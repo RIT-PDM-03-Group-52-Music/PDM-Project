@@ -22,12 +22,11 @@ jobs:
           cache: pnpm
           cache-dependency-path: pnpm-lock.yaml
 
-      - run: corepack enable
+      - name: Install pnpm
+        run: npm install -g pnpm
 
-      - name: Activate pnpm via Corepack
-        run: corepack prepare pnpm@10 --activate
-
-      - run: pnpm install --frozen-lockfile --prefer-offline
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Typecheck
         run: pnpm run typecheck
