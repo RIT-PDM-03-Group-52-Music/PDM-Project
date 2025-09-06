@@ -9,7 +9,7 @@
 
 - Clone this project from Git or GitHub Desktop
 - Open the repository in VSCode and run `pnpm install` at project root
-- Setup the required .env file set up in /apps/server/.env
+- Setup the required .env file set up in /apps/server/.env (i.e. copy the contents of .env.example and ask someone for the database connection string if applicable)
 - Optional: install the Biome extension in VSCode
 
 ## 3. Workflow
