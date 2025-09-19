@@ -1,9 +1,21 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.2.3/schema.json",
-  "formatter": { 
-	"enabled": true,
-	"indentStyle": "space",
-	"indentWidth": 4
- },
-  "linter": { "enabled": true }
+    "$schema": "https://biomejs.dev/schemas/2.2.3/schema.json",
+    "formatter": {
+        "enabled": true,
+        "indentStyle": "space",
+        "indentWidth": 4
+    },
+    "linter": { "enabled": true },
+    "javascript": {
+        "formatter": {
+            "lineWidth": 100
+        }
+    },
+    "assist": {
+        "actions": {
+            "source": {
+                "organizeImports": "on"
+            }
+        }
+    }
 }
