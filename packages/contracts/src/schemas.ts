@@ -7,12 +7,10 @@ export const RegisterSchema = z.object({
     first_name: z.string().trim().min(1, "First name is required."),
     last_name: z.string().trim().min(1, "Last name is required."),
 });
-
 export type RegisterInput = z.infer<typeof RegisterSchema>;
 
 export const LoginSchema = z.object({
     username: z.string().trim().min(1, "Username is required."),
     password: z.string().min(1, "Password is required."),
 });
-
 export type LoginInput = z.infer<typeof LoginSchema>;

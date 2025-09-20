@@ -4,8 +4,9 @@ import { pool } from "../db";
 import { sign } from "../jwt";
 import { authgate } from "../middleware/authgate";
 import { validateBody } from "../middleware/validate";
-import { type LoginInput, LoginSchema, type RegisterInput, RegisterSchema } from "../schemas/auth";
-import type { PublicUser, UserRow } from "../types/user";
+import { type LoginInput, LoginSchema, type RegisterInput, RegisterSchema } from "@pdm/contracts";
+import type { PublicUser } from "@pdm/contracts";
+import type { UserRow } from "../types/user";
 import { conflict, serverError, unauthorized } from "../utils/http";
 
 const router = Router();
@@ -79,7 +80,7 @@ router.post(
 
             // 1) Fetch user by username
             // QUERY NEEDED
-            const user: UserRow | null = null;
+            let user: UserRow | null = null as unknown as UserRow | null;
 
             if (!user) return unauthorized(res, "Invalid credentials.");
 

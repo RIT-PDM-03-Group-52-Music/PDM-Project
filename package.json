@@ -3,16 +3,16 @@
   "private": true,
   "packageManager": "pnpm@10.0.0",
   "engines": { "node": ">=22" },
-  "workspaces": ["apps/*"],
+  "workspaces": ["apps/*", "packages/*"],
   "scripts": {
-    "dev": "pnpm -r --parallel dev",
+    "dev": "concurrently -k \"pnpm --filter @pdm/contracts dev\" \"pnpm -r --parallel --filter !@pdm/contracts dev\"",
     "dev:server": "pnpm --filter @pdm/server dev",
     "dev:web": "pnpm --filter @pdm/web dev",
-    "build": "pnpm --filter @pdm/web build",
+  "build": "pnpm --filter @pdm/contracts build && pnpm --filter @pdm/web build",
     "start": "concurrently -k \"pnpm --filter @pdm/server start\" \"pnpm --filter @pdm/web preview --port 5173\"",
-    "typecheck": "pnpm --filter @pdm/server typecheck && pnpm --filter @pdm/web typecheck",
-    "lint": "biome lint apps/server/src apps/web/src",
-    "format": "biome format --write apps/server/src apps/web/src"
+  "typecheck": "pnpm --filter @pdm/contracts typecheck && pnpm --filter @pdm/server typecheck && pnpm --filter @pdm/web typecheck",
+    "lint": "biome lint apps/server/src apps/web/src packages/contracts/src",
+    "format": "biome format --write apps/server/src apps/web/src packages/contracts/src"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.2.3",
