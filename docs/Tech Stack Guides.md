@@ -7,7 +7,6 @@
 - https://react.dev/learn
 - https://vitejs.dev/guide/
 - https://tailwindcss.com/docs/installation
-- https://swr.vercel.app/docs/getting-started
 
 ## Backend (apps/server)
 - https://expressjs.com/en/starter/installing.html
