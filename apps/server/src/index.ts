@@ -2,10 +2,10 @@ import cors from "cors";
 import express from "express";
 import authRouter from "./routes/auth";
 
-const app = express();
+const app = express(); // HTTP server
 
-app.use(cors());
-app.use(express.json());
+app.use(cors()); // security thing
+app.use(express.json()); // use JSON in request body
 
 app.use("/api/auth", authRouter);
 

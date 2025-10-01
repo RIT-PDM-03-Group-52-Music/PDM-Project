@@ -1,11 +1,10 @@
+import { type PublicUser, type LoginInput, LoginSchema, type RegisterInput, RegisterSchema } from "@pdm/contracts";
 import bcrypt from "bcrypt";
 import { type Request, type Response, Router } from "express";
 import { pool } from "../db";
 import { sign } from "../jwt";
 import { authgate } from "../middleware/authgate";
 import { validateBody } from "../middleware/validate";
-import { type LoginInput, LoginSchema, type RegisterInput, RegisterSchema } from "@pdm/contracts";
-import type { PublicUser } from "@pdm/contracts";
 import type { UserRow } from "../types/user";
 import { conflict, serverError, unauthorized } from "../utils/http";
 
@@ -80,7 +79,7 @@ router.post(
 
             // 1) Fetch user by username
             // QUERY NEEDED
-            let user: UserRow | null = null as unknown as UserRow | null;
+            const user: UserRow | null = null as unknown as UserRow | null;
 
             if (!user) return unauthorized(res, "Invalid credentials.");
 
@@ -109,7 +108,7 @@ router.post(
  * header: Authorization: Bearer <token>
  * returns: { ok, user }
  */
-router.get("/check", authgate, async (req: Request, res: Response) => {
+router.get("/me", authgate, async (req: Request, res: Response) => {
     try {
         // 1) Get userId from req (set in authgate)
         const userId = req.userId;
