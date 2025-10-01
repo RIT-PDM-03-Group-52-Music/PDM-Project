@@ -1,5 +1,4 @@
-import type { PublicUser } from "@pdm/contracts";
-import { type LoginInput, LoginSchema, type RegisterInput, RegisterSchema } from "@pdm/contracts";
+import { type PublicUser, type LoginInput, LoginSchema, type RegisterInput, RegisterSchema } from "@pdm/contracts";
 import bcrypt from "bcrypt";
 import { type Request, type Response, Router } from "express";
 import { pool } from "../db";
