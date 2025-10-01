@@ -1,20 +1,21 @@
 ## Core
 - https://www.typescriptlang.org/docs/handbook/2/basic-types.html
 - https://pnpm.io/workspaces
-- https://nodejs.org/docs/latest/api/
+- https://nodejs.org/docs/latest/api
 
 ## Frontend (apps/web)
 - https://react.dev/learn
-- https://vitejs.dev/guide/
+- https://vitejs.dev/guide
+- https://zustand.docs.pmnd.rs/getting-started/introduction
 - https://tailwindcss.com/docs/installation
 
 ## Backend (apps/server)
 - https://expressjs.com/en/starter/installing.html
-- https://node-postgres.com/
+- https://node-postgres.com
 - https://zod.dev/?id=introduction
 
 ## Tooling
-- https://biomejs.dev/docs/
+- https://biomejs.dev/docs
 - https://github.com/privatenumber/tsx#readme
 
 ## Extras
