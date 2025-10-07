@@ -1,32 +1,37 @@
+import { type LoginInput, LoginSchema, type RegisterInput, RegisterSchema } from "@pdm/contracts";
 import bcrypt from "bcrypt";
 import { type Request, type Response, Router } from "express";
 import { pool } from "../db";
 import { sign } from "../jwt";
 import { authgate } from "../middleware/authgate";
 import { validateBody } from "../middleware/validate";
-import { type LoginInput, LoginSchema, type RegisterInput, RegisterSchema } from "@pdm/contracts";
-import type { PublicUser } from "@pdm/contracts";
-import type { UserRow } from "../types/user";
-import { conflict, serverError, unauthorized } from "../utils/http";
+import { conflict, serverError, unauthorized, created, ok } from "../utils/http";
+import {
+    getUserByEmail,
+    getUserById,
+    getUserByUsername,
+    loginUser,
+    registerUser,
+} from "../queries/user.queries";
 
 const router = Router();
 
 const SALT_ROUNDS = process.env.SALT_ROUNDS ? parseInt(process.env.SALT_ROUNDS, 10) : 12;
 
-const toPublicUser = (u: UserRow): PublicUser => ({
-    user_id: u.user_id,
-    username: u.username,
-    email: u.email,
-    first_name: u.first_name,
-    last_name: u.last_name,
-    created_at: u.created_at,
-    last_seen: u.last_seen,
-});
-
 /**
  * POST /api/auth/register
- * body: { username, password, email, first_name, last_name }
- * returns: { token, user }
+ *
+ * @description Register a new user account
+ * @body username (3 <= string <= 32)
+ * @body password (string === 60)
+ * @body email (valid email <= 254)
+ * @body first_name (1 <= string <= 50)
+ * @body last_name (1 <= string <= 50)
+ *
+ * @returns 201 { access_token, user_id, username, email, first_name, last_name, created_at, last_seen }
+ * @returns 409 on duplicate username or email
+ * @returns 422 on validation error
+ * @returns 500 on server error
  */
 router.post(
     "/register",
@@ -35,30 +40,28 @@ router.post(
         try {
             const { username, password, email, first_name, last_name } = req.body;
 
-            // 1) Check duplicates for username or email
-            // QUERY NEEDED
-            const existing = null;
-
-            if (existing) return conflict(res, "Username or email already in use.");
-
-            // 2) Hash password
             const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
 
-            // 3) Insert user
-            // QUERY NEEDED
-            const insertedUser: UserRow = {
-                user_id: "replace-with-real-id",
-                username,
-                password: passwordHash,
-                email,
-                created_at: new Date().toISOString(),
-                last_seen: new Date().toISOString(),
-                first_name,
-                last_name,
-            };
+            const result = await registerUser.run(
+                {
+                    username,
+                    password: passwordHash,
+                    email,
+                    first_name,
+                    last_name,
+                    now: new Date().toISOString(),
+                },
+                pool,
+            );
 
-            const token = sign({ sub: insertedUser.user_id });
-            return res.status(201).json({ token, user: toPublicUser(insertedUser) });
+            const user = result[0];
+            if (!user) return conflict(res, "Username or email already in use.");
+
+            const token = sign({ sub: `${user.user_id}` });
+            return created(res, {
+                access_token: token,
+                ...user,
+            });
         } catch (err) {
             console.error(err);
             return serverError(res);
@@ -68,35 +71,39 @@ router.post(
 
 /**
  * POST /api/auth/login
- * body: { username, password }
- * returns: { token, user }
+ *
+ * @description Authenticate user and generate access token
+ * @body username OR email (required)
+ * @body password (required)
+ *
+ * @returns 200 { access_token }
+ * @returns 401 on invalid credentials
+ * @returns 422 on validation error
+ * @returns 500 on server error
  */
 router.post(
     "/login",
     validateBody(LoginSchema),
     async (req: Request<unknown, unknown, LoginInput>, res: Response) => {
         try {
-            const { username, password } = req.body;
+            const { username, email, password } = req.body;
 
-            // 1) Fetch user by username
-            // QUERY NEEDED
-            let user: UserRow | null = null as unknown as UserRow | null;
+            const result = username
+                ? await getUserByUsername.run({ username }, pool)
+                : email
+                  ? await getUserByEmail.run({ email }, pool)
+                  : null;
 
+            const user = result?.[0];
             if (!user) return unauthorized(res, "Invalid credentials.");
 
-            // 2) Compare password
-            const ok = await bcrypt.compare(password, user.password);
-            if (!ok) return unauthorized(res, "Invalid credentials.");
+            const isValid = await bcrypt.compare(password, user.password);
+            if (!isValid) return unauthorized(res, "Invalid credentials.");
 
-            // 3) Update last_seen
-            // QUERY NEEDED
-            const freshUser: UserRow = {
-                ...(user as UserRow),
-                last_seen: new Date().toISOString(),
-            };
+            await loginUser.run({ user_id: user.user_id, now: new Date().toISOString() }, pool);
 
-            const token = sign({ sub: freshUser.user_id });
-            return res.status(200).json({ token, user: toPublicUser(freshUser) });
+            const token = sign({ sub: `${user.user_id}` });
+            return ok(res, { access_token: token });
         } catch (err) {
             console.error(err);
             return serverError(res);
@@ -105,23 +112,28 @@ router.post(
 );
 
 /**
- * GET /api/auth/check
- * header: Authorization: Bearer <token>
- * returns: { ok, user }
+ * GET /api/auth/me
+ *
+ * @description Get current authenticated user's profile
+ * @header Authorization: Bearer <token>
+ *
+ * @returns 200 { user_id, username, email, first_name, last_name, created_at, last_seen }
+ * @returns 401 on unauthorized or user not found
+ * @returns 500 on server error
  */
-router.get("/check", authgate, async (req: Request, res: Response) => {
+router.get("/me", authgate, async (req: Request, res: Response) => {
     try {
-        // 1) Get userId from req (set in authgate)
         const userId = req.userId;
+
         if (!userId) return unauthorized(res, "No user ID.");
 
-        // 2) Fetch user by ID
-        // QUERY NEEDED
-        const user: UserRow | null = null;
+        const result = await getUserById.run({ user_id: Number(userId) }, pool);
 
+        const user = result[0];
         if (!user) return unauthorized(res, "User not found.");
 
-        return res.status(200).json({ ok: true, user: toPublicUser(user) });
+        const { password, ...userData } = user;
+        return ok(res, userData);
     } catch (err) {
         console.error(err);
         return serverError(res);
@@ -129,3 +141,4 @@ router.get("/check", authgate, async (req: Request, res: Response) => {
 });
 
 export default router;
+

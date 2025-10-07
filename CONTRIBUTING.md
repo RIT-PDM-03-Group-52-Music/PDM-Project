@@ -15,6 +15,7 @@
 ## 3. Workflow
 
 - Run `pnpm dev` to start the server at http://localhost:3001 and the website at http://localhost:5173
+- You will need to supply your RIT password to the terminal to allow the SSH tunnel to connect; it may time out occasionally so be prepared to have it ready at all times
 - Check types occasionally with `pnpm typecheck`
 - Before committing, run `pnpm lint` and `pnpm format` to ensure we all use consistent styles
 

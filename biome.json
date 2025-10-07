@@ -5,7 +5,10 @@
         "indentStyle": "space",
         "indentWidth": 4
     },
-    "linter": { "enabled": true },
+    "linter": {
+        "enabled": true,
+        "includes": ["**/*.ts", "!**/*.queries.ts"]
+    },
     "javascript": {
         "formatter": {
             "lineWidth": 100
