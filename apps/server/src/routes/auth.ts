@@ -141,4 +141,3 @@ router.get("/me", authgate, async (req: Request, res: Response) => {
 });
 
 export default router;
-
