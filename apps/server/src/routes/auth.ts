@@ -132,8 +132,7 @@ router.get("/me", authgate, async (req: Request, res: Response) => {
         const user = result[0];
         if (!user) return unauthorized(res, "User not found.");
 
-        const { password, ...userData } = user;
-        return ok(res, userData);
+        return ok(res, { ...user, password: undefined });
     } catch (err) {
         console.error(err);
         return serverError(res);
