@@ -3,7 +3,8 @@
     "formatter": {
         "enabled": true,
         "indentStyle": "space",
-        "indentWidth": 4
+        "indentWidth": 4,
+        "includes": ["**/*.ts", "**/*.tsx", "!**/*.queries.ts"]
     },
     "linter": {
         "enabled": true,
