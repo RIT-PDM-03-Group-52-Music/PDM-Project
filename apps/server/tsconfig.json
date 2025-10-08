@@ -1,10 +1,12 @@
 {
 	"extends": "../../tsconfig.base.json",
 	"compilerOptions": {
-		"rootDir": "src",
 		"outDir": "dist",
 		"module": "ESNext",
-		"moduleResolution": "Bundler"
+		"moduleResolution": "Bundler",
+		"paths": {
+			"@pdm/contracts": ["../../packages/contracts/src/index.ts"]
+		}
 	},
 	"include": ["src"]
 }
