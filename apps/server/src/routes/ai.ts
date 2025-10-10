@@ -1,10 +1,18 @@
-import { type Request, type Response, Router } from "express";
-import { validateBody } from "../middleware/validate";
-import { PlanSchema, PlanOutputSchema, type PlanInput, CompleteSchema, type CompleteInput, CompleteOutputSchema } from "@pdm/contracts";
-import { generateObject, NoObjectGeneratedError } from "ai";
 import { openai } from "@ai-sdk/openai";
-import { noContent, ok, serverError } from "../utils/http";
+import {
+    // type CompleteInput,
+    // CompleteOutputSchema,
+    // CompleteSchema,
+    type PlanInput,
+    PlanOutputSchema,
+    PlanSchema,
+} from "@pdm/contracts";
+import { generateObject, NoObjectGeneratedError } from "ai";
+import { type Request, type Response, Router } from "express";
 import { PLAN_SYSTEM_PROMPT } from "../context/prompts";
+import { validateBody } from "../middleware/validate";
+import { noContent, ok, serverError } from "../utils/http";
+
 // import { authgate } from "../middleware/authgate";
 
 const router = Router();
@@ -48,30 +56,28 @@ router.post(
     },
 );
 
-router.post(
-    "/complete",
-    // authgate,
-    validateBody(CompleteSchema),
-    async (req: Request<unknown, unknown, CompleteInput>, res: Response) => {
-        try {
-            const { prompt, history, started_at, results } = req.body;
-            
-            // const response = await generateObject({
-            //     model: openai("gpt-4o-mini"),
-            //     schema: CompleteOutputSchema,
-            //     system: COMPLETE_SYSTEM_PROMPT,
-            
+// router.post(
+//     "/complete",
+//     // authgate,
+//     validateBody(CompleteSchema),
+//     async (req: Request<unknown, unknown, CompleteInput>, res: Response) => {
+//         try {
+//             // const { prompt, history, started_at, results } = req.body;
 
-        } catch (err) {
-            if (NoObjectGeneratedError.isInstance(err))
-                return res.status(422).json({
-                    error: "Failed to generate valid completion",
-                });
-                
-            console.error(err);
-            return serverError(res);
-        }
-    },
-);
+//             // const response = await generateObject({
+//             //     model: openai("gpt-4o-mini"),
+//             //     schema: CompleteOutputSchema,
+//             //     system: COMPLETE_SYSTEM_PROMPT,
+//         } catch (err) {
+//             if (NoObjectGeneratedError.isInstance(err))
+//                 return res.status(422).json({
+//                     error: "Failed to generate valid completion",
+//                 });
+
+//             console.error(err);
+//             return serverError(res);
+//         }
+//     },
+// );
 
 export default router;
