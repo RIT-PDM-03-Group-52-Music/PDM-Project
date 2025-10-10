@@ -29,7 +29,6 @@ export const PlanOutputSchema = z.object({
 export type PlanOutput = z.infer<typeof PlanOutputSchema>;
 
 export const CompleteSchema = z.object({
-    started_at: z.string().datetime(),
     prompt: z.string().min(1, "Prompt is required."),
     history: z
         .array(
@@ -41,6 +40,7 @@ export const CompleteSchema = z.object({
         )
         .max(10)
         .optional(),
+    started_at: z.string().datetime(),
     results: z.array(
         z.object({
             call_id: z.string(),
@@ -57,6 +57,7 @@ export const CompleteSchema = z.object({
         }),
     ),
 });
+export type CompleteInput = z.infer<typeof CompleteSchema>;
 
 export const CompleteOutputSchema = z.object({
     markdown_text: z.string(),

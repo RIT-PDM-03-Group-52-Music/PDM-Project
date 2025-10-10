@@ -1,6 +1,6 @@
 import { type Request, type Response, Router } from "express";
 import { validateBody } from "../middleware/validate";
-import { PlanSchema, PlanOutputSchema, type PlanInput, CompleteSchema } from "@pdm/contracts";
+import { PlanSchema, PlanOutputSchema, type PlanInput, CompleteSchema, type CompleteInput, CompleteOutputSchema } from "@pdm/contracts";
 import { generateObject, NoObjectGeneratedError } from "ai";
 import { openai } from "@ai-sdk/openai";
 import { noContent, ok, serverError } from "../utils/http";
@@ -14,11 +14,11 @@ router.post(
     // authgate,
     validateBody(PlanSchema),
     async (req: Request<unknown, unknown, PlanInput>, res: Response) => {
-        const { prompt, history } = req.body;
-
         try {
+            const { prompt, history } = req.body;
+
             const response = await generateObject({
-                model: openai("gpt-4o-mini"),
+                model: openai("gpt-5-nano"),
                 schema: PlanOutputSchema,
                 system: PLAN_SYSTEM_PROMPT,
                 messages: [
@@ -52,8 +52,25 @@ router.post(
     "/complete",
     // authgate,
     validateBody(CompleteSchema),
-    async (_req: Request<unknown, unknown, { prompt: string }>, _res: Response) => {
-        //TODO
+    async (req: Request<unknown, unknown, CompleteInput>, res: Response) => {
+        try {
+            const { prompt, history, started_at, results } = req.body;
+            
+            // const response = await generateObject({
+            //     model: openai("gpt-4o-mini"),
+            //     schema: CompleteOutputSchema,
+            //     system: COMPLETE_SYSTEM_PROMPT,
+            
+
+        } catch (err) {
+            if (NoObjectGeneratedError.isInstance(err))
+                return res.status(422).json({
+                    error: "Failed to generate valid completion",
+                });
+                
+            console.error(err);
+            return serverError(res);
+        }
     },
 );
 
