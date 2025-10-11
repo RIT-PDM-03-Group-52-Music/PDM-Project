@@ -1,8 +1,9 @@
 import { openai } from "@ai-sdk/openai";
 import {
+    CompleteBodySchema,
     type CompleteInput,
     CompleteOutputSchema,
-    CompleteSchema,
+    PlanBodySchema,
     type PlanInput,
     PlanOutputSchema,
 } from "@pdm/contracts";
@@ -18,7 +19,7 @@ const router = Router();
 router.post(
     "/plan",
     authgate,
-    validateBody(PlanSchema),
+    validateBody(PlanBodySchema),
     async (req: Request<unknown, unknown, PlanInput>, res: Response) => {
         try {
             const { prompt, history } = req.body;
@@ -57,7 +58,7 @@ router.post(
 router.post(
     "/complete",
     authgate,
-    validateBody(CompleteSchema),
+    validateBody(CompleteBodySchema),
     async (req: Request<unknown, unknown, CompleteInput>, res: Response) => {
         try {
             const { prompt, history, started_at, results } = req.body;
