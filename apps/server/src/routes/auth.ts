@@ -1,4 +1,9 @@
-import { type LoginInput, LoginSchema, type RegisterInput, RegisterSchema } from "@pdm/contracts";
+import {
+    LoginBodySchema,
+    type LoginInput,
+    RegisterBodySchema,
+    type RegisterInput,
+} from "@pdm/contracts";
 import bcrypt from "bcrypt";
 import { type Request, type Response, Router } from "express";
 import { pool } from "../db";
@@ -35,7 +40,7 @@ const SALT_ROUNDS = process.env.SALT_ROUNDS ? parseInt(process.env.SALT_ROUNDS, 
  */
 router.post(
     "/register",
-    validateBody(RegisterSchema),
+    validateBody(RegisterBodySchema),
     async (req: Request<unknown, unknown, RegisterInput>, res: Response) => {
         try {
             const { username, password, email, first_name, last_name } = req.body;
@@ -83,7 +88,7 @@ router.post(
  */
 router.post(
     "/login",
-    validateBody(LoginSchema),
+    validateBody(LoginBodySchema),
     async (req: Request<unknown, unknown, LoginInput>, res: Response) => {
         try {
             const { username, email, password } = req.body;

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const PlanSchema = z.object({
+export const PlanBodySchema = z.object({
     prompt: z.string().min(1, "Prompt is required."),
     history: z
         .array(
@@ -13,7 +13,7 @@ export const PlanSchema = z.object({
         .max(10)
         .optional(),
 });
-export type PlanInput = z.infer<typeof PlanSchema>;
+export type PlanInput = z.infer<typeof PlanBodySchema>;
 
 export const PlanOutputSchema = z.object({
     calls: z.array(
@@ -28,7 +28,7 @@ export const PlanOutputSchema = z.object({
 });
 export type PlanOutput = z.infer<typeof PlanOutputSchema>;
 
-export const CompleteSchema = z.object({
+export const CompleteBodySchema = z.object({
     prompt: z.string().min(1, "Prompt is required."),
     history: z
         .array(
@@ -57,7 +57,7 @@ export const CompleteSchema = z.object({
         }),
     ),
 });
-export type CompleteInput = z.infer<typeof CompleteSchema>;
+export type CompleteInput = z.infer<typeof CompleteBodySchema>;
 
 export const CompleteOutputSchema = z.object({
     markdown_text: z.string(),
