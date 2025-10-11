@@ -9,7 +9,7 @@ import { notFound, ok, serverError } from "../utils/http";
 const router = Router();
 
 router.get(
-    "/:collectionId",
+    "/:collection_id",
     authgate,
     validateParams(GetCollectionParamsSchema),
     async (req: Request<GetCollectionParams, unknown, unknown>, res: Response) => {

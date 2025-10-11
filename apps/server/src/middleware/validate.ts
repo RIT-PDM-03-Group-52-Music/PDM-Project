@@ -18,10 +18,10 @@ export const validateBody =
 
 export const validateParams =
     <T extends ParamsLike>(schema: ZodSchema<T>) =>
-    (req: Request, res: Response, next: NextFunction) => {
+    (req: Request<T>, res: Response, next: NextFunction) => {
         try {
             const parsed = schema.parse(req.params);
-            (req as unknown as { params: T }).params = parsed;
+            req.params = parsed;
             next();
         } catch (err) {
             handleZodError(res, err) ??
