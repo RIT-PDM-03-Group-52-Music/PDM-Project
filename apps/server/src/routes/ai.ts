@@ -1,17 +1,24 @@
+import { openai } from "@ai-sdk/openai";
+import {
+    type CompleteInput,
+    CompleteOutputSchema,
+    CompleteSchema,
+    type PlanInput,
+    PlanOutputSchema,
+    PlanSchema,
+} from "@pdm/contracts";
+import { generateObject, NoObjectGeneratedError } from "ai";
 import { type Request, type Response, Router } from "express";
 import { validateBody } from "../middleware/validate";
-import { PlanSchema, PlanOutputSchema, type PlanInput, CompleteSchema, type CompleteInput, CompleteOutputSchema } from "@pdm/contracts";
-import { generateObject, NoObjectGeneratedError } from "ai";
-import { openai } from "@ai-sdk/openai";
 import { noContent, ok, serverError } from "../utils/http";
 import { COMPLETE_SYSTEM_PROMPT, PLAN_SYSTEM_PROMPT } from "../context/prompts";
-// import { authgate } from "../middleware/authgate";
+import { authgate } from "../middleware/authgate";
 
 const router = Router();
 
 router.post(
     "/plan",
-    // authgate,
+    authgate,
     validateBody(PlanSchema),
     async (req: Request<unknown, unknown, PlanInput>, res: Response) => {
         try {
@@ -50,7 +57,7 @@ router.post(
 
 router.post(
     "/complete",
-    // authgate,
+    authgate,
     validateBody(CompleteSchema),
     async (req: Request<unknown, unknown, CompleteInput>, res: Response) => {
         try {
@@ -58,8 +65,8 @@ router.post(
 
             const completed_at = new Date().toISOString();
             const startedAtTime = new Date(started_at).getTime();
-            const ellapsed_ms = isFinite(startedAtTime) ? Date.now() - startedAtTime : null;
-            
+            const ellapsed_ms = Number.isFinite(startedAtTime) ? Date.now() - startedAtTime : null;
+
             const execution = [
                 ">>> EXECUTION CONTEXT",
                 `started_at: ${started_at}`,
@@ -85,20 +92,20 @@ router.post(
                                 ? `${h.content}\n\n>>> INTERNAL CONTEXT: ${h.context || "N/A"}`
                                 : h.content,
                     })) ?? []),
-                    { role: "user", content: prompt},
-                    { role: "system", content: execution }
-                ]
+                    { role: "user", content: prompt },
+                    { role: "system", content: execution },
+                ],
             });
 
             console.log("AI Response:", JSON.stringify(response.object, null, 2));
-            
+
             return ok(res, response.object);
         } catch (err) {
             if (NoObjectGeneratedError.isInstance(err))
                 return res.status(422).json({
                     error: "Failed to generate valid completion",
                 });
-                
+
             console.error(err);
             return serverError(res);
         }

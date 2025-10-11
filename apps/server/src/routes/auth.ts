@@ -5,7 +5,6 @@ import { pool } from "../db";
 import { sign } from "../jwt";
 import { authgate } from "../middleware/authgate";
 import { validateBody } from "../middleware/validate";
-import { conflict, serverError, unauthorized, created, ok } from "../utils/http";
 import {
     getUserByEmail,
     getUserById,
@@ -13,6 +12,7 @@ import {
     loginUser,
     registerUser,
 } from "../queries/user.queries";
+import { conflict, created, ok, serverError, unauthorized } from "../utils/http";
 
 const router = Router();
 
