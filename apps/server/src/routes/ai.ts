@@ -65,8 +65,8 @@ router.post(
 
             const completed_at = new Date().toISOString();
             const startedAtTime = new Date(started_at).getTime();
-            const ellapsed_ms = isFinite(startedAtTime) ? Date.now() - startedAtTime : null;
-            
+            const ellapsed_ms = Number.isFinite(startedAtTime) ? Date.now() - startedAtTime : null;
+
             const execution = [
                 ">>> EXECUTION CONTEXT",
                 `started_at: ${started_at}`,
@@ -92,20 +92,20 @@ router.post(
                                 ? `${h.content}\n\n>>> INTERNAL CONTEXT: ${h.context || "N/A"}`
                                 : h.content,
                     })) ?? []),
-                    { role: "user", content: prompt},
-                    { role: "system", content: execution }
-                ]
+                    { role: "user", content: prompt },
+                    { role: "system", content: execution },
+                ],
             });
 
             console.log("AI Response:", JSON.stringify(response.object, null, 2));
-            
+
             return ok(res, response.object);
         } catch (err) {
             if (NoObjectGeneratedError.isInstance(err))
                 return res.status(422).json({
                     error: "Failed to generate valid completion",
                 });
-                
+
             console.error(err);
             return serverError(res);
         }
