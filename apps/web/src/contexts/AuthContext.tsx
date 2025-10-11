@@ -146,7 +146,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
             logout,
             clearError,
         }),
-        [user, isLoading, error, login, register, logout, clearError],
+        [user, hasToken, isLoading, error, login, register, logout, clearError],
     );
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
