@@ -1,25 +1,24 @@
 import { openai } from "@ai-sdk/openai";
 import {
-    // type CompleteInput,
-    // CompleteOutputSchema,
-    // CompleteSchema,
+    type CompleteInput,
+    CompleteOutputSchema,
+    CompleteSchema,
     type PlanInput,
     PlanOutputSchema,
     PlanSchema,
 } from "@pdm/contracts";
 import { generateObject, NoObjectGeneratedError } from "ai";
 import { type Request, type Response, Router } from "express";
-import { PLAN_SYSTEM_PROMPT } from "../context/prompts";
 import { validateBody } from "../middleware/validate";
 import { noContent, ok, serverError } from "../utils/http";
 import { COMPLETE_SYSTEM_PROMPT, PLAN_SYSTEM_PROMPT } from "../context/prompts";
-// import { authgate } from "../middleware/authgate";
+import { authgate } from "../middleware/authgate";
 
 const router = Router();
 
 router.post(
     "/plan",
-    // authgate,
+    authgate,
     validateBody(PlanSchema),
     async (req: Request<unknown, unknown, PlanInput>, res: Response) => {
         try {
@@ -58,7 +57,7 @@ router.post(
 
 router.post(
     "/complete",
-    // authgate,
+    authgate,
     validateBody(CompleteSchema),
     async (req: Request<unknown, unknown, CompleteInput>, res: Response) => {
         try {
