@@ -4,7 +4,7 @@
         "enabled": true,
         "indentStyle": "space",
         "indentWidth": 4,
-        "includes": ["**/*.ts", "**/*.tsx", "!**/*.queries.ts"]
+        "includes": ["**/*.ts", "**/*.tsx", "**/*.html", "!**/*.queries.ts"]
     },
     "linter": {
         "enabled": true,

@@ -1,11 +1,11 @@
 import { openai } from "@ai-sdk/openai";
 import {
+    PlanBodySchema,
     // type CompleteInput,
     // CompleteOutputSchema,
     // CompleteSchema,
     type PlanInput,
     PlanOutputSchema,
-    PlanSchema,
 } from "@pdm/contracts";
 import { generateObject, NoObjectGeneratedError } from "ai";
 import { type Request, type Response, Router } from "express";
@@ -20,7 +20,7 @@ const router = Router();
 router.post(
     "/plan",
     // authgate,
-    validateBody(PlanSchema),
+    validateBody(PlanBodySchema),
     async (req: Request<unknown, unknown, PlanInput>, res: Response) => {
         try {
             const { prompt, history } = req.body;

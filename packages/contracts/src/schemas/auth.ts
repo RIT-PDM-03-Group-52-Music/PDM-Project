@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const RegisterSchema = z.object({
+export const RegisterBodySchema = z.object({
     username: z
         .string()
         .trim()
@@ -22,9 +22,9 @@ export const RegisterSchema = z.object({
         .min(1, "Last name is required.")
         .max(50, "Last name must be at most 50 characters."),
 });
-export type RegisterInput = z.infer<typeof RegisterSchema>;
+export type RegisterInput = z.infer<typeof RegisterBodySchema>;
 
-export const LoginSchema = z
+export const LoginBodySchema = z
     .object({
         username: z.string().trim().optional(),
         email: z.string().trim().toLowerCase().email("Email must be valid.").optional(),
@@ -35,4 +35,4 @@ export const LoginSchema = z
         path: ["username"],
     });
 
-export type LoginInput = z.infer<typeof LoginSchema>;
+export type LoginInput = z.infer<typeof LoginBodySchema>;

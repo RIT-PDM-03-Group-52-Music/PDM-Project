@@ -1,4 +1,4 @@
-import { type GetCollectionInput, GetCollectionSchema } from "@pdm/contracts";
+import { type GetCollectionParams, GetCollectionParamsSchema } from "@pdm/contracts";
 import { type Request, type Response, Router } from "express";
 import { pool } from "../db";
 import { authgate } from "../middleware/authgate";
@@ -11,8 +11,8 @@ const router = Router();
 router.get(
     "/:collectionId",
     authgate,
-    validateParams(GetCollectionSchema),
-    async (req: Request<GetCollectionInput, unknown, unknown>, res: Response) => {
+    validateParams(GetCollectionParamsSchema),
+    async (req: Request<GetCollectionParams, unknown, unknown>, res: Response) => {
         try {
             const { collection_id } = req.params;
 
