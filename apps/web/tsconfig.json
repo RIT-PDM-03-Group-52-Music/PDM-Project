@@ -3,7 +3,10 @@
 	"compilerOptions": {
 		"jsx": "react-jsx",
 		"module": "ESNext",
-		"moduleResolution": "Bundler"
+		"moduleResolution": "Bundler",
+		"paths": {
+			"@pdm/contracts": ["../../packages/contracts/src/index.ts"]
+		}
 	},
 	"include": ["src", "vite.config.ts", "index.html"]
 }
