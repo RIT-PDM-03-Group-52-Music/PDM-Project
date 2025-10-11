@@ -3,7 +3,6 @@ import z from "zod";
 export const GetCollectionSchema = z.object({
     collection_id: z
         .string()
-        .min(1, "Collection ID is required.")
-        .max(24, "Collection ID must be at most 24 characters."),
+        .regex(/^\d{1,24}$/, "Collection ID must be a numeric string of up to 24 digits."),
 });
 export type GetCollectionInput = z.infer<typeof GetCollectionSchema>;
