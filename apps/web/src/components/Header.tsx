@@ -83,8 +83,6 @@ export function Header() {
     const { user, isAuthenticated } = useAuth();
     const { messages, isBusy, reset, sendPrompt } = useChatStore();
 
-    const [ loggedIn, setLoggedIn ] = useState(true);
-
     return (
         <header className="w-full flex flex-row items-center justify-between px-6 py-4 bg-neutral-900">
             <span className="text-neutral-100 text-lg font-medium">Relational Records - Chat</span>

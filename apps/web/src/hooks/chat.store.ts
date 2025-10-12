@@ -179,7 +179,10 @@ export const useChatStore = create<ChatStoreState>()((set, get) => ({
                     context: completed.data.body?.context ?? "",
                     createdAt: nowIso(),
                     durationMs: Date.now() - new Date(runStartedAt).getTime(),
-                    nCalls: { success: results.filter((r) => r.response.status < 400).length, total: results.length },
+                    nCalls: {
+                        success: results.filter((r) => r.response.status < 400).length,
+                        total: results.length,
+                    },
                 },
             ],
             run: { ...(s.run ?? { startedAt: nowIso() }), phase: "done", completedAt: nowIso() },
