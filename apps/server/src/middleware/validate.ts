@@ -16,7 +16,7 @@ export const validateBody =
         }
     };
 
-export const validateParams =
+export const validatePath =
     <T extends ParamsLike>(schema: ZodSchema<T>) =>
     (req: Request<T>, res: Response, next: NextFunction) => {
         try {

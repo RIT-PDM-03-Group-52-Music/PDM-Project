@@ -2,7 +2,7 @@ import { type GetCollectionParams, GetCollectionParamsSchema } from "@pdm/contra
 import { type Request, type Response, Router } from "express";
 import { pool } from "../db";
 import { authgate } from "../middleware/authgate";
-import { validateParams } from "../middleware/validate";
+import { validatePath } from "../middleware/validate";
 import { getCollectionById } from "../queries/collection.queries";
 import { notFound, ok, serverError } from "../utils/http";
 
@@ -11,7 +11,7 @@ const router = Router();
 router.get(
     "/:collection_id",
     authgate,
-    validateParams(GetCollectionParamsSchema),
+    validatePath(GetCollectionParamsSchema),
     async (req: Request<GetCollectionParams, unknown, unknown>, res: Response) => {
         try {
             const { collection_id } = req.params;

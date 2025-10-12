@@ -9,10 +9,10 @@ import {
 } from "@pdm/contracts";
 import { generateObject, NoObjectGeneratedError } from "ai";
 import { type Request, type Response, Router } from "express";
-import { validateBody } from "../middleware/validate";
-import { noContent, ok, serverError } from "../utils/http";
 import { COMPLETE_SYSTEM_PROMPT, PLAN_SYSTEM_PROMPT } from "../context/prompts";
 import { authgate } from "../middleware/authgate";
+import { validateBody } from "../middleware/validate";
+import { noContent, ok, serverError } from "../utils/http";
 
 const router = Router();
 
@@ -25,7 +25,7 @@ router.post(
             const { prompt, history } = req.body;
 
             const response = await generateObject({
-                model: openai("gpt-5-nano"),
+                model: openai("gpt-4.1-nano"),
                 schema: PlanOutputSchema,
                 system: PLAN_SYSTEM_PROMPT,
                 messages: [
@@ -39,6 +39,9 @@ router.post(
                     { role: "user", content: prompt },
                 ],
             });
+
+            console.log("Prompt:", prompt);
+            console.log("Generated plan:", response.object);
 
             if (response.object.calls.length === 0) return noContent(res);
 
@@ -76,12 +79,8 @@ router.post(
                 JSON.stringify(results, null, 2),
             ].join("\n");
 
-            console.log("Prompt:", prompt);
-            console.log("History:", history);
-            console.log("Execution context:", execution);
-
             const response = await generateObject({
-                model: openai("gpt-4o-mini"),
+                model: openai("gpt-4.1"),
                 schema: CompleteOutputSchema,
                 system: COMPLETE_SYSTEM_PROMPT,
                 messages: [
@@ -96,8 +95,6 @@ router.post(
                     { role: "system", content: execution },
                 ],
             });
-
-            console.log("AI Response:", JSON.stringify(response.object, null, 2));
 
             return ok(res, response.object);
         } catch (err) {

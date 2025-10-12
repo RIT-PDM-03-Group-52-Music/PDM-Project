@@ -15,9 +15,6 @@ export const err = <E = Error>(error: E): Result<never, E> => ({
     error,
 });
 
-/**
- * Generic API error with message and optional status code
- */
 export class ApiError extends Error {
     constructor(
         message: string,
@@ -28,14 +25,14 @@ export class ApiError extends Error {
     }
 }
 
-/**
- * Make an authenticated API request
- * Returns a Result type for explicit error handling
- */
+export type ApiMeta<T> =
+    | { hasBody: true; status: number; headers: Record<string, string>; body: T }
+    | { hasBody: false; status: number; headers: Record<string, string>; body: undefined };
+
 export async function api<T = unknown>(
     endpoint: string,
     options?: RequestInit,
-): Promise<Result<T, ApiError>> {
+): Promise<Result<ApiMeta<T>, ApiError>> {
     try {
         const token = localStorage.getItem("access_token");
 
@@ -49,18 +46,32 @@ export async function api<T = unknown>(
         });
 
         if (!response.ok) {
-            const errorData = await response.json().catch(() => ({
-                message: "Request failed",
-            }));
+            const errorData = await response.json().catch(() => ({ message: "Request failed" }));
             return err(
                 new ApiError(errorData.message || `HTTP ${response.status}`, response.status),
             );
         }
 
-        const data = await response.json();
-        return ok(data);
+        const status = response.status;
+        const headersRec: Record<string, string> = {};
+        response.headers.forEach((v, k) => {
+            headersRec[k] = v;
+        });
+
+        const contentType = response.headers.get("content-type") || "";
+        const isJson = /application\/json/i.test(contentType);
+        const isNoContent = status === 204;
+        const hasBody = isJson && !isNoContent;
+
+        if (hasBody) {
+            const body = (await response.json()) as T;
+            const meta: ApiMeta<T> = { hasBody: true, status, headers: headersRec, body };
+            return ok<ApiMeta<T>>(meta);
+        }
+
+        const meta: ApiMeta<T> = { hasBody: false, status, headers: headersRec, body: undefined };
+        return ok<ApiMeta<T>>(meta);
     } catch (error) {
-        // Network errors, JSON parse errors, etc.
         const message = error instanceof Error ? error.message : "An unknown error occurred";
         return err(new ApiError(message));
     }

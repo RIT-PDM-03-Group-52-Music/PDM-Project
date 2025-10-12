@@ -57,7 +57,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
         const { success, data } = await api<User>("/auth/me");
 
-        if (success) setUser(data);
+        if (success && data.hasBody) setUser(data.body);
         else {
             localStorage.removeItem(ACCESS_TOKEN);
             setHasToken(false);
@@ -77,12 +77,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 body: JSON.stringify(credentials),
             });
 
-            if (success) {
-                localStorage.setItem(ACCESS_TOKEN, data.access_token);
+            if (success && data.hasBody) {
+                localStorage.setItem(ACCESS_TOKEN, data.body.access_token);
                 setHasToken(true);
                 await checkAuth();
             } else {
-                setError(error.message);
+                setError(error?.message ?? "Login failed");
                 setIsLoading(false);
             }
         },
@@ -101,13 +101,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
             },
         );
 
-        if (success) {
-            localStorage.setItem(ACCESS_TOKEN, data.access_token);
-            const { access_token, ...userData } = data;
+        if (success && data.hasBody) {
+            const { access_token, ...userData } = data.body;
+            localStorage.setItem(ACCESS_TOKEN, access_token);
             setHasToken(true);
-            setUser(userData);
+            setUser(userData as User);
         } else {
-            setError(error.message);
+            setError(error?.message ?? "Registration failed");
         }
 
         setIsLoading(false);
