@@ -9,11 +9,18 @@ const components: Components = {
     h1: (props) => <h1 className="text-xl font-semibold mt-2 mb-1" {...props} />,
     h2: (props) => <h2 className="text-lg font-semibold mt-2 mb-1" {...props} />,
     h3: (props) => <h3 className="text-base font-semibold mt-2 mb-1" {...props} />,
-    p:  (props) => <p className="leading-normal" {...props} />,
+    p: (props) => <p className="leading-normal" {...props} />,
     ul: (props) => <ul className="list-disc pl-5 my-2 space-y-1" {...props} />,
     ol: (props) => <ol className="list-decimal pl-5 my-2 space-y-1" {...props} />,
     li: (props) => <li className="leading-6" {...props} />,
-    a:  (props) => <a className="underline text-blue-400 hover:text-blue-300" target="_blank" rel="noopener noreferrer" {...props} />,
+    a: (props) => (
+        <a
+            className="underline text-blue-400 hover:text-blue-300"
+            target="_blank"
+            rel="noopener noreferrer"
+            {...props}
+        />
+    ),
     table: ({ ...props }) => (
         <div className="overflow-x-auto my-2">
             <table
@@ -47,7 +54,7 @@ const components: Components = {
             className="max-w-full h-auto rounded md:rounded-lg border border-neutral-700/50"
         />
     ),
-    
+
     code({ className, children, ...props }) {
         const hasLang = /language-(\w+)/.exec(className || "");
         if (hasLang) {

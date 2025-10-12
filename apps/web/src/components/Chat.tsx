@@ -165,7 +165,9 @@ export function Chat() {
                                                         </div>
                                                     )}
                                                     <div className="px-4 py-2">
-                                                        <MarkdownRenderer>{m.content}</MarkdownRenderer>
+                                                        <MarkdownRenderer>
+                                                            {m.content}
+                                                        </MarkdownRenderer>
                                                     </div>
                                                 </div>
                                                 {!fromAssistant && user && (
