@@ -61,8 +61,6 @@ export const useChatStore = create<ChatStoreState>()((set, get) => ({
             body: JSON.stringify({ prompt: text, history } satisfies PlanInput),
         });
 
-        console.log("Plan result:", planResult);
-
         if (!planResult.success) {
             return set((s) => ({
                 isBusy: false,

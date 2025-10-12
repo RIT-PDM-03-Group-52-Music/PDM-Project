@@ -40,9 +40,6 @@ router.post(
                 ],
             });
 
-            console.log("Prompt:", prompt);
-            console.log("Generated plan:", response.object);
-
             if (response.object.calls.length === 0) return noContent(res);
 
             return ok(res, response.object);
