@@ -48,7 +48,7 @@ const components: Components = {
         />
     ),
     
-    code({ node, className, children, ...props }) {
+    code({ className, children, ...props }) {
         const hasLang = /language-(\w+)/.exec(className || "");
         if (hasLang) {
             return (
