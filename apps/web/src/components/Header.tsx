@@ -36,7 +36,7 @@ function ProfileButton({ firstName, lastName, email }: ProfileDropdown) {
                 aria-haspopup="menu"
                 aria-expanded={isOpen}
                 onClick={() => setIsOpen((s) => !s)}
-                className="inline-flex items-center gap-2 rounded-md border border-neutral-800 bg-neutral-900/60 px-3 py-1.5 text-xs font-medium text-neutral-200 hover:bg-neutral-800 transition cursor-pointer"
+                className="inline-flex items-center gap-2 rounded-md border border-neutral-800 bg-neutral-900 px-3 py-1.5 text-xs font-medium text-neutral-200 hover:bg-neutral-800 transition cursor-pointer"
                 title="Account"
             >
                 <User className="h-3 w-3" /> Account
@@ -50,7 +50,7 @@ function ProfileButton({ firstName, lastName, email }: ProfileDropdown) {
                     <div
                         role="menu"
                         aria-label="Account menu"
-                        className="flex flex-col rounded-md border border-neutral-800 bg-neutral-900/80 text-neutral-200 text-sm shadow-xl"
+                        className="flex flex-col rounded-md border border-neutral-800 bg-neutral-900 text-neutral-200 text-sm shadow-xl"
                     >
                         <div className="flex flex-col px-4 py-3 border-b border-neutral-800">
                             <span className="block font-medium">
@@ -66,7 +66,7 @@ function ProfileButton({ firstName, lastName, email }: ProfileDropdown) {
                                     setIsOpen(false);
                                     logout();
                                 }}
-                                className="inline-flex w-full items-center justify-between gap-2 rounded-md border border-neutral-800 bg-neutral-900/60 px-3 py-1.5 text-xs font-medium text-neutral-200 hover:bg-neutral-800 transition cursor-pointer"
+                                className="inline-flex w-full items-center justify-between gap-2 rounded-md border border-neutral-800 bg-neutral-900 px-3 py-1.5 text-xs font-medium text-neutral-200 hover:bg-neutral-800 transition cursor-pointer"
                             >
                                 <span>Logout</span>
                                 <LogOut className="h-3.5 w-3.5" />

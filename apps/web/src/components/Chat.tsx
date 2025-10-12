@@ -137,7 +137,18 @@ export function Chat() {
                                                 >
                                                     {fromAssistant && (
                                                         <div className="flex flex-row gap-1 h-8 items-center w-full border-b border-neutral-700 px-4 py-2 text-xs font-semibold text-neutral-500">
-                                                            <Radio className="w-4 h-4 text-green-500" />
+                                                            <Radio
+                                                                className={`w-4 h-4 ${
+                                                                    m.nCalls.total == 0
+                                                                        ? "text-neutral-500"
+                                                                        : m.nCalls.success === 0
+                                                                          ? "text-red-500/80"
+                                                                          : m.nCalls.success <
+                                                                              m.nCalls.total
+                                                                            ? "text-yellow-500/80"
+                                                                            : "text-green-500/80"
+                                                                }`}
+                                                            />
                                                             <span>
                                                                 API Calls:{" "}
                                                                 <span className="font-code bg-black/10 px-0.5 rounded-sm">
