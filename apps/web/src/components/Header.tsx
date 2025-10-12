@@ -85,9 +85,11 @@ export function Header() {
 
     return (
         <header className="w-full flex flex-row items-center justify-between px-6 py-4 bg-neutral-900">
-            <span className="text-neutral-100 text-lg font-medium">Relational Records - Chat</span>
+            <span className="text-neutral-100 text-md font-medium sm:text-lg">
+                Relational Records
+            </span>
 
-            <div className="flex flex-row flex-end gap-4">
+            <div className="flex flex-row flex-end gap-1 sm:gap-4">
                 {messages.length > 0 && (
                     <button
                         type="button"
