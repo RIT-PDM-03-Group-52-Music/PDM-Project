@@ -12,6 +12,7 @@ import {
 import { type FormEvent, type KeyboardEvent, useEffect, useRef, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useChatStore } from "../hooks/chat.store";
+import MarkdownRenderer from "./MarkdownRenderer";
 
 const recommendations = [
     "Recommend me some songs I might like",
@@ -129,9 +130,9 @@ export function Chat() {
                                                     </div>
                                                 )}
                                                 <div
-                                                    className={`whitespace-pre-wrap rounded-2xl text-sm shadow-md shadow-black/30 leading-relaxed ${
+                                                    className={`rounded-2xl text-sm shadow-md shadow-black/30 ${
                                                         fromAssistant
-                                                            ? "bg-neutral-800/70 border border-neutral-700 text-neutral-100"
+                                                            ? "bg-neutral-800/70 border border-neutral-700 text-neutral-100 py-2"
                                                             : "bg-blue-600/90 border border-blue-500 text-white"
                                                     }`}
                                                 >
@@ -163,7 +164,9 @@ export function Chat() {
                                                             </span>
                                                         </div>
                                                     )}
-                                                    <div className="px-4 py-2">{m.content}</div>
+                                                    <div className="px-4 py-2">
+                                                        <MarkdownRenderer>{m.content}</MarkdownRenderer>
+                                                    </div>
                                                 </div>
                                                 {!fromAssistant && user && (
                                                     <div className="h-8 w-8 shrink-0 grid place-items-center rounded-full bg-blue-600 border border-blue-500 text-[10px] shadow-md shadow-black/30 font-semibold text-white">
