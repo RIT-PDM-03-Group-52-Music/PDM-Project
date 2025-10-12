@@ -13,8 +13,8 @@ const components: Components = {
     ul: (props) => <ul className="list-disc pl-5 my-2 space-y-1" {...props} />,
     ol: (props) => <ol className="list-decimal pl-5 my-2 space-y-1" {...props} />,
     li: (props) => <li className="leading-6" {...props} />,
-    a:  (props) => <a className="underline text-blue-400 hover:text-blue-300" target="_blank" rel="noreferrer" {...props} />,
-    table: ({ node, ...props }) => (
+    a:  (props) => <a className="underline text-blue-400 hover:text-blue-300" target="_blank" rel="noopener noreferrer" {...props} />,
+    table: ({ ...props }) => (
         <div className="overflow-x-auto my-2">
             <table
                 className="w-full text-left border-collapse border border-neutral-700"
@@ -22,23 +22,23 @@ const components: Components = {
             />
         </div>
     ),
-    th: ({ node, ...props }) => (
+    th: ({ ...props }) => (
         <th
             className="border border-neutral-700 px-2 py-1 font-semibold bg-neutral-800"
             {...props}
         />
     ),
-    td: ({ node, ...props }) => (
+    td: ({ ...props }) => (
         <td className="border border-neutral-700/60 px-2 py-1 align-top" {...props} />
     ),
-    blockquote: ({ node, ...props }) => (
+    blockquote: ({ ...props }) => (
         <blockquote
             className="border-l-4 border-neutral-600 pl-3 italic text-neutral-300"
             {...props}
         />
     ),
-    hr: ({ node, ...props }) => <hr className="my-4 border-neutral-600" {...props} />,
-    img: ({ node, ...props }) => (
+    hr: ({ ...props }) => <hr className="my-4 border-neutral-600" {...props} />,
+    img: ({ ...props }) => (
         <img
             {...props}
             referrerPolicy="no-referrer"
