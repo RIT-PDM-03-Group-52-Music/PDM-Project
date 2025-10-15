@@ -22,3 +22,26 @@ CREATE TABLE collections (
     unique ( user_id, collection_name ),
     foreign key (user_id) references users(user_id) ON DELETE CASCADE ON UPDATE CASCADE
 )
+
+## ARTISTS(artist id, artist name)
+CREATE TABLE artists (
+    artist_id integer generated always as identity primary key,
+    artist_name varchar(128) not null
+)
+
+## GENRES(genre id, genre name)
+CREATE TABLE GENRES(
+    genre_id integer generated always as identity primary key,
+    genre_name varchar(24) not null UNIQUE
+)
+## SONGS(song id, song title, song length, released at)
+## ALBUMS(album id, album name, released at)
+## FOLLOWS(follower id , followee id )
+## RATES(user id , song id , rating)
+## LISTENS(user id , song id , listened at)
+## COLLECTIONITEMS(collection id , song id , added at)
+## SONGCAT(song id , genre id )
+## ALBUMCAT(album id , genre id )
+## ALBUMITEMS(album id , song id , track num)
+## MASTERS(album id , artist id )
+## FEATURES(artist id , song id )
