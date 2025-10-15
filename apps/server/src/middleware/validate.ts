@@ -17,11 +17,11 @@ export const validateBody =
     };
 
 export const validatePath =
-    <T extends ParamsLike>(schema: ZodSchema<T>) =>
-    (req: Request<T>, res: Response, next: NextFunction) => {
+    <T>(schema: ZodSchema<T>) =>
+    (req: Request, res: Response, next: NextFunction) => {
         try {
             const parsed = schema.parse(req.params);
-            req.params = parsed;
+            (req as unknown as { params: T }).params = parsed;
             next();
         } catch (err) {
             handleZodError(res, err) ??
@@ -30,7 +30,7 @@ export const validatePath =
     };
 
 export const validateQuery =
-    <T extends ParamsLike>(schema: ZodSchema<T>) =>
+    <T>(schema: ZodSchema<T>) =>
     (req: Request, res: Response, next: NextFunction) => {
         try {
             const parsed = schema.parse(req.query);
