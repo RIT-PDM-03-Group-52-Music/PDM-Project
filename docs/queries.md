@@ -131,8 +131,8 @@ CREATE TABLE ALBUMITEMS(
 CREATE TABLE MASTERS(
     album_id integer not null,
     artist_id integer not null,
-    FOREIGN KEY (album_id) REFERENCES albums(album_id),
-    FOREIGN KEY (artist_id) REFERENCES artists(artist_id),
+    FOREIGN KEY (album_id) REFERENCES albums(album_id) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (artist_id) REFERENCES artists(artist_id) ON UPDATE CASCADE ON DELETE CASCADE,
     PRIMARY KEY (album_id, artist_id)
 )
 
