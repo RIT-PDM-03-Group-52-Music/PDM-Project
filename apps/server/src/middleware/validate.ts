@@ -2,8 +2,6 @@ import type { NextFunction, Request, Response } from "express";
 import type { ZodSchema } from "zod";
 import { handleZodError } from "../utils/http";
 
-type ParamsLike = Record<string, string>;
-
 export const validateBody =
     <T>(schema: ZodSchema<T>) =>
     (req: Request, res: Response, next: NextFunction) => {
@@ -18,7 +16,7 @@ export const validateBody =
 
 export const validatePath =
     <T>(schema: ZodSchema<T>) =>
-    (req: Request, res: Response, next: NextFunction) => {
+    (req: Request<T>, res: Response, next: NextFunction) => {
         try {
             const parsed = schema.parse(req.params);
             (req as unknown as { params: T }).params = parsed;
