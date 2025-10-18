@@ -1,9 +1,21 @@
-import { type GetCollectionParams, GetCollectionParamsSchema, GetCollectionsQuerySchema } from "@pdm/contracts";
+import {
+    type GetCollectionParams,
+    GetCollectionParamsSchema,
+    GetCollectionsQuerySchema,
+} from "@pdm/contracts";
 import { type Request, type Response, Router } from "express";
 import { pool } from "../db";
 import { authgate } from "../middleware/authgate";
-import { validatePath} from "../middleware/validate";
-import { getCollectionById, getCollectionsByCollectionNameAsc, getCollectionsByCollectionNameDesc, getCollectionsBySongCountAsc, getCollectionsBySongCountDesc, getCollectionsByTotalLengthAsc, getCollectionsByTotalLengthDesc } from "../queries/collection.queries";
+import { validatePath } from "../middleware/validate";
+import {
+    getCollectionById,
+    getCollectionsByCollectionNameAsc,
+    getCollectionsByCollectionNameDesc,
+    getCollectionsBySongCountAsc,
+    getCollectionsBySongCountDesc,
+    getCollectionsByTotalLengthAsc,
+    getCollectionsByTotalLengthDesc,
+} from "../queries/collection.queries";
 import { badRequest, notFound, ok, serverError, unauthorized } from "../utils/http";
 
 const router = Router();
@@ -47,9 +59,9 @@ router.get("/", authgate, async (req: Request, res: Response) => {
         const user_id = req.userId;
         if (!user_id) return unauthorized(res, "Missing user ID.");
 
-        let result;
+        let result: unknown[] = [];
 
-        if (sort == "collection_name" && order == "asc") {
+        if (sort === "collection_name" && order === "asc") {
             result = await getCollectionsByCollectionNameAsc.run(
                 {
                     page,
@@ -58,7 +70,7 @@ router.get("/", authgate, async (req: Request, res: Response) => {
                 },
                 pool,
             );
-        } else if (sort == "collection_name" && order == "desc") {
+        } else if (sort === "collection_name" && order === "desc") {
             result = await getCollectionsByCollectionNameDesc.run(
                 {
                     page,
@@ -67,7 +79,7 @@ router.get("/", authgate, async (req: Request, res: Response) => {
                 },
                 pool,
             );
-        } else if (sort == "songs_count" && order == "asc") {
+        } else if (sort === "songs_count" && order === "asc") {
             result = await getCollectionsBySongCountAsc.run(
                 {
                     page,
@@ -76,7 +88,7 @@ router.get("/", authgate, async (req: Request, res: Response) => {
                 },
                 pool,
             );
-        } else if (sort == "songs_count" && order == "desc") {
+        } else if (sort === "songs_count" && order === "desc") {
             result = await getCollectionsBySongCountDesc.run(
                 {
                     page,
@@ -85,7 +97,7 @@ router.get("/", authgate, async (req: Request, res: Response) => {
                 },
                 pool,
             );
-        } else if (sort == "total_minutes" && order == "asc") {
+        } else if (sort === "total_minutes" && order === "asc") {
             result = await getCollectionsByTotalLengthAsc.run(
                 {
                     page,
@@ -94,7 +106,7 @@ router.get("/", authgate, async (req: Request, res: Response) => {
                 },
                 pool,
             );
-        } else if (sort == "total_minutes" && order == "desc") {
+        } else if (sort === "total_minutes" && order === "desc") {
             result = await getCollectionsByTotalLengthDesc.run(
                 {
                     page,
@@ -104,12 +116,12 @@ router.get("/", authgate, async (req: Request, res: Response) => {
                 pool,
             );
         }
-            return ok(res, result);
-        } catch (err) {
-            console.error(err);
-            return serverError(res);
-        }
-    },
-);
+
+        return ok(res, result);
+    } catch (err) {
+        console.error(err);
+        return serverError(res);
+    }
+});
 
 export default router;
