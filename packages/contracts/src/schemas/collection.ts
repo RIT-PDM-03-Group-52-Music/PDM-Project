@@ -21,5 +21,3 @@ export const GetCollectionsQuerySchema = z.object({
         .enum(["asc", "desc"])
         .default("asc"),
 });
-
-export type GetCollectionsQuery = z.infer<typeof GetCollectionsQuerySchema>;

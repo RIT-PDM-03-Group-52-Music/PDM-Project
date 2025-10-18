@@ -27,15 +27,3 @@ export const validatePath =
         }
     };
 
-export const validateQuery =
-    <T>(schema: ZodSchema<T>) =>
-    (req: Request, res: Response, next: NextFunction) => {
-        try {
-            const parsed = schema.parse(req.query);
-            (req as unknown as { query: T }).query = parsed;
-            next();
-        } catch (err) {
-            handleZodError(res, err) ??
-                res.status(400).json({ error: "Invalid query parameters." });
-        }
-    };
