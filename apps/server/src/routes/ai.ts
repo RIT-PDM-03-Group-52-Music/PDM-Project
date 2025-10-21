@@ -12,7 +12,7 @@ import { type Request, type Response, Router } from "express";
 import { COMPLETE_SYSTEM_PROMPT, PLAN_SYSTEM_PROMPT } from "../context/prompts";
 import { authgate } from "../middleware/authgate";
 import { validateBody } from "../middleware/validate";
-import { noContent, ok, serverError } from "../utils/http";
+import { noContent, ok, serverError, unprocessableEntity } from "../utils/http";
 
 const router = Router();
 
@@ -45,9 +45,7 @@ router.post(
             return ok(res, response.object);
         } catch (err) {
             if (NoObjectGeneratedError.isInstance(err))
-                return res.status(422).json({
-                    error: "Failed to generate valid API plan",
-                });
+                return noContent(res);
 
             console.error(err);
             return serverError(res);
@@ -96,9 +94,7 @@ router.post(
             return ok(res, response.object);
         } catch (err) {
             if (NoObjectGeneratedError.isInstance(err))
-                return res.status(422).json({
-                    error: "Failed to generate valid completion",
-                });
+                return unprocessableEntity(res, "Failed to generate valid completion");
 
             console.error(err);
             return serverError(res);

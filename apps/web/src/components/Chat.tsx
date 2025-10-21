@@ -49,7 +49,7 @@ const welcomes = [
 ];
 
 // copilot generated :-p gonna fix up later / add on as we expand app
-function getVirgilImageForText(text: string) {
+const getVirgilImageForText  = (text: string) => {
     const t = (text || "").toLowerCase();
     console.log('Analyzing text for Virgil mood:', t);
     let mood = 'blank';
@@ -58,14 +58,17 @@ function getVirgilImageForText(text: string) {
     if (/no data|no relevant data|did not complete successfully|unable to retrieve|http 400/.test(t)) {
         mood = 'sad';
     }
+
     // API errors and invalid inputs
     else if (/error|invalid|failed|denied|unrecognizable parameters/.test(t)) {
         mood = 'angry';
     }
+
     // Successful operations
     else if (/completed|received and executed|system status: nominal|greetings, operator/.test(t)) {
         mood = 'happy';
     }
+
     // Awaiting input or needs more info
     else if (/please revise|please submit|please confirm|awaiting|how may i assist/.test(t)) {
         mood = 'confused';
@@ -112,9 +115,6 @@ function VirgilAvatar({ text }: { text: string }) {
     if (failed) {
         return (
             <div className="relative group">
-                <div className="absolute -top-4 left-0 text-[10px] text-red-500 whitespace-nowrap opacity-0 group-hover:opacity-100">
-                    Failed: {src}
-                </div>
                 <div className="h-18 w-18 shrink-0 grid place-items-center rounded-full bg-neutral-800 border border-neutral-700 text-sm shadow-md shadow-black/30 font-semibold text-neutral-100">
                     V
                 </div>
@@ -124,9 +124,6 @@ function VirgilAvatar({ text }: { text: string }) {
 
     return (
         <div className="relative group w-12 h-12">
-            <div className="absolute -top-4 left-0 text-[10px] text-neutral-500 whitespace-nowrap opacity-0 group-hover:opacity-100">
-                {loaded ? 'Loaded:' : 'Loading:'} {src}
-            </div>
             <img
                 src={src}
                 alt="Virgil"
@@ -137,9 +134,9 @@ function VirgilAvatar({ text }: { text: string }) {
                     console.error("Virgil avatar failed to load:", (e.target as HTMLImageElement).src);
                     setFailed(true);
                 }}
-                className={`fixed-size w-12 h-12 rounded-full object-contain p-1 bg-neutral-800 border border-neutral-700 shadow-md shadow-black/30 transition-all duration-200 ${
+                className={`fixed-size w-12 h-12 rounded-full object-contain p-0 bg-neutral-800 border border-neutral-700 shadow-md shadow-black/30 transition-all duration-200 ${
                     loaded ? 'opacity-100 scale-100' : 'opacity-50 scale-95'
-                } hover:border-neutral-600 hover:shadow-lg hover:scale-105`}
+                } hover:border-neutral-600 hover:shadow-lg hover:scale-102`}
             />
         </div>
     );
@@ -163,8 +160,6 @@ export function Chat() {
             recommendations[(i + 2) % recommendations.length]!,
         ];
     });
-
-
 
     useEffect(() => {
         const list = listRef.current;
