@@ -30,3 +30,207 @@ const getCollectionByIdIR: any = {"usedParamSet":{"collection_id":true},"params"
 export const getCollectionById = new PreparedQuery<IGetCollectionByIdParams,IGetCollectionByIdResult>(getCollectionByIdIR);
 
 
+/** 'GetCollectionsByCollectionNameAsc' parameters type */
+export interface IGetCollectionsByCollectionNameAscParams {
+  page: number;
+  page_size: number;
+  user_id: number;
+}
+
+/** 'GetCollectionsByCollectionNameAsc' return type */
+export interface IGetCollectionsByCollectionNameAscResult {
+  collection_id: number;
+  collection_name: string;
+  user_id: number;
+}
+
+/** 'GetCollectionsByCollectionNameAsc' query type */
+export interface IGetCollectionsByCollectionNameAscQuery {
+  params: IGetCollectionsByCollectionNameAscParams;
+  result: IGetCollectionsByCollectionNameAscResult;
+}
+
+const getCollectionsByCollectionNameAscIR: any = {"usedParamSet":{"user_id":true,"page_size":true,"page":true},"params":[{"name":"user_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":43,"b":51}]},{"name":"page_size","required":true,"transform":{"type":"scalar"},"locs":[{"a":89,"b":99},{"a":123,"b":133}]},{"name":"page","required":true,"transform":{"type":"scalar"},"locs":[{"a":109,"b":114}]}],"statement":"SELECT * FROM COLLECTIONS WHERE (user_id = :user_id!) ORDER BY collection_name ASC LIMIT :page_size! OFFSET (:page! - 1) * :page_size!"};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * SELECT * FROM COLLECTIONS WHERE (user_id = :user_id!) ORDER BY collection_name ASC LIMIT :page_size! OFFSET (:page! - 1) * :page_size!
+ * ```
+ */
+export const getCollectionsByCollectionNameAsc = new PreparedQuery<IGetCollectionsByCollectionNameAscParams,IGetCollectionsByCollectionNameAscResult>(getCollectionsByCollectionNameAscIR);
+
+
+/** 'GetCollectionsByCollectionNameDesc' parameters type */
+export interface IGetCollectionsByCollectionNameDescParams {
+  page: number;
+  page_size: number;
+  user_id: number;
+}
+
+/** 'GetCollectionsByCollectionNameDesc' return type */
+export interface IGetCollectionsByCollectionNameDescResult {
+  collection_id: number;
+  collection_name: string;
+  user_id: number;
+}
+
+/** 'GetCollectionsByCollectionNameDesc' query type */
+export interface IGetCollectionsByCollectionNameDescQuery {
+  params: IGetCollectionsByCollectionNameDescParams;
+  result: IGetCollectionsByCollectionNameDescResult;
+}
+
+const getCollectionsByCollectionNameDescIR: any = {"usedParamSet":{"user_id":true,"page_size":true,"page":true},"params":[{"name":"user_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":43,"b":51}]},{"name":"page_size","required":true,"transform":{"type":"scalar"},"locs":[{"a":90,"b":100},{"a":124,"b":134}]},{"name":"page","required":true,"transform":{"type":"scalar"},"locs":[{"a":110,"b":115}]}],"statement":"SELECT * FROM COLLECTIONS WHERE (user_id = :user_id!) ORDER BY collection_name DESC LIMIT :page_size! OFFSET (:page! - 1) * :page_size!"};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * SELECT * FROM COLLECTIONS WHERE (user_id = :user_id!) ORDER BY collection_name DESC LIMIT :page_size! OFFSET (:page! - 1) * :page_size!
+ * ```
+ */
+export const getCollectionsByCollectionNameDesc = new PreparedQuery<IGetCollectionsByCollectionNameDescParams,IGetCollectionsByCollectionNameDescResult>(getCollectionsByCollectionNameDescIR);
+
+
+/** 'GetCollectionsBySongCountAsc' parameters type */
+export interface IGetCollectionsBySongCountAscParams {
+  page: number;
+  page_size: number;
+  user_id: number;
+}
+
+/** 'GetCollectionsBySongCountAsc' return type */
+export interface IGetCollectionsBySongCountAscResult {
+  collection_id: number;
+  collection_name: string;
+  song_count: string | null;
+  user_id: number;
+}
+
+/** 'GetCollectionsBySongCountAsc' query type */
+export interface IGetCollectionsBySongCountAscQuery {
+  params: IGetCollectionsBySongCountAscParams;
+  result: IGetCollectionsBySongCountAscResult;
+}
+
+const getCollectionsBySongCountAscIR: any = {"usedParamSet":{"user_id":true,"page_size":true,"page":true},"params":[{"name":"user_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":206,"b":214}]},{"name":"page_size","required":true,"transform":{"type":"scalar"},"locs":[{"a":247,"b":257},{"a":281,"b":291}]},{"name":"page","required":true,"transform":{"type":"scalar"},"locs":[{"a":267,"b":272}]}],"statement":"SELECT C.collection_id, C.user_id, C.collection_name, (\n    SELECT COUNT(*) FROM COLLECTIONITEMS AS CI WHERE (CI.collection_id = C.collection_id)    \n) AS song_count FROM COLLECTIONS AS C WHERE C.user_id = :user_id! ORDER BY song_count ASC \nLIMIT :page_size! OFFSET (:page! - 1) * :page_size!"};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * SELECT C.collection_id, C.user_id, C.collection_name, (
+ *     SELECT COUNT(*) FROM COLLECTIONITEMS AS CI WHERE (CI.collection_id = C.collection_id)    
+ * ) AS song_count FROM COLLECTIONS AS C WHERE C.user_id = :user_id! ORDER BY song_count ASC 
+ * LIMIT :page_size! OFFSET (:page! - 1) * :page_size!
+ * ```
+ */
+export const getCollectionsBySongCountAsc = new PreparedQuery<IGetCollectionsBySongCountAscParams,IGetCollectionsBySongCountAscResult>(getCollectionsBySongCountAscIR);
+
+
+/** 'GetCollectionsBySongCountDesc' parameters type */
+export interface IGetCollectionsBySongCountDescParams {
+  page: number;
+  page_size: number;
+  user_id: number;
+}
+
+/** 'GetCollectionsBySongCountDesc' return type */
+export interface IGetCollectionsBySongCountDescResult {
+  collection_id: number;
+  collection_name: string;
+  song_count: string | null;
+  user_id: number;
+}
+
+/** 'GetCollectionsBySongCountDesc' query type */
+export interface IGetCollectionsBySongCountDescQuery {
+  params: IGetCollectionsBySongCountDescParams;
+  result: IGetCollectionsBySongCountDescResult;
+}
+
+const getCollectionsBySongCountDescIR: any = {"usedParamSet":{"user_id":true,"page_size":true,"page":true},"params":[{"name":"user_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":206,"b":214}]},{"name":"page_size","required":true,"transform":{"type":"scalar"},"locs":[{"a":247,"b":257},{"a":281,"b":291}]},{"name":"page","required":true,"transform":{"type":"scalar"},"locs":[{"a":267,"b":272}]}],"statement":"SELECT C.collection_id, C.user_id, C.collection_name, (\n    SELECT COUNT(*) FROM COLLECTIONITEMS AS CI WHERE (CI.collection_id = C.collection_id)    \n) AS song_count FROM COLLECTIONS AS C WHERE C.user_id = :user_id! ORDER BY song_count DESC\nLIMIT :page_size! OFFSET (:page! - 1) * :page_size!"};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * SELECT C.collection_id, C.user_id, C.collection_name, (
+ *     SELECT COUNT(*) FROM COLLECTIONITEMS AS CI WHERE (CI.collection_id = C.collection_id)    
+ * ) AS song_count FROM COLLECTIONS AS C WHERE C.user_id = :user_id! ORDER BY song_count DESC
+ * LIMIT :page_size! OFFSET (:page! - 1) * :page_size!
+ * ```
+ */
+export const getCollectionsBySongCountDesc = new PreparedQuery<IGetCollectionsBySongCountDescParams,IGetCollectionsBySongCountDescResult>(getCollectionsBySongCountDescIR);
+
+
+/** 'GetCollectionsByTotalLengthAsc' parameters type */
+export interface IGetCollectionsByTotalLengthAscParams {
+  page: number;
+  page_size: number;
+  user_id: number;
+}
+
+/** 'GetCollectionsByTotalLengthAsc' return type */
+export interface IGetCollectionsByTotalLengthAscResult {
+  collection_id: number;
+  collection_name: string;
+  total_length: string | null;
+  user_id: number;
+}
+
+/** 'GetCollectionsByTotalLengthAsc' query type */
+export interface IGetCollectionsByTotalLengthAscQuery {
+  params: IGetCollectionsByTotalLengthAscParams;
+  result: IGetCollectionsByTotalLengthAscResult;
+}
+
+const getCollectionsByTotalLengthAscIR: any = {"usedParamSet":{"user_id":true,"page_size":true,"page":true},"params":[{"name":"user_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":269,"b":277}]},{"name":"page_size","required":true,"transform":{"type":"scalar"},"locs":[{"a":311,"b":321},{"a":345,"b":355}]},{"name":"page","required":true,"transform":{"type":"scalar"},"locs":[{"a":331,"b":336}]}],"statement":"SELECT C.collection_id, C.user_id, C.collection_name, (\n    SELECT SUM(S.song_length) FROM COLLECTIONITEMS AS CI INNER JOIN SONGS AS S \n    ON (S.song_id = CI.song_id) WHERE (CI.collection_id = C.collection_id)\n) AS total_length FROM COLLECTIONS AS C WHERE C.user_id = :user_id! ORDER BY total_length ASC\nLIMIT :page_size! OFFSET (:page! - 1) * :page_size!"};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * SELECT C.collection_id, C.user_id, C.collection_name, (
+ *     SELECT SUM(S.song_length) FROM COLLECTIONITEMS AS CI INNER JOIN SONGS AS S 
+ *     ON (S.song_id = CI.song_id) WHERE (CI.collection_id = C.collection_id)
+ * ) AS total_length FROM COLLECTIONS AS C WHERE C.user_id = :user_id! ORDER BY total_length ASC
+ * LIMIT :page_size! OFFSET (:page! - 1) * :page_size!
+ * ```
+ */
+export const getCollectionsByTotalLengthAsc = new PreparedQuery<IGetCollectionsByTotalLengthAscParams,IGetCollectionsByTotalLengthAscResult>(getCollectionsByTotalLengthAscIR);
+
+
+/** 'GetCollectionsByTotalLengthDesc' parameters type */
+export interface IGetCollectionsByTotalLengthDescParams {
+  page: number;
+  page_size: number;
+  user_id: number;
+}
+
+/** 'GetCollectionsByTotalLengthDesc' return type */
+export interface IGetCollectionsByTotalLengthDescResult {
+  collection_id: number;
+  collection_name: string;
+  total_length: string | null;
+  user_id: number;
+}
+
+/** 'GetCollectionsByTotalLengthDesc' query type */
+export interface IGetCollectionsByTotalLengthDescQuery {
+  params: IGetCollectionsByTotalLengthDescParams;
+  result: IGetCollectionsByTotalLengthDescResult;
+}
+
+const getCollectionsByTotalLengthDescIR: any = {"usedParamSet":{"user_id":true,"page_size":true,"page":true},"params":[{"name":"user_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":269,"b":277}]},{"name":"page_size","required":true,"transform":{"type":"scalar"},"locs":[{"a":312,"b":322},{"a":346,"b":356}]},{"name":"page","required":true,"transform":{"type":"scalar"},"locs":[{"a":332,"b":337}]}],"statement":"SELECT C.collection_id, C.user_id, C.collection_name, (\n    SELECT SUM(S.song_length) FROM COLLECTIONITEMS AS CI INNER JOIN SONGS AS S \n    ON (S.song_id = CI.song_id) WHERE (CI.collection_id = C.collection_id)\n) AS total_length FROM COLLECTIONS AS C WHERE C.user_id = :user_id! ORDER BY total_length DESC\nLIMIT :page_size! OFFSET (:page! - 1) * :page_size!"};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * SELECT C.collection_id, C.user_id, C.collection_name, (
+ *     SELECT SUM(S.song_length) FROM COLLECTIONITEMS AS CI INNER JOIN SONGS AS S 
+ *     ON (S.song_id = CI.song_id) WHERE (CI.collection_id = C.collection_id)
+ * ) AS total_length FROM COLLECTIONS AS C WHERE C.user_id = :user_id! ORDER BY total_length DESC
+ * LIMIT :page_size! OFFSET (:page! - 1) * :page_size!
+ * ```
+ */
+export const getCollectionsByTotalLengthDesc = new PreparedQuery<IGetCollectionsByTotalLengthDescParams,IGetCollectionsByTotalLengthDescResult>(getCollectionsByTotalLengthDescIR);
+
+
