@@ -2,11 +2,13 @@ import {
     type GetCollectionParams,
     GetCollectionParamsSchema,
     GetCollectionsQuerySchema,
+    type PostCollectionBody,
+    PostCollectionBodySchema,
 } from "@pdm/contracts";
 import { type Request, type Response, Router } from "express";
 import { pool } from "../db";
 import { authgate } from "../middleware/authgate";
-import { validatePath } from "../middleware/validate";
+import { validateBody, validatePath } from "../middleware/validate";
 import {
     getCollectionById,
     getCollectionsByCollectionNameAsc,
@@ -15,8 +17,9 @@ import {
     getCollectionsBySongCountDesc,
     getCollectionsByTotalLengthAsc,
     getCollectionsByTotalLengthDesc,
+    insertCollectionByCollectionName,
 } from "../queries/collection.queries";
-import { badRequest, notFound, ok, serverError, unauthorized } from "../utils/http";
+import { badRequest, conflict, notFound, ok, serverError, unauthorized } from "../utils/http";
 
 const router = Router();
 
@@ -123,5 +126,34 @@ router.get("/", authgate, async (req: Request, res: Response) => {
         return serverError(res);
     }
 });
+
+router.post(
+    "/",
+    authgate,
+    validateBody(PostCollectionBodySchema),
+    async (req: Request<unknown, unknown, PostCollectionBody>, res: Response) => {
+        try {
+            const { collection_name } = req.body;
+
+            if (!req.userId) return unauthorized(res, "Missing user ID.");
+
+            const result = await insertCollectionByCollectionName.run(
+                {
+                    user_id: Number(req.userId),
+                    collection_name,
+                },
+                pool,
+            );
+
+            const collection = result?.[0];
+            if (!collection) return conflict(res, "Collection with this name already exists.");
+
+            return ok(res, collection);
+        } catch (err) {
+            console.error(err);
+            return serverError(res);
+        }
+    },
+);
 
 export default router;

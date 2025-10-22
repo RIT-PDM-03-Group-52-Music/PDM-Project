@@ -32,3 +32,7 @@ SELECT C.collection_id, C.user_id, C.collection_name, (
     ON (S.song_id = CI.song_id) WHERE (CI.collection_id = C.collection_id)
 ) AS total_length FROM COLLECTIONS AS C WHERE C.user_id = :user_id! ORDER BY total_length DESC
 LIMIT :page_size! OFFSET (:page! - 1) * :page_size!;
+
+/* @name insertCollectionByCollectionName */
+INSERT INTO COLLECTIONS (user_id, collection_name) VALUES (:user_id!, :collection_name!)
+RETURNING collection_id, collection_name;

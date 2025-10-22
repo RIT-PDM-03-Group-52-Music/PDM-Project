@@ -234,3 +234,33 @@ const getCollectionsByTotalLengthDescIR: any = {"usedParamSet":{"user_id":true,"
 export const getCollectionsByTotalLengthDesc = new PreparedQuery<IGetCollectionsByTotalLengthDescParams,IGetCollectionsByTotalLengthDescResult>(getCollectionsByTotalLengthDescIR);
 
 
+/** 'InsertCollectionByCollectionName' parameters type */
+export interface IInsertCollectionByCollectionNameParams {
+  collection_name: string;
+  user_id: number;
+}
+
+/** 'InsertCollectionByCollectionName' return type */
+export interface IInsertCollectionByCollectionNameResult {
+  collection_id: number;
+  collection_name: string;
+}
+
+/** 'InsertCollectionByCollectionName' query type */
+export interface IInsertCollectionByCollectionNameQuery {
+  params: IInsertCollectionByCollectionNameParams;
+  result: IInsertCollectionByCollectionNameResult;
+}
+
+const insertCollectionByCollectionNameIR: any = {"usedParamSet":{"user_id":true,"collection_name":true},"params":[{"name":"user_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":59,"b":67}]},{"name":"collection_name","required":true,"transform":{"type":"scalar"},"locs":[{"a":70,"b":86}]}],"statement":"INSERT INTO COLLECTIONS (user_id, collection_name) VALUES (:user_id!, :collection_name!)\nRETURNING collection_id, collection_name"};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * INSERT INTO COLLECTIONS (user_id, collection_name) VALUES (:user_id!, :collection_name!)
+ * RETURNING collection_id, collection_name
+ * ```
+ */
+export const insertCollectionByCollectionName = new PreparedQuery<IInsertCollectionByCollectionNameParams,IInsertCollectionByCollectionNameResult>(insertCollectionByCollectionNameIR);
+
+

@@ -2,8 +2,13 @@
   "name": "pdm-project",
   "private": true,
   "packageManager": "pnpm@10.0.0",
-  "engines": { "node": ">=22" },
-  "workspaces": ["apps/*", "packages/*"],
+  "engines": {
+    "node": ">=22"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "dev": "concurrently -k \"pnpm --filter @pdm/contracts dev\" \"pnpm -r --parallel --filter !@pdm/contracts dev\"",
     "dev:server": "pnpm --filter @pdm/server dev",
@@ -19,5 +24,8 @@
     "@types/node": "^22.7.5",
     "concurrently": "^9.0.0",
     "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "swr": "2.3.6"
   }
 }

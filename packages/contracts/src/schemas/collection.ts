@@ -13,3 +13,12 @@ export const GetCollectionsQuerySchema = z.object({
     sort: z.enum(["collection_name", "songs_count", "total_minutes"]).default("collection_name"),
     order: z.enum(["asc", "desc"]).default("asc"),
 });
+
+export const PostCollectionBodySchema = z.object({
+    collection_name: z
+        .string()
+        .min(3, "Collection name must be at least 3 character long.")
+        .max(24, "Collection name must be at most 24 characters long."),
+});
+
+export type PostCollectionBody = z.infer<typeof PostCollectionBodySchema>;
