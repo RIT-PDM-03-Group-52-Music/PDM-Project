@@ -81,7 +81,7 @@ export const ENDPOINTS: Endpoint[] = [
             page: { t: "integer", d: "default = 0" },
             page_size: { t: "integer", d: "default = 15" },
             sort: { t: "enum", enum: ["collection_name", "songs_count", "total_minutes"] },
-            order: { t: "enum", enum: ["ASC", "DESC"] },
+            order: { t: "enum", enum: ["asc", "desc"] },
         },
         ret: [
             {
@@ -154,7 +154,7 @@ export const ENDPOINTS: Endpoint[] = [
                     "song_length",
                 ],
             },
-            order: { t: "enum", enum: ["ASC", "DESC"] },
+            order: { t: "enum", enum: ["asc", "desc"] },
         },
         ret: [
             {
@@ -240,7 +240,7 @@ export const ENDPOINTS: Endpoint[] = [
                 t: "enum",
                 enum: ["song_title", "artist_name", "genre_name", "released_at"],
             },
-            order: { t: "enum", enum: ["ASC", "DESC"] },
+            order: { t: "enum", enum: ["asc", "desc"] },
         },
         ret: [
             {

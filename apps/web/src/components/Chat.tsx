@@ -49,35 +49,37 @@ const welcomes = [
 ];
 
 // copilot generated :-p gonna fix up later / add on as we expand app
-const getVirgilImageForText  = (text: string) => {
+const getVirgilImageForText = (text: string) => {
     const t = (text || "").toLowerCase();
-    console.log('Analyzing text for Virgil mood:', t);
-    let mood = 'blank';
-    
+    console.log("Analyzing text for Virgil mood:", t);
+    let mood = "blank";
+
     // System errors and no data states
-    if (/no data|no relevant data|did not complete successfully|unable to retrieve|http 400/.test(t)) {
-        mood = 'sad';
+    if (
+        /no data|no relevant data|did not complete successfully|unable to retrieve|http 400/.test(t)
+    ) {
+        mood = "sad";
     }
 
     // API errors and invalid inputs
     else if (/error|invalid|failed|denied|unrecognizable parameters/.test(t)) {
-        mood = 'angry';
+        mood = "angry";
     }
 
     // Successful operations
     else if (/completed|received and executed|system status: nominal|greetings, operator/.test(t)) {
-        mood = 'happy';
+        mood = "happy";
     }
 
     // Awaiting input or needs more info
     else if (/please revise|please submit|please confirm|awaiting|how may i assist/.test(t)) {
-        mood = 'confused';
+        mood = "confused";
     }
 
     const src = `/virgil_images/${mood}-face.jpg`;
-    console.log('Chose Virgil mood:', mood, 'Image:', src);
+    console.log("Chose Virgil mood:", mood, "Image:", src);
     return src;
-}
+};
 
 function VirgilAvatar({ text }: { text: string }) {
     const [src, setSrc] = useState(() => getVirgilImageForText(text));
@@ -86,13 +88,13 @@ function VirgilAvatar({ text }: { text: string }) {
 
     // Debug: log component lifecycle
     useEffect(() => {
-        console.log('VirgilAvatar mounted, text:', text);
-        console.log('Trying to load image:', src);
+        console.log("VirgilAvatar mounted, text:", text);
+        console.log("Trying to load image:", src);
     }, []);
 
     useEffect(() => {
         const newSrc = getVirgilImageForText(text);
-        console.log('VirgilAvatar updating src:', newSrc);
+        console.log("VirgilAvatar updating src:", newSrc);
         setSrc(newSrc);
         setFailed(false);
         setLoaded(false);
@@ -102,11 +104,11 @@ function VirgilAvatar({ text }: { text: string }) {
     useEffect(() => {
         const img = new Image();
         img.onload = () => {
-            console.log('Image loaded successfully:', src);
+            console.log("Image loaded successfully:", src);
             setLoaded(true);
         };
         img.onerror = (e) => {
-            console.error('Image failed to load:', src, e);
+            console.error("Image failed to load:", src, e);
             setFailed(true);
         };
         img.src = src;
@@ -127,21 +129,23 @@ function VirgilAvatar({ text }: { text: string }) {
             <img
                 src={src}
                 alt="Virgil"
-                title={loaded ? 'Loaded: ' + src : 'Loading: ' + src}
+                title={loaded ? "Loaded: " + src : "Loading: " + src}
                 loading="eager"
                 onLoad={() => setLoaded(true)}
                 onError={(e) => {
-                    console.error("Virgil avatar failed to load:", (e.target as HTMLImageElement).src);
+                    console.error(
+                        "Virgil avatar failed to load:",
+                        (e.target as HTMLImageElement).src,
+                    );
                     setFailed(true);
                 }}
-                className={`fixed-size w-12 h-12 rounded-full object-contain p-0 bg-neutral-800 border border-neutral-700 shadow-md shadow-black/30 transition-all duration-200 ${
-                    loaded ? 'opacity-100 scale-100' : 'opacity-50 scale-95'
+                className={`w-12 h-12 rounded-full bg-neutral-800 border border-neutral-700 shadow-md shadow-black/30 transition-all duration-100 ${
+                    loaded ? "opacity-100 scale-100" : "opacity-50 scale-95"
                 } hover:border-neutral-600 hover:shadow-lg hover:scale-102`}
             />
         </div>
     );
 }
-
 
 export function Chat() {
     const { user } = useAuth();
@@ -219,30 +223,26 @@ export function Chat() {
                                             className={`flex ${fromAssistant ? "justify-start" : "justify-end"}`}
                                         >
                                             <div className={`flex items-start gap-2 max-w-[85%]`}>
-                                                {fromAssistant && (
-                                                    <div className="flex-shrink-0 w-12">
-                                                        <VirgilAvatar text={m.content} />
-                                                    </div>
-                                                )}
+                                                {fromAssistant && <VirgilAvatar text={m.content} />}
                                                 <div
                                                     className={`rounded-2xl text-sm shadow-md shadow-black/30 flex-1 ${
                                                         fromAssistant
                                                             ? "bg-neutral-800/70 border border-neutral-700 text-neutral-100 py-2"
-                                                            : "bg-blue-600/90 border border-blue-500 text-white"
+                                                            : "bg-[rgb(111,143,94)] border border-[rgb(111,143,94)] text-white"
                                                     }`}
                                                 >
                                                     {fromAssistant && (
-                                                        <div className="flex flex-row gap-1 h-8 items-center w-full border-b border-neutral-700 px-4 py-2 text-xs font-semibold text-neutral-500">
+                                                        <div className="flex flex-row gap-1 items-center w-full border-b border-neutral-700 px-4 pb-2 pt-0.5 text-xs font-semibold text-neutral-500">
                                                             <Radio
                                                                 className={`w-4 h-4 ${
                                                                     m.nCalls.total == 0
                                                                         ? "text-neutral-500"
                                                                         : m.nCalls.success === 0
-                                                                          ? "text-red-500/80"
+                                                                          ? "text-[#8b3b3b]" /* muted error */
                                                                           : m.nCalls.success <
                                                                               m.nCalls.total
-                                                                            ? "text-yellow-500/80"
-                                                                            : "text-green-500/80"
+                                                                            ? "text-[#b7c48f]" /* partial - lighter camo */
+                                                                            : "text-[#6f8f5e]" /* success - camo green */
                                                                 }`}
                                                             />
                                                             <span>
@@ -266,7 +266,7 @@ export function Chat() {
                                                     </div>
                                                 </div>
                                                 {!fromAssistant && user && (
-                                                    <div className="h-8 w-8 shrink-0 grid place-items-center rounded-full bg-blue-600 border border-blue-500 text-[10px] shadow-md shadow-black/30 font-semibold text-white">
+                                                    <div className="h-8 w-8 shrink-0 grid place-items-center rounded-full bg-[rgb(111,143,94)] border border-[rgb(111,143,94)] text-[10px] shadow-md shadow-black/30 font-semibold text-white">
                                                         {user.first_name[0]?.toUpperCase() ?? "?"}
                                                     </div>
                                                 )}

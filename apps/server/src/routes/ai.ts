@@ -44,8 +44,7 @@ router.post(
 
             return ok(res, response.object);
         } catch (err) {
-            if (NoObjectGeneratedError.isInstance(err))
-                return noContent(res);
+            if (NoObjectGeneratedError.isInstance(err)) return noContent(res);
 
             console.error(err);
             return serverError(res);
