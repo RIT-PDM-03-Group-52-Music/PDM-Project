@@ -1,6 +1,8 @@
 /** Types generated for queries found in "src/queries/collection.sql" */
 import { PreparedQuery } from '@pgtyped/runtime';
 
+export type DateOrString = Date | string;
+
 /** 'GetCollectionById' parameters type */
 export interface IGetCollectionByIdParams {
   collection_id: number;
@@ -262,5 +264,101 @@ const insertCollectionByCollectionNameIR: any = {"usedParamSet":{"user_id":true,
  * ```
  */
 export const insertCollectionByCollectionName = new PreparedQuery<IInsertCollectionByCollectionNameParams,IInsertCollectionByCollectionNameResult>(insertCollectionByCollectionNameIR);
+
+
+/** 'UpdateCollectionByCollectionName' parameters type */
+export interface IUpdateCollectionByCollectionNameParams {
+  collection_id: number;
+  collection_name: string;
+  user_id: number;
+}
+
+/** 'UpdateCollectionByCollectionName' return type */
+export interface IUpdateCollectionByCollectionNameResult {
+  collection_id: number;
+  collection_name: string;
+}
+
+/** 'UpdateCollectionByCollectionName' query type */
+export interface IUpdateCollectionByCollectionNameQuery {
+  params: IUpdateCollectionByCollectionNameParams;
+  result: IUpdateCollectionByCollectionNameResult;
+}
+
+const updateCollectionByCollectionNameIR: any = {"usedParamSet":{"collection_name":true,"collection_id":true,"user_id":true},"params":[{"name":"collection_name","required":true,"transform":{"type":"scalar"},"locs":[{"a":41,"b":57}]},{"name":"collection_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":81,"b":95}]},{"name":"user_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":111,"b":119}]}],"statement":"UPDATE COLLECTIONS SET collection_name = :collection_name! WHERE collection_id = :collection_id! AND user_id = :user_id!\nRETURNING collection_id, collection_name"};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * UPDATE COLLECTIONS SET collection_name = :collection_name! WHERE collection_id = :collection_id! AND user_id = :user_id!
+ * RETURNING collection_id, collection_name
+ * ```
+ */
+export const updateCollectionByCollectionName = new PreparedQuery<IUpdateCollectionByCollectionNameParams,IUpdateCollectionByCollectionNameResult>(updateCollectionByCollectionNameIR);
+
+
+/** 'InsertCollectionItemBySongId' parameters type */
+export interface IInsertCollectionItemBySongIdParams {
+  added_at: DateOrString;
+  collection_id: number;
+  song_id: number;
+}
+
+/** 'InsertCollectionItemBySongId' return type */
+export interface IInsertCollectionItemBySongIdResult {
+  added_at: Date;
+  collection_id: number;
+  song_id: number;
+}
+
+/** 'InsertCollectionItemBySongId' query type */
+export interface IInsertCollectionItemBySongIdQuery {
+  params: IInsertCollectionItemBySongIdParams;
+  result: IInsertCollectionItemBySongIdResult;
+}
+
+const insertCollectionItemBySongIdIR: any = {"usedParamSet":{"collection_id":true,"song_id":true,"added_at":true},"params":[{"name":"collection_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":71,"b":85}]},{"name":"song_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":88,"b":96}]},{"name":"added_at","required":true,"transform":{"type":"scalar"},"locs":[{"a":99,"b":108}]}],"statement":"INSERT INTO COLLECTIONITEMS (collection_id, song_id, added_at) VALUES (:collection_id!, :song_id!, :added_at!)\nON CONFLICT (collection_id, song_id) DO NOTHING\nRETURNING collection_id, song_id, added_at"};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * INSERT INTO COLLECTIONITEMS (collection_id, song_id, added_at) VALUES (:collection_id!, :song_id!, :added_at!)
+ * ON CONFLICT (collection_id, song_id) DO NOTHING
+ * RETURNING collection_id, song_id, added_at
+ * ```
+ */
+export const insertCollectionItemBySongId = new PreparedQuery<IInsertCollectionItemBySongIdParams,IInsertCollectionItemBySongIdResult>(insertCollectionItemBySongIdIR);
+
+
+/** 'GetCollectionItem' parameters type */
+export interface IGetCollectionItemParams {
+  collection_id: number;
+  song_id: number;
+  user_id: number;
+}
+
+/** 'GetCollectionItem' return type */
+export interface IGetCollectionItemResult {
+  added_at: Date;
+  collection_id: number;
+  song_id: number;
+}
+
+/** 'GetCollectionItem' query type */
+export interface IGetCollectionItemQuery {
+  params: IGetCollectionItemParams;
+  result: IGetCollectionItemResult;
+}
+
+const getCollectionItemIR: any = {"usedParamSet":{"collection_id":true,"song_id":true,"user_id":true},"params":[{"name":"collection_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":133,"b":147}]},{"name":"song_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":166,"b":174}]},{"name":"user_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":192,"b":200}]}],"statement":"SELECT CI.* FROM COLLECTIONITEMS AS CI INNER JOIN COLLECTIONS AS C ON \n(C.collection_id = CI.collection_id) WHERE CI.collection_id = :collection_id! AND CI.song_id = :song_id! AND C.user_id = :user_id!"};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * SELECT CI.* FROM COLLECTIONITEMS AS CI INNER JOIN COLLECTIONS AS C ON 
+ * (C.collection_id = CI.collection_id) WHERE CI.collection_id = :collection_id! AND CI.song_id = :song_id! AND C.user_id = :user_id!
+ * ```
+ */
+export const getCollectionItem = new PreparedQuery<IGetCollectionItemParams,IGetCollectionItemResult>(getCollectionItemIR);
 
 

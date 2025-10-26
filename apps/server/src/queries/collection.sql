@@ -36,3 +36,16 @@ LIMIT :page_size! OFFSET GREATEST(:page!, 0) * :page_size!;
 /* @name insertCollectionByCollectionName */
 INSERT INTO COLLECTIONS (user_id, collection_name) VALUES (:user_id!, :collection_name!)
 RETURNING collection_id, collection_name;
+
+/* @name updateCollectionByCollectionName */
+UPDATE COLLECTIONS SET collection_name = :collection_name! WHERE collection_id = :collection_id! AND user_id = :user_id!
+RETURNING collection_id, collection_name;
+
+/* @name insertCollectionItemBySongID */
+INSERT INTO COLLECTIONITEMS (collection_id, song_id, added_at) VALUES (:collection_id!, :song_id!, :added_at!)
+ON CONFLICT (collection_id, song_id) DO NOTHING
+RETURNING collection_id, song_id, added_at;
+
+/* @name getCollectionItem */
+SELECT CI.* FROM COLLECTIONITEMS AS CI INNER JOIN COLLECTIONS AS C ON 
+(C.collection_id = CI.collection_id) WHERE CI.collection_id = :collection_id! AND CI.song_id = :song_id! AND C.user_id = :user_id!;

@@ -22,3 +22,21 @@ export const PostCollectionBodySchema = z.object({
 });
 
 export type PostCollectionBody = z.infer<typeof PostCollectionBodySchema>;
+
+export const PatchCollectionBodySchema = z.object({
+    collection_name: z
+        .string()
+        .min(3, "Collection name must be at least 3 character long.")
+        .max(24, "Collection name must be at most 24 characters long."),
+});
+
+export type PatchCollectionBody = z.infer<typeof PatchCollectionBodySchema>;
+
+export const PutCollectionPathSchema = PatchCollectionBodySchema.extend({
+    collection_id: z
+        .string()
+        .regex(/^\d{1,24}$/, "Collection ID must be a numeric string of up to 24 digits."),
+    song_id: z.string().regex(/^\d{1,24}$/, "Song ID must be a numeric string of up to 24 digits."),
+});
+
+export type PutCollectionPath = z.infer<typeof PutCollectionPathSchema>;

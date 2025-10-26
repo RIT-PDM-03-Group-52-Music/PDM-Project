@@ -2,8 +2,12 @@ import {
     type GetCollectionParams,
     GetCollectionParamsSchema,
     GetCollectionsQuerySchema,
+    type PatchCollectionBody,
+    PatchCollectionBodySchema,
     type PostCollectionBody,
     PostCollectionBodySchema,
+    type PutCollectionPath,
+    PutCollectionPathSchema,
 } from "@pdm/contracts";
 import { type Request, type Response, Router } from "express";
 import { pool } from "../db";
@@ -11,6 +15,7 @@ import { authgate } from "../middleware/authgate";
 import { validateBody, validatePath } from "../middleware/validate";
 import {
     getCollectionById,
+    getCollectionItem,
     getCollectionsByCollectionNameAsc,
     getCollectionsByCollectionNameDesc,
     getCollectionsBySongCountAsc,
@@ -18,8 +23,18 @@ import {
     getCollectionsByTotalLengthAsc,
     getCollectionsByTotalLengthDesc,
     insertCollectionByCollectionName,
+    insertCollectionItemBySongId,
+    updateCollectionByCollectionName,
 } from "../queries/collection.queries";
-import { badRequest, conflict, notFound, ok, serverError, unauthorized } from "../utils/http";
+import {
+    badRequest,
+    conflict,
+    created,
+    notFound,
+    ok,
+    serverError,
+    unauthorized,
+} from "../utils/http";
 
 const router = Router();
 
@@ -149,6 +164,99 @@ router.post(
             if (!collection) return conflict(res, "Collection with this name already exists.");
 
             return ok(res, collection);
+        } catch (err) {
+            console.error(err);
+            return serverError(res);
+        }
+    },
+);
+
+router.patch(
+    "/:collection_id",
+    authgate,
+    validatePath(GetCollectionParamsSchema),
+    validateBody(PatchCollectionBodySchema),
+    async (req: Request<GetCollectionParams, unknown, PatchCollectionBody>, res: Response) => {
+        try {
+            const { collection_id } = req.params;
+            const { collection_name } = req.body;
+
+            if (!req.userId) return unauthorized(res, "Missing user ID.");
+            const result = await getCollectionById.run(
+                {
+                    collection_id: Number(collection_id),
+                },
+                pool,
+            );
+
+            const collection = result[0];
+            if (!collection || collection.user_id !== Number(req.userId))
+                return notFound(res, "Collection not found.");
+
+            const updateResult = await updateCollectionByCollectionName.run(
+                {
+                    user_id: Number(req.userId),
+                    collection_name,
+                    collection_id: Number(collection_id),
+                },
+                pool,
+            );
+
+            const updatedCollection = updateResult?.[0];
+            if (!updatedCollection) return conflict(res, "Failed to update collection.");
+            return ok(res, updatedCollection);
+        } catch (err) {
+            console.error(err);
+            return serverError(res);
+        }
+    },
+);
+
+router.put(
+    "/:collection_id/items/:song_id",
+    authgate,
+    validatePath(PutCollectionPathSchema),
+    async (req: Request<PutCollectionPath, unknown, unknown>, res: Response) => {
+        try {
+            const { collection_id, song_id } = req.params;
+
+            if (!req.userId) return unauthorized(res, "Missing user ID.");
+
+            const result = await getCollectionById.run(
+                {
+                    collection_id: Number(collection_id),
+                },
+                pool,
+            );
+
+            const collection = result[0];
+            if (!collection) return notFound(res, "Collection not found.");
+            if (collection.user_id !== Number(req.userId)) {
+                return unauthorized(res, "You do not have permission to edit this collection.");
+            }
+
+            const insertResult = await insertCollectionItemBySongId.run(
+                {
+                    collection_id: Number(collection_id),
+                    song_id: Number(song_id),
+                    added_at: new Date().toISOString(),
+                },
+                pool,
+            );
+
+            const collectionItem = insertResult[0];
+            if (!collectionItem) {
+                const getResult = await getCollectionItem.run(
+                    {
+                        collection_id: Number(collection_id),
+                        song_id: Number(song_id),
+                        user_id: Number(req.userId),
+                    },
+                    pool,
+                );
+                return ok(res, getResult[0]);
+            }
+            return created(res, collectionItem);
         } catch (err) {
             console.error(err);
             return serverError(res);
