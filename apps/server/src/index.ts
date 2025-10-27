@@ -4,6 +4,7 @@ import { ENDPOINTS } from "./context/endpoints";
 import aiRouter from "./routes/ai";
 import authRouter from "./routes/auth";
 import collectionRouter from "./routes/collection";
+import listensRouter from "./routes/listens";
 import userRouter from "./routes/user";
 import { ok } from "./utils/http";
 
@@ -21,6 +22,7 @@ app.use(express.json()); // use JSON in request body
 app.use("/api/auth", authRouter);
 app.use("/api/ai", aiRouter);
 app.use("/api/collections", collectionRouter);
+app.use("/api/listens", listensRouter);
 app.use("/api/users", userRouter);
 
 app.get("/api/endpoints", (_, req) => {
