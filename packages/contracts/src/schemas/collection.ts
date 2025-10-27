@@ -32,7 +32,7 @@ export const PatchCollectionBodySchema = z.object({
 
 export type PatchCollectionBody = z.infer<typeof PatchCollectionBodySchema>;
 
-export const PutCollectionPathSchema = PatchCollectionBodySchema.extend({
+export const PutCollectionPathSchema = z.object({
     collection_id: z
         .string()
         .regex(/^\d{1,24}$/, "Collection ID must be a numeric string of up to 24 digits."),

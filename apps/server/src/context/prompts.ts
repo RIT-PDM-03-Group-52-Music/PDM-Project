@@ -4,12 +4,13 @@ export const PLAN_SYSTEM_PROMPT = `You are an expert at designing RESTful APIs f
 
 GUIDANCE:
 - User prompts may be refering to the "completion" AI (named SUPERINTENDANT), you are the "planning" AI
+- Refer to conversation history for context
 - Try to extrapolate user intent from their prompt, even if it's vague or ambiguous
   - For example, a user may call a collection a "playlist", or refer to "following" a user as "adding a friend"
 - Never mix read + write operations, or suggest a sequence of calls whose output is needed for the next call's input or whose order matters
   - In this case, only partially fulfilling the user's request is acceptable, the completion AI will handle requesting follow-ups
-- Refer to conversation history for context
 - Each call MUST have a call_id that is unique for this turn (use "call-01", "call-02", etc.)
+- Only include fields (e.g. query, body) for the correct HTTP methods (e.g. no body for GET requests)
 
 AVAILABLE ENDPOINTS:
 ${JSON.stringify(ENDPOINTS, null, 2)}

@@ -266,26 +266,26 @@ const insertCollectionByCollectionNameIR: any = {"usedParamSet":{"user_id":true,
 export const insertCollectionByCollectionName = new PreparedQuery<IInsertCollectionByCollectionNameParams,IInsertCollectionByCollectionNameResult>(insertCollectionByCollectionNameIR);
 
 
-/** 'UpdateCollectionByCollectionName' parameters type */
-export interface IUpdateCollectionByCollectionNameParams {
+/** 'UpdateCollectionName' parameters type */
+export interface IUpdateCollectionNameParams {
   collection_id: number;
   collection_name: string;
   user_id: number;
 }
 
-/** 'UpdateCollectionByCollectionName' return type */
-export interface IUpdateCollectionByCollectionNameResult {
+/** 'UpdateCollectionName' return type */
+export interface IUpdateCollectionNameResult {
   collection_id: number;
   collection_name: string;
 }
 
-/** 'UpdateCollectionByCollectionName' query type */
-export interface IUpdateCollectionByCollectionNameQuery {
-  params: IUpdateCollectionByCollectionNameParams;
-  result: IUpdateCollectionByCollectionNameResult;
+/** 'UpdateCollectionName' query type */
+export interface IUpdateCollectionNameQuery {
+  params: IUpdateCollectionNameParams;
+  result: IUpdateCollectionNameResult;
 }
 
-const updateCollectionByCollectionNameIR: any = {"usedParamSet":{"collection_name":true,"collection_id":true,"user_id":true},"params":[{"name":"collection_name","required":true,"transform":{"type":"scalar"},"locs":[{"a":41,"b":57}]},{"name":"collection_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":81,"b":95}]},{"name":"user_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":111,"b":119}]}],"statement":"UPDATE COLLECTIONS SET collection_name = :collection_name! WHERE collection_id = :collection_id! AND user_id = :user_id!\nRETURNING collection_id, collection_name"};
+const updateCollectionNameIR: any = {"usedParamSet":{"collection_name":true,"collection_id":true,"user_id":true},"params":[{"name":"collection_name","required":true,"transform":{"type":"scalar"},"locs":[{"a":41,"b":57}]},{"name":"collection_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":81,"b":95}]},{"name":"user_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":111,"b":119}]}],"statement":"UPDATE COLLECTIONS SET collection_name = :collection_name! WHERE collection_id = :collection_id! AND user_id = :user_id!\nRETURNING collection_id, collection_name"};
 
 /**
  * Query generated from SQL:
@@ -294,7 +294,7 @@ const updateCollectionByCollectionNameIR: any = {"usedParamSet":{"collection_nam
  * RETURNING collection_id, collection_name
  * ```
  */
-export const updateCollectionByCollectionName = new PreparedQuery<IUpdateCollectionByCollectionNameParams,IUpdateCollectionByCollectionNameResult>(updateCollectionByCollectionNameIR);
+export const updateCollectionName = new PreparedQuery<IUpdateCollectionNameParams,IUpdateCollectionNameResult>(updateCollectionNameIR);
 
 
 /** 'InsertCollectionItemBySongId' parameters type */
