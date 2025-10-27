@@ -1,4 +1,6 @@
 import {
+    type DeleteCollectionItemPath,
+    DeleteCollectionItemPathSchema,
     type GetCollectionParams,
     GetCollectionParamsSchema,
     GetCollectionsQuerySchema,
@@ -14,6 +16,7 @@ import { pool } from "../db";
 import { authgate } from "../middleware/authgate";
 import { validateBody, validatePath } from "../middleware/validate";
 import {
+    deleteCollectionItem,
     getCollectionById,
     getCollectionItem,
     getCollectionsByCollectionNameAsc,
@@ -257,6 +260,48 @@ router.put(
                 return ok(res, getResult[0]);
             }
             return created(res, collectionItem);
+        } catch (err) {
+            console.error(err);
+            return serverError(res);
+        }
+    },
+);
+
+router.delete(
+    "/:collection_id/items/:song_id",
+    authgate,
+    validatePath(DeleteCollectionItemPathSchema),
+    async (req: Request<DeleteCollectionItemPath, unknown, unknown>, res: Response) => {
+        try {
+            const { collection_id, song_id } = req.params;
+
+            if (!req.userId) return unauthorized(res, "Missing user ID.");
+
+            const result = await getCollectionById.run(
+                {
+                    collection_id: Number(collection_id),
+                },
+                pool,
+            );
+
+            const collection = result[0];
+            if (!collection || (collection.user_id !== Number(req.userId))) return notFound(res, "Collection not found.");
+
+            const deleteResult = await deleteCollectionItem.run(
+                {
+                    collection_id: Number(collection_id),
+                    song_id: Number(song_id),
+                    user_id: Number(req.userId),
+                },
+                pool,
+            );
+
+            const collectionItem = deleteResult[0];
+            if (!collectionItem) {
+                return notFound(res, "Collection item not found.");
+            }
+
+            return ok(res, collectionItem);
         } catch (err) {
             console.error(err);
             return serverError(res);

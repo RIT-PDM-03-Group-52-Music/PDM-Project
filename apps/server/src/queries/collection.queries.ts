@@ -362,3 +362,36 @@ const getCollectionItemIR: any = {"usedParamSet":{"collection_id":true,"song_id"
 export const getCollectionItem = new PreparedQuery<IGetCollectionItemParams,IGetCollectionItemResult>(getCollectionItemIR);
 
 
+/** 'DeleteCollectionItem' parameters type */
+export interface IDeleteCollectionItemParams {
+  collection_id: number;
+  song_id: number;
+  user_id: number;
+}
+
+/** 'DeleteCollectionItem' return type */
+export interface IDeleteCollectionItemResult {
+  collection_id: number;
+  song_id: number;
+}
+
+/** 'DeleteCollectionItem' query type */
+export interface IDeleteCollectionItemQuery {
+  params: IDeleteCollectionItemParams;
+  result: IDeleteCollectionItemResult;
+}
+
+const deleteCollectionItemIR: any = {"usedParamSet":{"collection_id":true,"song_id":true,"user_id":true},"params":[{"name":"collection_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":59,"b":73}]},{"name":"song_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":92,"b":100}]},{"name":"user_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":203,"b":211}]}],"statement":"DELETE FROM COLLECTIONITEMS AS CI\nWHERE CI.collection_id = :collection_id! AND CI.song_id = :song_id! AND EXISTS \n(SELECT 1 FROM COLLECTIONS AS C WHERE C.collection_id = CI.collection_id AND C.user_id = :user_id!)\nRETURNING CI.collection_id, CI.song_id"};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * DELETE FROM COLLECTIONITEMS AS CI
+ * WHERE CI.collection_id = :collection_id! AND CI.song_id = :song_id! AND EXISTS 
+ * (SELECT 1 FROM COLLECTIONS AS C WHERE C.collection_id = CI.collection_id AND C.user_id = :user_id!)
+ * RETURNING CI.collection_id, CI.song_id
+ * ```
+ */
+export const deleteCollectionItem = new PreparedQuery<IDeleteCollectionItemParams,IDeleteCollectionItemResult>(deleteCollectionItemIR);
+
+
