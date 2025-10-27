@@ -59,3 +59,38 @@ RETURNING CI.collection_id, CI.song_id;
 /* @name deleteCollectionById */
 DELETE FROM COLLECTIONS WHERE collection_id = :collection_id! AND user_id = :user_id!
 RETURNING collection_id, collection_name;
+
+/* @name getCollectionItemsBySongNameASC */
+SELECT CI.* from COLLECTIONITEMS as CI  INNER JOIN COLLECTIONS as C ON
+(C.collection_id = CI.collection_id) INNER JOIN SONGS AS S ON
+(CI.song_id = S.song_id)
+WHERE c.user_id = :user_id!
+ORDER BY S.song_title ASC
+LIMIT :page_size! OFFSET GREATEST(:page!, 0) * :page_size!;
+
+
+/* @name getCollectionItemsBySongNameDESC */
+SELECT CI.* from COLLECTIONITEMS as CI  INNER JOIN COLLECTIONS as C ON
+(C.collection_id = CI.collection_id) INNER JOIN SONGS AS S ON
+(CI.song_id = S.song_id)
+WHERE c.user_id = :user_id!
+ORDER BY S.song_title DESC
+LIMIT :page_size! OFFSET GREATEST(:page!, 0) * :page_size!;
+
+
+/* @name getCollectionItemsByAddedAtASC */
+SELECT CI.* from COLLECTIONITEMS as CI  INNER JOIN COLLECTIONS as C ON
+(C.collection_id = CI.collection_id)
+WHERE c.user_id = :user_id!
+ORDER BY ci.added_at ASC
+LIMIT :page_size! OFFSET GREATEST(:page!, 0) * :page_size!;
+
+
+/* @name getCollectionItemsByAddedAtDESC */
+SELECT CI.* from COLLECTIONITEMS as CI  INNER JOIN COLLECTIONS as C ON
+(C.collection_id = CI.collection_id)
+WHERE c.user_id = :user_id!
+ORDER BY ci.added_at DESC
+LIMIT :page_size! OFFSET GREATEST(:page!, 0) * :page_size!;
+
+

@@ -70,6 +70,82 @@ router.get(
     },
 );
 
+/**
+* GET /collections/:collection_id/items
+* Expects (path) collection_id (int)
+* Expects (query)  page,  page_size,  sort, order
+* RETURNS
+* 200 with { songs[] { song_id, song_title, song_length,
+* released_at, artists[], genres[], added_at }, page, page_size, total }
+* 401 on unauthorized
+* */
+router.get("/:collection_id/items", authgate, async (req: Request, res: Response) => {
+ try {
+   const { collection_id } = req.params;
+   const user_id = req.userId;
+
+
+   // Validate collection_id
+   const collectionIdNum = Number(collection_id);
+   if (!collection_id || isNaN(collectionIdNum)) {
+     return badRequest(res, "Invalid collection_id.");
+   }
+
+
+   if (!user_id) return unauthorized(res, "Missing user ID.");
+
+
+   // Extract query params with defaults
+   const page = req.query.page ? Number(req.query.page) : 0;
+   const page_size = req.query.page_size ? Number(req.query.page_size) : 15;
+   const sort = (req.query.sort as string) || "added_at";
+   const order = (req.query.order as string) || "asc";
+
+
+   // Validate query params
+   if (isNaN(page) || page < 0) return badRequest(res, "Invalid page number.");
+   if (isNaN(page_size) || page_size < 1 || page_size > 100) return badRequest(res, "Invalid page_size.");
+   if (!["added_at", "song_name"].includes(sort)) return badRequest(res, "Invalid sort field.");
+   if (!["asc", "desc"].includes(order)) return badRequest(res, "Invalid order value.");
+
+
+   // Pick correct SQL query based on sort/order
+   let result: unknown[] = [];
+   const queryParams = {
+     page,
+     page_size,
+     user_id: Number(user_id),
+     collection_id: collectionIdNum,
+   };
+
+
+   if (sort === "song_name" && order === "asc") {
+     result = await getCollectionItemsBySongNameAsc.run(queryParams, pool);
+   } else if (sort === "song_name" && order === "desc") {
+     result = await getCollectionItemsBySongNameDesc.run(queryParams, pool);
+   } else if (sort === "added_at" && order === "asc") {
+     result = await getCollectionItemsByAddedAtAsc.run(queryParams, pool);
+   } else if (sort === "added_at" && order === "desc") {
+     result = await getCollectionItemsByAddedAtDesc.run(queryParams, pool);
+   }
+
+
+   // Return structured response
+   return ok(res, {
+     songs: result,
+     page,
+     page_size,
+     total: result.length, // For full count, you could run a COUNT query
+   });
+
+
+ } catch (err) {
+   console.error(err);
+   return serverError(res);
+ }
+});
+
+
 router.get("/", authgate, async (req: Request, res: Response) => {
     try {
         const query = GetCollectionsQuerySchema.safeParse(req.query);

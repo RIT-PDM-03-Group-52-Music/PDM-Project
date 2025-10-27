@@ -425,3 +425,145 @@ const deleteCollectionByIdIR: any = {"usedParamSet":{"collection_id":true,"user_
 export const deleteCollectionById = new PreparedQuery<IDeleteCollectionByIdParams,IDeleteCollectionByIdResult>(deleteCollectionByIdIR);
 
 
+/** 'GetCollectionItemsBySongNameAsc' parameters type */
+export interface IGetCollectionItemsBySongNameAscParams {
+  page: number;
+  page_size: number;
+  user_id: number;
+}
+
+/** 'GetCollectionItemsBySongNameAsc' return type */
+export interface IGetCollectionItemsBySongNameAscResult {
+  added_at: Date;
+  collection_id: number;
+  song_id: number;
+}
+
+/** 'GetCollectionItemsBySongNameAsc' query type */
+export interface IGetCollectionItemsBySongNameAscQuery {
+  params: IGetCollectionItemsBySongNameAscParams;
+  result: IGetCollectionItemsBySongNameAscResult;
+}
+
+const getCollectionItemsBySongNameAscIR: any = {"usedParamSet":{"user_id":true,"page_size":true,"page":true},"params":[{"name":"user_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":176,"b":184}]},{"name":"page_size","required":true,"transform":{"type":"scalar"},"locs":[{"a":218,"b":228},{"a":259,"b":269}]},{"name":"page","required":true,"transform":{"type":"scalar"},"locs":[{"a":246,"b":251}]}],"statement":"SELECT CI.* from COLLECTIONITEMS as CI  INNER JOIN COLLECTIONS as C ON\n(C.collection_id = CI.collection_id) INNER JOIN SONGS AS S ON\n(CI.song_id = S.song_id)\nWHERE c.user_id = :user_id!\nORDER BY S.song_title ASC\nLIMIT :page_size! OFFSET GREATEST(:page!, 0) * :page_size!"};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * SELECT CI.* from COLLECTIONITEMS as CI  INNER JOIN COLLECTIONS as C ON
+ * (C.collection_id = CI.collection_id) INNER JOIN SONGS AS S ON
+ * (CI.song_id = S.song_id)
+ * WHERE c.user_id = :user_id!
+ * ORDER BY S.song_title ASC
+ * LIMIT :page_size! OFFSET GREATEST(:page!, 0) * :page_size!
+ * ```
+ */
+export const getCollectionItemsBySongNameAsc = new PreparedQuery<IGetCollectionItemsBySongNameAscParams,IGetCollectionItemsBySongNameAscResult>(getCollectionItemsBySongNameAscIR);
+
+
+/** 'GetCollectionItemsBySongNameDesc' parameters type */
+export interface IGetCollectionItemsBySongNameDescParams {
+  page: number;
+  page_size: number;
+  user_id: number;
+}
+
+/** 'GetCollectionItemsBySongNameDesc' return type */
+export interface IGetCollectionItemsBySongNameDescResult {
+  added_at: Date;
+  collection_id: number;
+  song_id: number;
+}
+
+/** 'GetCollectionItemsBySongNameDesc' query type */
+export interface IGetCollectionItemsBySongNameDescQuery {
+  params: IGetCollectionItemsBySongNameDescParams;
+  result: IGetCollectionItemsBySongNameDescResult;
+}
+
+const getCollectionItemsBySongNameDescIR: any = {"usedParamSet":{"user_id":true,"page_size":true,"page":true},"params":[{"name":"user_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":176,"b":184}]},{"name":"page_size","required":true,"transform":{"type":"scalar"},"locs":[{"a":219,"b":229},{"a":260,"b":270}]},{"name":"page","required":true,"transform":{"type":"scalar"},"locs":[{"a":247,"b":252}]}],"statement":"SELECT CI.* from COLLECTIONITEMS as CI  INNER JOIN COLLECTIONS as C ON\n(C.collection_id = CI.collection_id) INNER JOIN SONGS AS S ON\n(CI.song_id = S.song_id)\nWHERE c.user_id = :user_id!\nORDER BY S.song_title DESC\nLIMIT :page_size! OFFSET GREATEST(:page!, 0) * :page_size!"};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * SELECT CI.* from COLLECTIONITEMS as CI  INNER JOIN COLLECTIONS as C ON
+ * (C.collection_id = CI.collection_id) INNER JOIN SONGS AS S ON
+ * (CI.song_id = S.song_id)
+ * WHERE c.user_id = :user_id!
+ * ORDER BY S.song_title DESC
+ * LIMIT :page_size! OFFSET GREATEST(:page!, 0) * :page_size!
+ * ```
+ */
+export const getCollectionItemsBySongNameDesc = new PreparedQuery<IGetCollectionItemsBySongNameDescParams,IGetCollectionItemsBySongNameDescResult>(getCollectionItemsBySongNameDescIR);
+
+
+/** 'GetCollectionItemsByAddedAtAsc' parameters type */
+export interface IGetCollectionItemsByAddedAtAscParams {
+  page: number;
+  page_size: number;
+  user_id: number;
+}
+
+/** 'GetCollectionItemsByAddedAtAsc' return type */
+export interface IGetCollectionItemsByAddedAtAscResult {
+  added_at: Date;
+  collection_id: number;
+  song_id: number;
+}
+
+/** 'GetCollectionItemsByAddedAtAsc' query type */
+export interface IGetCollectionItemsByAddedAtAscQuery {
+  params: IGetCollectionItemsByAddedAtAscParams;
+  result: IGetCollectionItemsByAddedAtAscResult;
+}
+
+const getCollectionItemsByAddedAtAscIR: any = {"usedParamSet":{"user_id":true,"page_size":true,"page":true},"params":[{"name":"user_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":126,"b":134}]},{"name":"page_size","required":true,"transform":{"type":"scalar"},"locs":[{"a":167,"b":177},{"a":208,"b":218}]},{"name":"page","required":true,"transform":{"type":"scalar"},"locs":[{"a":195,"b":200}]}],"statement":"SELECT CI.* from COLLECTIONITEMS as CI  INNER JOIN COLLECTIONS as C ON\n(C.collection_id = CI.collection_id)\nWHERE c.user_id = :user_id!\nORDER BY ci.added_at ASC\nLIMIT :page_size! OFFSET GREATEST(:page!, 0) * :page_size!"};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * SELECT CI.* from COLLECTIONITEMS as CI  INNER JOIN COLLECTIONS as C ON
+ * (C.collection_id = CI.collection_id)
+ * WHERE c.user_id = :user_id!
+ * ORDER BY ci.added_at ASC
+ * LIMIT :page_size! OFFSET GREATEST(:page!, 0) * :page_size!
+ * ```
+ */
+export const getCollectionItemsByAddedAtAsc = new PreparedQuery<IGetCollectionItemsByAddedAtAscParams,IGetCollectionItemsByAddedAtAscResult>(getCollectionItemsByAddedAtAscIR);
+
+
+/** 'GetCollectionItemsByAddedAtDesc' parameters type */
+export interface IGetCollectionItemsByAddedAtDescParams {
+  page: number;
+  page_size: number;
+  user_id: number;
+}
+
+/** 'GetCollectionItemsByAddedAtDesc' return type */
+export interface IGetCollectionItemsByAddedAtDescResult {
+  added_at: Date;
+  collection_id: number;
+  song_id: number;
+}
+
+/** 'GetCollectionItemsByAddedAtDesc' query type */
+export interface IGetCollectionItemsByAddedAtDescQuery {
+  params: IGetCollectionItemsByAddedAtDescParams;
+  result: IGetCollectionItemsByAddedAtDescResult;
+}
+
+const getCollectionItemsByAddedAtDescIR: any = {"usedParamSet":{"user_id":true,"page_size":true,"page":true},"params":[{"name":"user_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":126,"b":134}]},{"name":"page_size","required":true,"transform":{"type":"scalar"},"locs":[{"a":168,"b":178},{"a":209,"b":219}]},{"name":"page","required":true,"transform":{"type":"scalar"},"locs":[{"a":196,"b":201}]}],"statement":"SELECT CI.* from COLLECTIONITEMS as CI  INNER JOIN COLLECTIONS as C ON\n(C.collection_id = CI.collection_id)\nWHERE c.user_id = :user_id!\nORDER BY ci.added_at DESC\nLIMIT :page_size! OFFSET GREATEST(:page!, 0) * :page_size!"};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * SELECT CI.* from COLLECTIONITEMS as CI  INNER JOIN COLLECTIONS as C ON
+ * (C.collection_id = CI.collection_id)
+ * WHERE c.user_id = :user_id!
+ * ORDER BY ci.added_at DESC
+ * LIMIT :page_size! OFFSET GREATEST(:page!, 0) * :page_size!
+ * ```
+ */
+export const getCollectionItemsByAddedAtDesc = new PreparedQuery<IGetCollectionItemsByAddedAtDescParams,IGetCollectionItemsByAddedAtDescResult>(getCollectionItemsByAddedAtDescIR);
+
+
