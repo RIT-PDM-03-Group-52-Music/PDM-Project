@@ -55,3 +55,7 @@ DELETE FROM COLLECTIONITEMS AS CI
 WHERE CI.collection_id = :collection_id! AND CI.song_id = :song_id! AND EXISTS 
 (SELECT 1 FROM COLLECTIONS AS C WHERE C.collection_id = CI.collection_id AND C.user_id = :user_id!)
 RETURNING CI.collection_id, CI.song_id;
+
+/* @name deleteCollectionById */
+DELETE FROM COLLECTIONS WHERE collection_id = :collection_id! AND user_id = :user_id!
+RETURNING collection_id, collection_name;

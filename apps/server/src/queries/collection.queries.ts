@@ -395,3 +395,33 @@ const deleteCollectionItemIR: any = {"usedParamSet":{"collection_id":true,"song_
 export const deleteCollectionItem = new PreparedQuery<IDeleteCollectionItemParams,IDeleteCollectionItemResult>(deleteCollectionItemIR);
 
 
+/** 'DeleteCollectionById' parameters type */
+export interface IDeleteCollectionByIdParams {
+  collection_id: number;
+  user_id: number;
+}
+
+/** 'DeleteCollectionById' return type */
+export interface IDeleteCollectionByIdResult {
+  collection_id: number;
+  collection_name: string;
+}
+
+/** 'DeleteCollectionById' query type */
+export interface IDeleteCollectionByIdQuery {
+  params: IDeleteCollectionByIdParams;
+  result: IDeleteCollectionByIdResult;
+}
+
+const deleteCollectionByIdIR: any = {"usedParamSet":{"collection_id":true,"user_id":true},"params":[{"name":"collection_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":46,"b":60}]},{"name":"user_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":76,"b":84}]}],"statement":"DELETE FROM COLLECTIONS WHERE collection_id = :collection_id! AND user_id = :user_id!\nRETURNING collection_id, collection_name"};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * DELETE FROM COLLECTIONS WHERE collection_id = :collection_id! AND user_id = :user_id!
+ * RETURNING collection_id, collection_name
+ * ```
+ */
+export const deleteCollectionById = new PreparedQuery<IDeleteCollectionByIdParams,IDeleteCollectionByIdResult>(deleteCollectionByIdIR);
+
+
