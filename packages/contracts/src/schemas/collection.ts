@@ -45,9 +45,7 @@ export const DeleteCollectionItemPathSchema = z.object({
     collection_id: z
         .string()
         .regex(/^\d{1,24}$/, "Collection ID must be a numeric string of up to 24 digits."),
-    song_id: z
-        .string()
-        .regex(/^\d{1,24}$/, "Song ID must be a numeric string of up to 24 digits."),
+    song_id: z.string().regex(/^\d{1,24}$/, "Song ID must be a numeric string of up to 24 digits."),
 });
 
 export type DeleteCollectionItemPath = z.infer<typeof DeleteCollectionItemPathSchema>;

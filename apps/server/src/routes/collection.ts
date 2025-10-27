@@ -285,7 +285,8 @@ router.delete(
             );
 
             const collection = result[0];
-            if (!collection || (collection.user_id !== Number(req.userId))) return notFound(res, "Collection not found.");
+            if (!collection || collection.user_id !== Number(req.userId))
+                return notFound(res, "Collection not found.");
 
             const deleteResult = await deleteCollectionItem.run(
                 {
