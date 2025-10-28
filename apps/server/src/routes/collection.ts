@@ -81,7 +81,8 @@ router.get(
     },
 );
 
-router.get("/:collection_id/items",
+router.get(
+    "/:collection_id/items",
     authgate,
     validatePath(GetCollectionItemsPathSchema),
     async (req: Request<GetCollectionItemsPath, unknown, unknown>, res: Response) => {
@@ -101,15 +102,47 @@ router.get("/:collection_id/items",
             let result: unknown[] = [];
 
             if (sort === "song_title" && order === "asc") {
-                result = await getCollectionItemsBySongNameAsc.run({ page, page_size, user_id: Number(user_id), collection_id: Number(collection_id) }, pool);
+                result = await getCollectionItemsBySongNameAsc.run(
+                    {
+                        page,
+                        page_size,
+                        user_id: Number(user_id),
+                        collection_id: Number(collection_id),
+                    },
+                    pool,
+                );
             } else if (sort === "song_title" && order === "desc") {
-                result = await getCollectionItemsBySongNameDesc.run({ page, page_size, user_id: Number(user_id), collection_id: Number(collection_id) }, pool);
+                result = await getCollectionItemsBySongNameDesc.run(
+                    {
+                        page,
+                        page_size,
+                        user_id: Number(user_id),
+                        collection_id: Number(collection_id),
+                    },
+                    pool,
+                );
             } else if (sort === "added_at" && order === "asc") {
-                result = await getCollectionItemsByAddedAtAsc.run({ page, page_size, user_id: Number(user_id), collection_id: Number(collection_id) }, pool);
+                result = await getCollectionItemsByAddedAtAsc.run(
+                    {
+                        page,
+                        page_size,
+                        user_id: Number(user_id),
+                        collection_id: Number(collection_id),
+                    },
+                    pool,
+                );
             } else if (sort === "added_at" && order === "desc") {
-                result = await getCollectionItemsByAddedAtDesc.run({ page, page_size, user_id: Number(user_id), collection_id: Number(collection_id) }, pool);
+                result = await getCollectionItemsByAddedAtDesc.run(
+                    {
+                        page,
+                        page_size,
+                        user_id: Number(user_id),
+                        collection_id: Number(collection_id),
+                    },
+                    pool,
+                );
             }
-            
+
             return ok(res, {
                 songs: result,
                 page,
@@ -120,7 +153,8 @@ router.get("/:collection_id/items",
             console.error(err);
             return serverError(res);
         }
-    });
+    },
+);
 
 router.get("/", authgate, async (req: Request, res: Response) => {
     try {

@@ -69,9 +69,7 @@ export type GetCollectionItemsPath = z.infer<typeof GetCollectionItemsPathSchema
 export const GetCollectionItemsQuerySchema = z.object({
     page: z.string().default("0").transform(Number),
     page_size: z.string().default("15").transform(Number),
-    sort: z
-        .enum(["added_at", "song_title"])
-        .default("added_at"),
+    sort: z.enum(["added_at", "song_title"]).default("added_at"),
     order: z.enum(["asc", "desc"]).default("asc"),
 });
 
