@@ -1,5 +1,5 @@
 /* @name getCollectionById */
-SELECT * FROM COLLECTIONS WHERE collection_id = :collection_id!;
+SELECT * FROM COLLECTIONS WHERE collection_id = :collection_id! AND user_id = :user_id!;
 
 /* @name getCollectionsByCollectionNameAsc */
 SELECT * FROM COLLECTIONS WHERE (user_id = :user_id!) ORDER BY collection_name ASC LIMIT :page_size! OFFSET GREATEST(:page!, 0) * :page_size!;
@@ -61,36 +61,33 @@ DELETE FROM COLLECTIONS WHERE collection_id = :collection_id! AND user_id = :use
 RETURNING collection_id, collection_name;
 
 /* @name getCollectionItemsBySongNameASC */
-SELECT CI.* from COLLECTIONITEMS as CI  INNER JOIN COLLECTIONS as C ON
-(C.collection_id = CI.collection_id) INNER JOIN SONGS AS S ON
-(CI.song_id = S.song_id)
-WHERE c.user_id = :user_id!
+SELECT S.* from COLLECTIONITEMS as CI
+INNER JOIN COLLECTIONS as C ON (C.collection_id = CI.collection_id) 
+INNER JOIN SONGS AS S ON (CI.song_id = S.song_id)
+WHERE c.user_id = :user_id! AND ci.collection_id = :collection_id!
 ORDER BY S.song_title ASC
 LIMIT :page_size! OFFSET GREATEST(:page!, 0) * :page_size!;
 
-
 /* @name getCollectionItemsBySongNameDESC */
-SELECT CI.* from COLLECTIONITEMS as CI  INNER JOIN COLLECTIONS as C ON
-(C.collection_id = CI.collection_id) INNER JOIN SONGS AS S ON
-(CI.song_id = S.song_id)
-WHERE c.user_id = :user_id!
+SELECT S.* from COLLECTIONITEMS as CI
+INNER JOIN COLLECTIONS as C ON (C.collection_id = CI.collection_id)
+INNER JOIN SONGS AS S ON (CI.song_id = S.song_id)
+WHERE c.user_id = :user_id! AND ci.collection_id = :collection_id!
 ORDER BY S.song_title DESC
 LIMIT :page_size! OFFSET GREATEST(:page!, 0) * :page_size!;
 
-
 /* @name getCollectionItemsByAddedAtASC */
-SELECT CI.* from COLLECTIONITEMS as CI  INNER JOIN COLLECTIONS as C ON
-(C.collection_id = CI.collection_id)
-WHERE c.user_id = :user_id!
+SELECT S.* from COLLECTIONITEMS as CI
+INNER JOIN COLLECTIONS as C ON (C.collection_id = CI.collection_id)
+INNER JOIN SONGS AS S ON (CI.song_id = S.song_id)
+WHERE c.user_id = :user_id! AND ci.collection_id = :collection_id!
 ORDER BY ci.added_at ASC
 LIMIT :page_size! OFFSET GREATEST(:page!, 0) * :page_size!;
 
-
 /* @name getCollectionItemsByAddedAtDESC */
-SELECT CI.* from COLLECTIONITEMS as CI  INNER JOIN COLLECTIONS as C ON
-(C.collection_id = CI.collection_id)
-WHERE c.user_id = :user_id!
+SELECT S.* from COLLECTIONITEMS as CI
+INNER JOIN COLLECTIONS as C ON (C.collection_id = CI.collection_id)
+INNER JOIN SONGS AS S ON (CI.song_id = S.song_id)
+WHERE c.user_id = :user_id! AND ci.collection_id = :collection_id!
 ORDER BY ci.added_at DESC
 LIMIT :page_size! OFFSET GREATEST(:page!, 0) * :page_size!;
-
-
