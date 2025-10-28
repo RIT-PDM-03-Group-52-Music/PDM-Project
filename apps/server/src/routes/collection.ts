@@ -113,8 +113,7 @@ router.get("/:collection_id/items",
             return ok(res, {
                 songs: result,
                 page,
-                page_size,
-                total: result.length,
+                page_size
             });
         } catch (err) {
             console.error(err);

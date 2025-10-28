@@ -86,7 +86,7 @@ export const ENDPOINTS: Endpoint[] = [
         ret: [
             {
                 status: 200,
-                d: "{ collections[] { collection_id, collection_name, songs_count, total_minutes }, page, page_size, total }",
+                d: "{ collections[] { collection_id, collection_name, songs_count, total_minutes }, page, page_size }",
             },
             { status: 401, d: "unauthorized" },
         ],
@@ -159,7 +159,7 @@ export const ENDPOINTS: Endpoint[] = [
         ret: [
             {
                 status: 200,
-                d: "{ songs[] { song_id, song_title, song_length, released_at, artists[], genres[], added_at }, page, page_size, total }",
+                d: "{ songs[] { song_id, song_title, song_length, released_at, artists[], genres[], added_at }, page, page_size }",
             },
             { status: 401, d: "unauthorized" },
         ],

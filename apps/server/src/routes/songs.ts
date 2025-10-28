@@ -69,7 +69,11 @@ router.get("/", authgate, async (req: Request, res: Response) => {
             );
         }
 
-        return ok(res, result);
+        return ok(res, {
+            songs: result,
+            page,
+            page_size
+        });
     } catch (err) {
         console.error(err);
         return serverError(res);
