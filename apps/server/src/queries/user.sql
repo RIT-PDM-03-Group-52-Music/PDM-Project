@@ -13,5 +13,8 @@ SELECT * FROM USERS WHERE username = :username!;
 /* @name getUserByEmail */
 SELECT * FROM USERS WHERE email = :email!;
 
+/* @name getPublicUserByEmail */
+SELECT user_id, username, email FROM USERS WHERE email = :email!;
+
 /* @name loginUser */
 UPDATE USERS SET last_seen = :now! WHERE user_id = :user_id!;

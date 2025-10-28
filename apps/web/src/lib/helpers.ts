@@ -8,7 +8,9 @@ export const normalizeApiPath = (path: string, query?: string) => {
     if (p.startsWith("/api/")) p = p.slice(4);
     if (!query) return p;
 
-    const parts = query.split("&");
+    const cleanQuery = query.startsWith("?") ? query.slice(1) : query;
+
+    const parts = cleanQuery.split("&");
     const encoded = parts
         .map((kv) => {
             const [rawK, rawV] = kv.split("=");

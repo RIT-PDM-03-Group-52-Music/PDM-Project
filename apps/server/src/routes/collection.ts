@@ -1,6 +1,11 @@
 import {
     type DeleteCollectionItemPath,
     DeleteCollectionItemPathSchema,
+    type DeleteCollectionPath,
+    DeleteCollectionPathSchema,
+    type GetCollectionItemsPath,
+    GetCollectionItemsPathSchema,
+    GetCollectionItemsQuerySchema,
     type GetCollectionParams,
     GetCollectionParamsSchema,
     GetCollectionsQuerySchema,
@@ -16,9 +21,14 @@ import { pool } from "../db";
 import { authgate } from "../middleware/authgate";
 import { validateBody, validatePath } from "../middleware/validate";
 import {
+    deleteCollectionById,
     deleteCollectionItem,
     getCollectionById,
     getCollectionItem,
+    getCollectionItemsByAddedAtAsc,
+    getCollectionItemsByAddedAtDesc,
+    getCollectionItemsBySongNameAsc,
+    getCollectionItemsBySongNameDesc,
     getCollectionsByCollectionNameAsc,
     getCollectionsByCollectionNameDesc,
     getCollectionsBySongCountAsc,
@@ -27,7 +37,7 @@ import {
     getCollectionsByTotalLengthDesc,
     insertCollectionByCollectionName,
     insertCollectionItemBySongId,
-    updateCollectionByCollectionName,
+    updateCollectionName,
 } from "../queries/collection.queries";
 import {
     badRequest,
@@ -49,9 +59,13 @@ router.get(
         try {
             const { collection_id } = req.params;
 
+            const user_id = req.userId;
+            if (!user_id) return unauthorized(res, "Missing user ID.");
+
             const result = await getCollectionById.run(
                 {
                     collection_id: Number(collection_id),
+                    user_id: Number(user_id),
                 },
                 pool,
             );
@@ -66,6 +80,47 @@ router.get(
         }
     },
 );
+
+router.get("/:collection_id/items",
+    authgate,
+    validatePath(GetCollectionItemsPathSchema),
+    async (req: Request<GetCollectionItemsPath, unknown, unknown>, res: Response) => {
+        try {
+            const query = GetCollectionItemsQuerySchema.safeParse(req.query);
+            if (!query.success) {
+                const first = query.error.issues[0]?.message ?? "Invalid query parameters.";
+                return badRequest(res, first);
+            }
+
+            const { page, page_size, sort, order } = query.data;
+            const { collection_id } = req.params;
+            const user_id = req.userId;
+
+            if (!user_id) return unauthorized(res, "Missing user ID.");
+
+            let result: unknown[] = [];
+
+            if (sort === "song_title" && order === "asc") {
+                result = await getCollectionItemsBySongNameAsc.run({ page, page_size, user_id: Number(user_id), collection_id: Number(collection_id) }, pool);
+            } else if (sort === "song_title" && order === "desc") {
+                result = await getCollectionItemsBySongNameDesc.run({ page, page_size, user_id: Number(user_id), collection_id: Number(collection_id) }, pool);
+            } else if (sort === "added_at" && order === "asc") {
+                result = await getCollectionItemsByAddedAtAsc.run({ page, page_size, user_id: Number(user_id), collection_id: Number(collection_id) }, pool);
+            } else if (sort === "added_at" && order === "desc") {
+                result = await getCollectionItemsByAddedAtDesc.run({ page, page_size, user_id: Number(user_id), collection_id: Number(collection_id) }, pool);
+            }
+            
+            return ok(res, {
+                songs: result,
+                page,
+                page_size,
+                total: result.length,
+            });
+        } catch (err) {
+            console.error(err);
+            return serverError(res);
+        }
+    });
 
 router.get("/", authgate, async (req: Request, res: Response) => {
     try {
@@ -188,6 +243,7 @@ router.patch(
             const result = await getCollectionById.run(
                 {
                     collection_id: Number(collection_id),
+                    user_id: Number(req.userId),
                 },
                 pool,
             );
@@ -196,10 +252,10 @@ router.patch(
             if (!collection || collection.user_id !== Number(req.userId))
                 return notFound(res, "Collection not found.");
 
-            const updateResult = await updateCollectionByCollectionName.run(
+            const updateResult = await updateCollectionName.run(
                 {
                     user_id: Number(req.userId),
-                    collection_name,
+                    collection_name: collection_name,
                     collection_id: Number(collection_id),
                 },
                 pool,
@@ -228,6 +284,7 @@ router.put(
             const result = await getCollectionById.run(
                 {
                     collection_id: Number(collection_id),
+                    user_id: Number(req.userId),
                 },
                 pool,
             );
@@ -280,12 +337,14 @@ router.delete(
             const result = await getCollectionById.run(
                 {
                     collection_id: Number(collection_id),
+                    user_id: Number(req.userId),
                 },
                 pool,
             );
 
             const collection = result[0];
-            if (!collection || (collection.user_id !== Number(req.userId))) return notFound(res, "Collection not found.");
+            if (!collection || collection.user_id !== Number(req.userId))
+                return notFound(res, "Collection not found.");
 
             const deleteResult = await deleteCollectionItem.run(
                 {
@@ -302,6 +361,34 @@ router.delete(
             }
 
             return ok(res, collectionItem);
+        } catch (err) {
+            console.error(err);
+            return serverError(res);
+        }
+    },
+);
+
+router.delete(
+    "/:collection_id",
+    authgate,
+    validatePath(DeleteCollectionPathSchema),
+    async (req: Request<DeleteCollectionPath, unknown, unknown>, res: Response) => {
+        try {
+            const { collection_id } = req.params;
+
+            if (!req.userId) return unauthorized(res, "Missing user ID.");
+
+            const result = await deleteCollectionById.run(
+                {
+                    collection_id: Number(collection_id),
+                    user_id: Number(req.userId),
+                },
+                pool,
+            );
+            const collection = result[0];
+            if (!collection) return notFound(res, "Collection not found.");
+
+            return ok(res, collection);
         } catch (err) {
             console.error(err);
             return serverError(res);
