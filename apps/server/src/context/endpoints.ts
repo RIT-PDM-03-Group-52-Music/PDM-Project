@@ -1,4 +1,4 @@
-type ParamType = "string" | "integer" | "number" | "boolean" | "enum" | "string[]" | "integer[]";
+type ParamType = "string" | "integer_str" | "integer" | "enum";
 
 type ParamSpec = {
     t: ParamType;
@@ -63,7 +63,7 @@ export const ENDPOINTS: Endpoint[] = [
         method: "GET",
         path: "/collections/:collection_id",
         desc: "Get a specific collection by ID",
-        pathParams: { collection_id: { t: "integer", d: "ID of the collection" } },
+        pathParams: { collection_id: { t: "integer_str", d: "ID of the collection" } },
         ret: [
             {
                 status: 200,
@@ -109,7 +109,7 @@ export const ENDPOINTS: Endpoint[] = [
         path: "/collections/:collection_id",
         desc: "Update a collection's name",
         pathParams: {
-            collection_id: { t: "integer", d: "ID of the collection to update" },
+            collection_id: { t: "integer_str", d: "ID of the collection to update" },
         },
         body: {
             collection_name: { t: "string", d: "3 <= string <= 24" },
@@ -126,7 +126,7 @@ export const ENDPOINTS: Endpoint[] = [
         path: "/collections/:collection_id",
         desc: "Delete a collection",
         pathParams: {
-            collection_id: { t: "integer", d: "ID of the collection to delete" },
+            collection_id: { t: "integer_str", d: "ID of the collection to delete" },
         },
         ret: [
             { status: 204, d: "collection deleted or not found" },
@@ -138,7 +138,7 @@ export const ENDPOINTS: Endpoint[] = [
         path: "/collections/:collection_id/items",
         desc: "Get songs in a collection with pagination and sorting",
         pathParams: {
-            collection_id: { t: "integer", d: "ID of the collection" },
+            collection_id: { t: "integer_str", d: "ID of the collection" },
         },
         query: {
             page: { t: "integer", d: "default = 0" },
@@ -169,8 +169,8 @@ export const ENDPOINTS: Endpoint[] = [
         path: "/collections/:collection_id/items/:song_id",
         desc: "Add a song to a collection",
         pathParams: {
-            collection_id: { t: "integer", d: "ID of the collection" },
-            song_id: { t: "integer", d: "ID of the song to add" },
+            collection_id: { t: "integer_str", d: "ID of the collection" },
+            song_id: { t: "integer_str", d: "ID of the song to add" },
         },
         ret: [
             { status: 201, d: "{ collection_id, song_id, added_at } - song added" },
@@ -187,8 +187,8 @@ export const ENDPOINTS: Endpoint[] = [
         path: "/collections/:collection_id/items/:song_id",
         desc: "Remove a song from a collection",
         pathParams: {
-            collection_id: { t: "integer", d: "ID of the collection" },
-            song_id: { t: "integer", d: "ID of the song to remove" },
+            collection_id: { t: "integer_str", d: "ID of the collection" },
+            song_id: { t: "integer_str", d: "ID of the song to remove" },
         },
         ret: [
             { status: 204, d: "song removed or not found" },
@@ -201,8 +201,8 @@ export const ENDPOINTS: Endpoint[] = [
         path: "/collections/:collection_id/albums/:album_id",
         desc: "Add all songs from an album to a collection",
         pathParams: {
-            collection_id: { t: "integer", d: "ID of the collection" },
-            album_id: { t: "integer", d: "ID of the album" },
+            collection_id: { t: "integer_str", d: "ID of the collection" },
+            album_id: { t: "integer_str", d: "ID of the album" },
         },
         ret: [
             { status: 201, d: "{ collection_id, songs[] { song_id, added_at } }" },
@@ -216,8 +216,8 @@ export const ENDPOINTS: Endpoint[] = [
         path: "/collections/:collection_id/albums/:album_id",
         desc: "Remove all songs from an album from a collection",
         pathParams: {
-            collection_id: { t: "integer", d: "ID of the collection" },
-            album_id: { t: "integer", d: "ID of the album" },
+            collection_id: { t: "integer_str", d: "ID of the collection" },
+            album_id: { t: "integer_str", d: "ID of the album" },
         },
         ret: [
             { status: 204, d: "album songs removed or not found" },
@@ -255,7 +255,7 @@ export const ENDPOINTS: Endpoint[] = [
         path: "/songs/:song_id",
         desc: "Get detailed information about a specific song",
         pathParams: {
-            song_id: { t: "integer", d: "ID of the song" },
+            song_id: { t: "integer_str", d: "ID of the song" },
         },
         ret: [
             {
@@ -271,7 +271,7 @@ export const ENDPOINTS: Endpoint[] = [
         path: "/listens",
         desc: "Record that user listened to or plays a song",
         body: {
-            song_id: { t: "integer", d: "ID of the song to record" },
+            song_id: { t: "integer_str", d: "ID of the song to record" },
         },
         ret: [
             { status: 201, d: "{ user_id, song_id, listened_at }" },
@@ -284,10 +284,10 @@ export const ENDPOINTS: Endpoint[] = [
         path: "/ratings/:song_id",
         desc: "Rate a song (1-5 stars)",
         pathParams: {
-            song_id: { t: "integer", d: "ID of the song to rate" },
+            song_id: { t: "integer_str", d: "ID of the song to rate" },
         },
         body: {
-            stars: { t: "integer", d: "1 <= integer <= 5" },
+            stars: { t: "integer_str", d: "1 <= integer <= 5" },
         },
         ret: [
             { status: 200, d: "{ user_id, song_id, stars }" },
@@ -313,7 +313,7 @@ export const ENDPOINTS: Endpoint[] = [
         path: "/follows/:user_id",
         desc: "Follow a user",
         pathParams: {
-            user_id: { t: "integer", d: "ID of the user to follow" },
+            user_id: { t: "integer_str", d: "ID of the user to follow" },
         },
         ret: [
             { status: 201, d: "{ follower_id, followee_id }" },
@@ -337,7 +337,7 @@ export const ENDPOINTS: Endpoint[] = [
         path: "/follows/:user_id",
         desc: "Unfollow a user",
         pathParams: {
-            user_id: { t: "integer", d: "ID of the user to unfollow" },
+            user_id: { t: "integer_str", d: "ID of the user to unfollow" },
         },
         ret: [
             { status: 204, d: "unfollowed or already not following" },

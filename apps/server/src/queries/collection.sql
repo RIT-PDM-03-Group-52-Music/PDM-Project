@@ -37,7 +37,7 @@ LIMIT :page_size! OFFSET GREATEST(:page!, 0) * :page_size!;
 INSERT INTO COLLECTIONS (user_id, collection_name) VALUES (:user_id!, :collection_name!)
 RETURNING collection_id, collection_name;
 
-/* @name updateCollectionByCollectionName */
+/* @name updateCollectionName */
 UPDATE COLLECTIONS SET collection_name = :collection_name! WHERE collection_id = :collection_id! AND user_id = :user_id!
 RETURNING collection_id, collection_name;
 

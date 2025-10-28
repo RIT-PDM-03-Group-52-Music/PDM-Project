@@ -227,8 +227,8 @@ export function Chat() {
                                                 <div
                                                     className={`rounded-2xl text-sm shadow-md shadow-black/30 flex-1 ${
                                                         fromAssistant
-                                                            ? "bg-neutral-800/70 border border-neutral-700 text-neutral-100 py-2"
-                                                            : "bg-[rgb(111,143,94)] border border-[rgb(111,143,94)] text-white"
+                                                            ? "bg-neutral-800/70 border border-neutral-700 text-neutral-100 py-2 [--link-color:theme(colors.blue.400)] [--link-hover:theme(colors.blue.300)]"
+                                                            : "bg-[rgb(111,143,94)] border border-[rgb(111,143,94)] text-white [--link-color:theme(colors.blue.200)] [--link-hover:theme(colors.blue.100)]"
                                                     }`}
                                                 >
                                                     {fromAssistant && (

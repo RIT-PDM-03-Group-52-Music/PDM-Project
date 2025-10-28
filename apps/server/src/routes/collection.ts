@@ -30,7 +30,7 @@ import {
     getCollectionsByTotalLengthDesc,
     insertCollectionByCollectionName,
     insertCollectionItemBySongId,
-    updateCollectionByCollectionName,
+    updateCollectionName,
 } from "../queries/collection.queries";
 import {
     badRequest,
@@ -275,10 +275,10 @@ router.patch(
             if (!collection || collection.user_id !== Number(req.userId))
                 return notFound(res, "Collection not found.");
 
-            const updateResult = await updateCollectionByCollectionName.run(
+            const updateResult = await updateCollectionName.run(
                 {
                     user_id: Number(req.userId),
-                    collection_name,
+                    collection_name: collection_name,
                     collection_id: Number(collection_id),
                 },
                 pool,
