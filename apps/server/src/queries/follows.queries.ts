@@ -8,8 +8,9 @@ export interface IGetFollowsByFollowerParams {
 
 /** 'GetFollowsByFollower' return type */
 export interface IGetFollowsByFollowerResult {
+  email: string;
   followee_id: number;
-  follower_id: number;
+  username: string;
 }
 
 /** 'GetFollowsByFollower' query type */
@@ -18,12 +19,14 @@ export interface IGetFollowsByFollowerQuery {
   result: IGetFollowsByFollowerResult;
 }
 
-const getFollowsByFollowerIR: any = {"usedParamSet":{"user_id":true},"params":[{"name":"user_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":42,"b":50}]}],"statement":"SELECT * FROM FOLLOWS WHERE follower_id = :user_id!"};
+const getFollowsByFollowerIR: any = {"usedParamSet":{"user_id":true},"params":[{"name":"user_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":133,"b":141}]}],"statement":"SELECT f.followee_id, u.email, u.username FROM FOLLOWS as f\nINNER JOIN USERS AS u ON u.user_id = f.followee_id\nWHERE f.follower_id = :user_id!"};
 
 /**
  * Query generated from SQL:
  * ```
- * SELECT * FROM FOLLOWS WHERE follower_id = :user_id!
+ * SELECT f.followee_id, u.email, u.username FROM FOLLOWS as f
+ * INNER JOIN USERS AS u ON u.user_id = f.followee_id
+ * WHERE f.follower_id = :user_id!
  * ```
  */
 export const getFollowsByFollower = new PreparedQuery<IGetFollowsByFollowerParams,IGetFollowsByFollowerResult>(getFollowsByFollowerIR);
