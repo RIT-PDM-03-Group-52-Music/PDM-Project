@@ -18,7 +18,7 @@ export const GetSongsByArtistNameQuerySchema = GetSongsQuerySchemaBase.extend({
 });
 
 export const GetSongsByAlbumNameQuerySchema = GetSongsQuerySchemaBase.extend({
-    album_name : z.string().min(1).max(128),
+    album_name: z.string().min(1).max(128),
 });
 
 export const GetSongsByGenreNameQuerySchema = GetSongsQuerySchemaBase.extend({
