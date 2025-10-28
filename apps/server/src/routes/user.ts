@@ -3,13 +3,14 @@ import { type Request, type Response, Router } from "express";
 import { pool } from "../db";
 import { authgate } from "../middleware/authgate";
 import { getUserByEmail } from "../queries/user.queries";
-import { ok, notFound, unauthorized, badRequest, serverError } from "../utils/http";
+import { badRequest, notFound, ok, serverError } from "../utils/http";
 
 const router = Router();
 
 router.get("/", authgate, async (req: Request, res: Response) => {
     try {
         const query = GetUserQuerySchema.safeParse(req.query);
+        console.log("Get User Query:", req.query);
         if (!query.success) {
             const first = query.error.issues[0]?.message ?? "Email is required.";
             return badRequest(res, first);

@@ -15,7 +15,7 @@ const components: Components = {
     li: (props) => <li className="leading-6" {...props} />,
     a: (props) => (
         <a
-            className="underline text-blue-400 hover:text-blue-300"
+            className="underline text-[var(--link-color,theme(colors.blue.400))] hover:text-[var(--link-hover,theme(colors.blue.300))]"
             target="_blank"
             rel="noopener noreferrer"
             {...props}

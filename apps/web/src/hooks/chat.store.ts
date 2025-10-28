@@ -75,12 +75,12 @@ export const useChatStore = create<ChatStoreState>()((set, get) => ({
         const calls = !planResult.data.body
             ? []
             : planResult.data.body.calls.map((c) => ({
-                call_id: c.call_id,
-                method: c.method,
-                path: c.path,
-                ...(c.query !== undefined ? { query: c.query } : {}),
-                ...(c.body !== undefined ? { body: c.body } : {}),
-            }));
+                  call_id: c.call_id,
+                  method: c.method,
+                  path: c.path,
+                  ...(c.query !== undefined ? { query: c.query } : {}),
+                  ...(c.body !== undefined ? { body: c.body } : {}),
+              }));
 
         set((s) => ({
             run: {
@@ -96,7 +96,7 @@ export const useChatStore = create<ChatStoreState>()((set, get) => ({
             calls.map(async (call) => {
                 try {
                     const endpoint = normalizeApiPath(call.path, call.query);
-                    const hasBody = 
+                    const hasBody =
                         call.body !== undefined &&
                         Object.keys(call.body).length > 0 &&
                         call.method !== "GET" &&
