@@ -3,6 +3,9 @@ import {
     DeleteCollectionItemPathSchema,
     type DeleteCollectionPath,
     DeleteCollectionPathSchema,
+    type GetCollectionItemsPath,
+    GetCollectionItemsPathSchema,
+    GetCollectionItemsQuerySchema,
     type GetCollectionParams,
     GetCollectionParamsSchema,
     GetCollectionsQuerySchema,
@@ -22,6 +25,10 @@ import {
     deleteCollectionItem,
     getCollectionById,
     getCollectionItem,
+    getCollectionItemsByAddedAtAsc,
+    getCollectionItemsByAddedAtDesc,
+    getCollectionItemsBySongNameAsc,
+    getCollectionItemsBySongNameDesc,
     getCollectionsByCollectionNameAsc,
     getCollectionsByCollectionNameDesc,
     getCollectionsBySongCountAsc,
@@ -52,9 +59,13 @@ router.get(
         try {
             const { collection_id } = req.params;
 
+            const user_id = req.userId;
+            if (!user_id) return unauthorized(res, "Missing user ID.");
+
             const result = await getCollectionById.run(
                 {
                     collection_id: Number(collection_id),
+                    user_id: Number(user_id),
                 },
                 pool,
             );
@@ -69,6 +80,47 @@ router.get(
         }
     },
 );
+
+router.get("/:collection_id/items",
+    authgate,
+    validatePath(GetCollectionItemsPathSchema),
+    async (req: Request<GetCollectionItemsPath, unknown, unknown>, res: Response) => {
+        try {
+            const query = GetCollectionItemsQuerySchema.safeParse(req.query);
+            if (!query.success) {
+                const first = query.error.issues[0]?.message ?? "Invalid query parameters.";
+                return badRequest(res, first);
+            }
+
+            const { page, page_size, sort, order } = query.data;
+            const { collection_id } = req.params;
+            const user_id = req.userId;
+
+            if (!user_id) return unauthorized(res, "Missing user ID.");
+
+            let result: unknown[] = [];
+
+            if (sort === "song_title" && order === "asc") {
+                result = await getCollectionItemsBySongNameAsc.run({ page, page_size, user_id: Number(user_id), collection_id: Number(collection_id) }, pool);
+            } else if (sort === "song_title" && order === "desc") {
+                result = await getCollectionItemsBySongNameDesc.run({ page, page_size, user_id: Number(user_id), collection_id: Number(collection_id) }, pool);
+            } else if (sort === "added_at" && order === "asc") {
+                result = await getCollectionItemsByAddedAtAsc.run({ page, page_size, user_id: Number(user_id), collection_id: Number(collection_id) }, pool);
+            } else if (sort === "added_at" && order === "desc") {
+                result = await getCollectionItemsByAddedAtDesc.run({ page, page_size, user_id: Number(user_id), collection_id: Number(collection_id) }, pool);
+            }
+            
+            return ok(res, {
+                songs: result,
+                page,
+                page_size,
+                total: result.length,
+            });
+        } catch (err) {
+            console.error(err);
+            return serverError(res);
+        }
+    });
 
 router.get("/", authgate, async (req: Request, res: Response) => {
     try {
@@ -191,6 +243,7 @@ router.patch(
             const result = await getCollectionById.run(
                 {
                     collection_id: Number(collection_id),
+                    user_id: Number(req.userId),
                 },
                 pool,
             );
@@ -231,6 +284,7 @@ router.put(
             const result = await getCollectionById.run(
                 {
                     collection_id: Number(collection_id),
+                    user_id: Number(req.userId),
                 },
                 pool,
             );
@@ -283,6 +337,7 @@ router.delete(
             const result = await getCollectionById.run(
                 {
                     collection_id: Number(collection_id),
+                    user_id: Number(req.userId),
                 },
                 pool,
             );
