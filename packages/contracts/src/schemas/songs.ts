@@ -4,7 +4,7 @@ export const GetSongsQuerySchemaBase = z.object({
     page: z.string().default("0").transform(Number),
     page_size: z.string().default("50").transform(Number),
     sort: z
-        .enum(["song_title", "artist_name", "genre_name", "release_year"])
+        .enum(["song_title", "artist_name", "genre_name", "released_at"])
         .default("song_title"),
     order: z.enum(["asc", "desc"]).default("asc"),
 });
