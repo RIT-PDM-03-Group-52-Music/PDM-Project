@@ -4,6 +4,7 @@ import { ENDPOINTS } from "./context/endpoints";
 import aiRouter from "./routes/ai";
 import authRouter from "./routes/auth";
 import collectionRouter from "./routes/collection";
+import followsRouter from "./routes/follows";
 import { ok } from "./utils/http";
 
 const app = express(); // HTTP server
@@ -21,6 +22,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/ai", aiRouter);
 app.use("/api/collections", collectionRouter);
 
+app.use("/api/follows", followsRouter);
 app.get("/api/endpoints", (_, req) => {
     return ok(req, JSON.stringify(ENDPOINTS, null, 2));
 });
