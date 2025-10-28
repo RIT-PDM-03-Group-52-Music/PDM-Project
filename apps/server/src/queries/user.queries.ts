@@ -146,6 +146,35 @@ const getUserByEmailIR: any = {"usedParamSet":{"email":true},"params":[{"name":"
 export const getUserByEmail = new PreparedQuery<IGetUserByEmailParams,IGetUserByEmailResult>(getUserByEmailIR);
 
 
+/** 'GetPublicUserByEmail' parameters type */
+export interface IGetPublicUserByEmailParams {
+  email: string;
+}
+
+/** 'GetPublicUserByEmail' return type */
+export interface IGetPublicUserByEmailResult {
+  email: string;
+  user_id: number;
+  username: string;
+}
+
+/** 'GetPublicUserByEmail' query type */
+export interface IGetPublicUserByEmailQuery {
+  params: IGetPublicUserByEmailParams;
+  result: IGetPublicUserByEmailResult;
+}
+
+const getPublicUserByEmailIR: any = {"usedParamSet":{"email":true},"params":[{"name":"email","required":true,"transform":{"type":"scalar"},"locs":[{"a":57,"b":63}]}],"statement":"SELECT user_id, username, email FROM USERS WHERE email = :email!"};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * SELECT user_id, username, email FROM USERS WHERE email = :email!
+ * ```
+ */
+export const getPublicUserByEmail = new PreparedQuery<IGetPublicUserByEmailParams,IGetPublicUserByEmailResult>(getPublicUserByEmailIR);
+
+
 /** 'LoginUser' parameters type */
 export interface ILoginUserParams {
   now: DateOrString;

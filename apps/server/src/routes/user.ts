@@ -2,7 +2,7 @@ import { GetUserQuerySchema } from "@pdm/contracts";
 import { type Request, type Response, Router } from "express";
 import { pool } from "../db";
 import { authgate } from "../middleware/authgate";
-import { getUserByEmail } from "../queries/user.queries";
+import { getPublicUserByEmail } from "../queries/user.queries";
 import { badRequest, notFound, ok, serverError } from "../utils/http";
 
 const router = Router();
@@ -18,7 +18,7 @@ router.get("/", authgate, async (req: Request, res: Response) => {
 
         const { email } = query.data;
 
-        const result = await getUserByEmail.run(
+        const result = await getPublicUserByEmail.run(
             {
                 email,
             },
@@ -28,11 +28,7 @@ router.get("/", authgate, async (req: Request, res: Response) => {
         const user = result[0];
         if (!user) return notFound(res, "User not found.");
 
-        return ok(res, {
-            user_id: user.user_id,
-            username: user.username,
-            email: user.email,
-        });
+        return ok(res, user);
     } catch (err) {
         console.error(err);
         return serverError(res);
