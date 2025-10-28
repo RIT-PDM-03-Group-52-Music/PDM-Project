@@ -6,6 +6,7 @@ import authRouter from "./routes/auth";
 import collectionRouter from "./routes/collection";
 import followsRouter from "./routes/follows";
 import listensRouter from "./routes/listens";
+import songsRouter from "./routes/songs";
 import userRouter from "./routes/user";
 import { ok } from "./utils/http";
 
@@ -25,6 +26,7 @@ app.use("/api/ai", aiRouter);
 app.use("/api/collections", collectionRouter);
 app.use("/api/listens", listensRouter);
 app.use("/api/users", userRouter);
+app.use("/api/songs", songsRouter);
 
 app.use("/api/follows", followsRouter);
 app.get("/api/endpoints", (_, req) => {
