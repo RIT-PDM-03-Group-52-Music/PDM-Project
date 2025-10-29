@@ -3,7 +3,7 @@ import { type Request, type Response, Router } from "express";
 import { pool } from "../db";
 import { authgate } from "../middleware/authgate";
 import { validatePath } from "../middleware/validate";
-import { deleteFollowsByUserId, getFollowsByFollower } from "../queries/follows.queries";
+import { deleteFollowsByUserId, getFollowsByFollower, postFollowsByUserId } from "../queries/follows.queries";
 import { notFound, ok, serverError, unauthorized } from "../utils/http";
 
 const router = Router();
@@ -56,5 +56,30 @@ router.delete(
         }
     },
 );
+
+router.post("/", authgate, async (req: Request, res: Response) => {
+    try {
+        const user_id = req.userId;
+        if (!user_id) return unauthorized(res, "User not found.");
+
+        const { followee_id } = req.body;
+        if (!followee_id) return unauthorized(res, "Missing followee_id.");
+
+        const result = await postFollowsByUserId.run(
+            {
+                follower_id: Number(user_id),
+                followee_id: Number(followee_id),
+            },
+            pool
+        );
+
+        return ok(res, result[0]); // returning first row is common
+    } catch (err) {
+        console.error(err);
+        return serverError(res);
+    }
+});
+
+
 
 export default router;

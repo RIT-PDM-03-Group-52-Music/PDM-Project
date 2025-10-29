@@ -8,3 +8,8 @@ DELETE FROM FOLLOWS
 WHERE FOLLOWS.follower_id = :user_id!
     AND FOLLOWS.followee_id = :followee_id!
 RETURNING *;
+
+/* @name postFollowsByUserID */
+
+INSERT INTO FOLLOWS(followee_id, follower_id) VALUES(:followee_id!, :follower_id!)
+RETURNING *;
