@@ -54,7 +54,7 @@ const deleteFollowsByUserIdIR: any = {"usedParamSet":{"user_id":true},"params":[
  * DELETE FROM FOLLOWS 
  * WHERE FOLLOWS.follower_id = :user_id!
  *     AND :user_id = FOLLOWS.followee_id
- * ```
+ * ``` //
  */
 export const deleteFollowsByUserId = new PreparedQuery<IDeleteFollowsByUserIdParams,IDeleteFollowsByUserIdResult>(deleteFollowsByUserIdIR);
 

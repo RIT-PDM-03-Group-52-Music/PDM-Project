@@ -45,7 +45,7 @@ router.delete("/:user_id", authgate, async (req: Request, res: Response) => {
     } catch (err) {
         console.error(err);
         return serverError(res);
-    }
+    } //
 });
 
 export default router;
