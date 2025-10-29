@@ -32,3 +32,30 @@ const getFollowsByFollowerIR: any = {"usedParamSet":{"user_id":true},"params":[{
 export const getFollowsByFollower = new PreparedQuery<IGetFollowsByFollowerParams,IGetFollowsByFollowerResult>(getFollowsByFollowerIR);
 
 
+/** 'DeleteFollowsByUserId' parameters type */
+export interface IDeleteFollowsByUserIdParams {
+  user_id: number;
+}
+
+/** 'DeleteFollowsByUserId' return type */
+export type IDeleteFollowsByUserIdResult = void;
+
+/** 'DeleteFollowsByUserId' query type */
+export interface IDeleteFollowsByUserIdQuery {
+  params: IDeleteFollowsByUserIdParams;
+  result: IDeleteFollowsByUserIdResult;
+}
+
+const deleteFollowsByUserIdIR: any = {"usedParamSet":{"user_id":true},"params":[{"name":"user_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":49,"b":57},{"a":67,"b":74}]}],"statement":"DELETE FROM FOLLOWS \nWHERE FOLLOWS.follower_id = :user_id!\n    AND :user_id = FOLLOWS.followee_id"};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * DELETE FROM FOLLOWS 
+ * WHERE FOLLOWS.follower_id = :user_id!
+ *     AND :user_id = FOLLOWS.followee_id
+ * ```
+ */
+export const deleteFollowsByUserId = new PreparedQuery<IDeleteFollowsByUserIdParams,IDeleteFollowsByUserIdResult>(deleteFollowsByUserIdIR);
+
+
