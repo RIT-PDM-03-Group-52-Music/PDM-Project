@@ -77,7 +77,7 @@ router.post(
             );
 
             const follow = result[0];
-            if (!follow) return conflict(res, "Unable to create follow relationship.");
+            if (!follow) return conflict(res, "Follow relationship already exists.");
 
             return ok(res, follow);
         } catch (err) {
