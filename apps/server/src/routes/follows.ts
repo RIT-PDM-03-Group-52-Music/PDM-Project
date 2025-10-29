@@ -1,10 +1,10 @@
-import { type UserPath, UserPathSchema } from "@pdm/contracts";
+import { type PostFollowBody, PostFollowBodySchema, type UserPath, UserPathSchema } from "@pdm/contracts";
 import { type Request, type Response, Router } from "express";
 import { pool } from "../db";
 import { authgate } from "../middleware/authgate";
-import { validatePath } from "../middleware/validate";
+import { validateBody, validatePath } from "../middleware/validate";
 import { deleteFollowsByUserId, getFollowsByFollower, postFollowsByUserId } from "../queries/follows.queries";
-import { notFound, ok, serverError, unauthorized } from "../utils/http";
+import { conflict, notFound, ok, serverError, unauthorized } from "../utils/http";
 
 const router = Router();
 
@@ -57,28 +57,34 @@ router.delete(
     },
 );
 
-router.post("/", authgate, async (req: Request, res: Response) => {
-    try {
-        const user_id = req.userId;
-        if (!user_id) return unauthorized(res, "User not found.");
+router.post(
+    "/",
+    authgate,
+    validateBody(PostFollowBodySchema),
+    async (req: Request<unknown, unknown, PostFollowBody>, res: Response) => {
+        try {
+            const { followee_id } = req.body;
 
-        const { followee_id } = req.body;
-        if (!followee_id) return unauthorized(res, "Missing followee_id.");
+            const user_id = req.userId;
+            if (!user_id) return unauthorized(res, "User not found.");
 
-        const result = await postFollowsByUserId.run(
-            {
-                follower_id: Number(user_id),
-                followee_id: Number(followee_id),
-            },
-            pool
-        );
+            const result = await postFollowsByUserId.run(
+                {
+                    follower_id: Number(user_id),
+                    followee_id: Number(followee_id),
+                },
+                pool
+            );
 
-        return ok(res, result[0]); // returning first row is common
-    } catch (err) {
-        console.error(err);
-        return serverError(res);
-    }
-});
+            const follow = result[0];
+            if (!follow) return conflict(res, "Unable to create follow relationship.");
+
+            return ok(res, follow);
+        } catch (err) {
+            console.error(err);
+            return serverError(res);
+        }
+    });
 
 
 
