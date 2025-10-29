@@ -35,3 +35,15 @@ export const GetSongByIDPathSchema = z.object({
 });
 
 export type GetSongByIDPath = z.infer<typeof GetSongByIDPathSchema>;
+
+export const PutRatingPathSchema = z.object({
+    song_id: z.string().regex(/^\d{1,24}$/, "Song ID must be a numeric string of up to 24 digits."),
+});
+
+export type PutRatingPath = z.infer<typeof PutRatingPathSchema>;
+
+export const PutRatingBodySchema = z.object({
+    rating: z.number().min(1).max(5),
+});
+
+export type PutRatingBody = z.infer<typeof PutRatingBodySchema>;

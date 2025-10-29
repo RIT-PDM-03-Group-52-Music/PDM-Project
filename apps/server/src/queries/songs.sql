@@ -88,3 +88,8 @@ LIMIT :page_size! OFFSET GREATEST(:page!, 0) * :page_size!;
 
 /* @name getSongsById */ 
 SELECT s.song_id, s.song_title, s.released_at, s.song_length FROM songs as s WHERE s.song_id = :song_id!;
+
+/* @name rateSong */
+INSERT INTO RATES (user_id, song_id, rating) VALUES (:user_id!, :song_id!, :rating!)
+ON CONFLICT (user_id, song_id) DO UPDATE SET rating = EXCLUDED.rating
+RETURNING *;

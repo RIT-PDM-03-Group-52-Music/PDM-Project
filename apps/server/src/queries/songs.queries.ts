@@ -248,14 +248,47 @@ export interface IGetSongsByIdQuery {
   result: IGetSongsByIdResult;
 }
 
-const getSongsByIdIR: any = {"usedParamSet":{"song_id":true},"params":[{"name":"song_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":41,"b":49}]}],"statement":"SELECT * FROM SONGS as S WHERE song_id = :song_id!"};
+const getSongsByIdIR: any = {"usedParamSet":{"song_id":true},"params":[{"name":"song_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":95,"b":103}]}],"statement":"SELECT s.song_id, s.song_title, s.released_at, s.song_length FROM songs as s WHERE s.song_id = :song_id!"};
 
 /**
  * Query generated from SQL:
  * ```
- * SELECT * FROM SONGS as S WHERE song_id = :song_id!
+ * SELECT s.song_id, s.song_title, s.released_at, s.song_length FROM songs as s WHERE s.song_id = :song_id!
  * ```
  */
 export const getSongsById = new PreparedQuery<IGetSongsByIdParams,IGetSongsByIdResult>(getSongsByIdIR);
+
+
+/** 'RateSong' parameters type */
+export interface IRateSongParams {
+  rating: number;
+  song_id: number;
+  user_id: number;
+}
+
+/** 'RateSong' return type */
+export interface IRateSongResult {
+  rating: number;
+  song_id: number;
+  user_id: number;
+}
+
+/** 'RateSong' query type */
+export interface IRateSongQuery {
+  params: IRateSongParams;
+  result: IRateSongResult;
+}
+
+const rateSongIR: any = {"usedParamSet":{"user_id":true,"song_id":true,"rating":true},"params":[{"name":"user_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":53,"b":61}]},{"name":"song_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":64,"b":72}]},{"name":"rating","required":true,"transform":{"type":"scalar"},"locs":[{"a":75,"b":82}]}],"statement":"INSERT INTO RATES (user_id, song_id, rating) VALUES (:user_id!, :song_id!, :rating!)\nON CONFLICT (user_id, song_id) DO UPDATE SET rating = EXCLUDED.rating\nRETURNING *"};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * INSERT INTO RATES (user_id, song_id, rating) VALUES (:user_id!, :song_id!, :rating!)
+ * ON CONFLICT (user_id, song_id) DO UPDATE SET rating = EXCLUDED.rating
+ * RETURNING *
+ * ```
+ */
+export const rateSong = new PreparedQuery<IRateSongParams,IRateSongResult>(rateSongIR);
 
 
