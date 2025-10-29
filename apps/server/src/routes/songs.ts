@@ -83,7 +83,7 @@ router.get("/", authgate, async (req: Request, res: Response) => {
 });
 
 router.get(
-    "/",
+    "/:song_id",
     authgate,
     validatePath(GetSongByIDPathSchema),
     async (req: Request<GetSongByIDPath, unknown, unknown>, res: Response) => {
