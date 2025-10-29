@@ -6,4 +6,6 @@ WHERE f.follower_id = :user_id!;
 /* @name deleteFollowsByUserID */
 DELETE FROM FOLLOWS 
 WHERE FOLLOWS.follower_id = :user_id!
-    AND :user_id = FOLLOWS.followee_id;
+    AND FOLLOWS.followee_id = :followee_id!
+RETURNING *;
+RETURNING *;
