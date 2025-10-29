@@ -91,3 +91,22 @@ INNER JOIN SONGS AS S ON (CI.song_id = S.song_id)
 WHERE c.user_id = :user_id! AND ci.collection_id = :collection_id!
 ORDER BY ci.added_at DESC
 LIMIT :page_size! OFFSET GREATEST(:page!, 0) * :page_size!;
+
+/* @name addCollectionItemsByAlbumId */
+INSERT INTO collectionitems(collection_id, song_id, added_at)
+SELECT :collection_id!, ai.song_id, :added_at!
+FROM albums AS a
+INNER JOIN albumitems AS ai ON ai.album_id = a.album_id
+WHERE a.album_id = :album_id!
+ON CONFLICT DO NOTHING
+RETURNING song_id, added_at;
+
+/* @name removeCollectionItemsByAlbumId */
+DELETE FROM collectionitems
+WHERE collection_id = :collection_id! AND
+      song_id IN (
+          SELECT ai.song_id FROM albums AS a
+                   INNER JOIN albumitems ai ON a.album_id = ai.album_id
+                   WHERE a.album_id = :album_id!
+          )
+RETURNING song_id;

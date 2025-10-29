@@ -227,6 +227,22 @@ export const ENDPOINTS: Endpoint[] = [
     },
     {
         method: "GET",
+        path: "/albums",
+        desc: "Search for albums by album name",
+        query: {
+            album_name: { t: "string", d: "album name to search for" },
+        },
+        ret: [
+            {
+                status: 200,
+                d: "albums[] { album_id, album_name }",
+            },
+            { status: 400, d: "invalid query parameters" },
+            { status: 401, d: "unauthorized" },
+        ],
+    },
+    {
+        method: "GET",
         path: "/songs",
         desc: "Search for songs by title, artist, album, or genre (at least one search term is required)",
         query: {

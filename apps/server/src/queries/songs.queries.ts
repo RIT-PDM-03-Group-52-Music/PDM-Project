@@ -231,8 +231,6 @@ export const getSongsByGenreName = new PreparedQuery<IGetSongsByGenreNameParams,
 
 /** 'GetSongsById' parameters type */
 export interface IGetSongsByIdParams {
-  page: number;
-  page_size: number;
   song_id: number;
 }
 
@@ -250,13 +248,12 @@ export interface IGetSongsByIdQuery {
   result: IGetSongsByIdResult;
 }
 
-const getSongsByIdIR: any = {"usedParamSet":{"song_id":true,"page_size":true,"page":true},"params":[{"name":"song_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":41,"b":49}]},{"name":"page_size","required":true,"transform":{"type":"scalar"},"locs":[{"a":58,"b":68},{"a":99,"b":109}]},{"name":"page","required":true,"transform":{"type":"scalar"},"locs":[{"a":86,"b":91}]}],"statement":"SELECT * FROM SONGS as S WHERE song_id = :song_id! \nLIMIT :page_size! OFFSET GREATEST(:page!, 0) * :page_size!"};
+const getSongsByIdIR: any = {"usedParamSet":{"song_id":true},"params":[{"name":"song_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":41,"b":49}]}],"statement":"SELECT * FROM SONGS as S WHERE song_id = :song_id!"};
 
 /**
  * Query generated from SQL:
  * ```
- * SELECT * FROM SONGS as S WHERE song_id = :song_id! 
- * LIMIT :page_size! OFFSET GREATEST(:page!, 0) * :page_size!
+ * SELECT * FROM SONGS as S WHERE song_id = :song_id!
  * ```
  */
 export const getSongsById = new PreparedQuery<IGetSongsByIdParams,IGetSongsByIdResult>(getSongsByIdIR);
