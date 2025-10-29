@@ -74,3 +74,25 @@ export const GetCollectionItemsQuerySchema = z.object({
 });
 
 export type GetCollectionItemsQuery = z.infer<typeof GetCollectionItemsQuerySchema>;
+
+export const PutCollectionAlbumPathSchema = z.object({
+    collection_id: z
+        .string()
+        .regex(/^\d{1,24}$/, "Collection ID must be a numeric string of up to 24 digits."),
+    album_id: z
+        .string()
+        .regex(/^\d{1,24}$/, "Album ID must be a numeric string of up to 24 digits."),
+});
+
+export type PutCollectionAlbumPath = z.infer<typeof PutCollectionAlbumPathSchema>;
+
+export const DeleteCollectionAlbumPathSchema = z.object({
+    collection_id: z
+        .string()
+        .regex(/^\d{1,24}$/, "Collection ID must be a numeric string of up to 24 digits."),
+    album_id: z
+        .string()
+        .regex(/^\d{1,24}$/, "Album ID must be a numeric string of up to 24 digits."),
+});
+
+export type DeleteCollectionAlbumPath = z.infer<typeof DeleteCollectionAlbumPathSchema>;

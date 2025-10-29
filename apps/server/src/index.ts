@@ -2,6 +2,7 @@ import cors from "cors";
 import express from "express";
 import { ENDPOINTS } from "./context/endpoints";
 import aiRouter from "./routes/ai";
+import albumsRouter from "./routes/albums";
 import authRouter from "./routes/auth";
 import collectionRouter from "./routes/collection";
 import followsRouter from "./routes/follows";
@@ -27,6 +28,7 @@ app.use("/api/collections", collectionRouter);
 app.use("/api/listens", listensRouter);
 app.use("/api/users", userRouter);
 app.use("/api/songs", songsRouter);
+app.use("/api/albums", albumsRouter);
 
 app.use("/api/follows", followsRouter);
 app.get("/api/endpoints", (_, req) => {

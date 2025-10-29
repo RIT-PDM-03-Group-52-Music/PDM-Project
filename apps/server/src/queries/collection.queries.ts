@@ -578,3 +578,74 @@ const getCollectionItemsByAddedAtDescIR: any = {"usedParamSet":{"user_id":true,"
 export const getCollectionItemsByAddedAtDesc = new PreparedQuery<IGetCollectionItemsByAddedAtDescParams,IGetCollectionItemsByAddedAtDescResult>(getCollectionItemsByAddedAtDescIR);
 
 
+/** 'AddCollectionItemsByAlbumId' parameters type */
+export interface IAddCollectionItemsByAlbumIdParams {
+  added_at: DateOrString;
+  album_id: number;
+  collection_id: number;
+}
+
+/** 'AddCollectionItemsByAlbumId' return type */
+export interface IAddCollectionItemsByAlbumIdResult {
+  added_at: Date;
+  song_id: number;
+}
+
+/** 'AddCollectionItemsByAlbumId' query type */
+export interface IAddCollectionItemsByAlbumIdQuery {
+  params: IAddCollectionItemsByAlbumIdParams;
+  result: IAddCollectionItemsByAlbumIdResult;
+}
+
+const addCollectionItemsByAlbumIdIR: any = {"usedParamSet":{"collection_id":true,"added_at":true,"album_id":true},"params":[{"name":"collection_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":69,"b":83}]},{"name":"added_at","required":true,"transform":{"type":"scalar"},"locs":[{"a":98,"b":107}]},{"name":"album_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":201,"b":210}]}],"statement":"INSERT INTO collectionitems(collection_id, song_id, added_at)\nSELECT :collection_id!, ai.song_id, :added_at!\nFROM albums AS a\nINNER JOIN albumitems AS ai ON ai.album_id = a.album_id\nWHERE a.album_id = :album_id!\nON CONFLICT DO NOTHING\nRETURNING song_id, added_at"};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * INSERT INTO collectionitems(collection_id, song_id, added_at)
+ * SELECT :collection_id!, ai.song_id, :added_at!
+ * FROM albums AS a
+ * INNER JOIN albumitems AS ai ON ai.album_id = a.album_id
+ * WHERE a.album_id = :album_id!
+ * ON CONFLICT DO NOTHING
+ * RETURNING song_id, added_at
+ * ```
+ */
+export const addCollectionItemsByAlbumId = new PreparedQuery<IAddCollectionItemsByAlbumIdParams,IAddCollectionItemsByAlbumIdResult>(addCollectionItemsByAlbumIdIR);
+
+
+/** 'RemoveCollectionItemsByAlbumId' parameters type */
+export interface IRemoveCollectionItemsByAlbumIdParams {
+  album_id: number;
+  collection_id: number;
+}
+
+/** 'RemoveCollectionItemsByAlbumId' return type */
+export interface IRemoveCollectionItemsByAlbumIdResult {
+  song_id: number;
+}
+
+/** 'RemoveCollectionItemsByAlbumId' query type */
+export interface IRemoveCollectionItemsByAlbumIdQuery {
+  params: IRemoveCollectionItemsByAlbumIdParams;
+  result: IRemoveCollectionItemsByAlbumIdResult;
+}
+
+const removeCollectionItemsByAlbumIdIR: any = {"usedParamSet":{"collection_id":true,"album_id":true},"params":[{"name":"collection_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":50,"b":64}]},{"name":"album_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":244,"b":253}]}],"statement":"DELETE FROM collectionitems\nWHERE collection_id = :collection_id! AND\n      song_id IN (\n          SELECT ai.song_id FROM albums AS a\n                   INNER JOIN albumitems ai ON a.album_id = ai.album_id\n                   WHERE a.album_id = :album_id!\n          )\nRETURNING song_id"};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * DELETE FROM collectionitems
+ * WHERE collection_id = :collection_id! AND
+ *       song_id IN (
+ *           SELECT ai.song_id FROM albums AS a
+ *                    INNER JOIN albumitems ai ON a.album_id = ai.album_id
+ *                    WHERE a.album_id = :album_id!
+ *           )
+ * RETURNING song_id
+ * ```
+ */
+export const removeCollectionItemsByAlbumId = new PreparedQuery<IRemoveCollectionItemsByAlbumIdParams,IRemoveCollectionItemsByAlbumIdResult>(removeCollectionItemsByAlbumIdIR);
+
+

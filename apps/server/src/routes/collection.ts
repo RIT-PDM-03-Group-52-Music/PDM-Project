@@ -1,4 +1,6 @@
 import {
+    type DeleteCollectionAlbumPath,
+    DeleteCollectionAlbumPathSchema,
     type DeleteCollectionItemPath,
     DeleteCollectionItemPathSchema,
     type DeleteCollectionPath,
@@ -13,6 +15,8 @@ import {
     PatchCollectionBodySchema,
     type PostCollectionBody,
     PostCollectionBodySchema,
+    type PutCollectionAlbumPath,
+    PutCollectionAlbumPathSchema,
     type PutCollectionPath,
     PutCollectionPathSchema,
 } from "@pdm/contracts";
@@ -21,6 +25,7 @@ import { pool } from "../db";
 import { authgate } from "../middleware/authgate";
 import { validateBody, validatePath } from "../middleware/validate";
 import {
+    addCollectionItemsByAlbumId,
     deleteCollectionById,
     deleteCollectionItem,
     getCollectionById,
@@ -37,6 +42,7 @@ import {
     getCollectionsByTotalLengthDesc,
     insertCollectionByCollectionName,
     insertCollectionItemBySongId,
+    removeCollectionItemsByAlbumId,
     updateCollectionName,
 } from "../queries/collection.queries";
 import {
@@ -323,10 +329,8 @@ router.put(
             );
 
             const collection = result[0];
-            if (!collection) return notFound(res, "Collection not found.");
-            if (collection.user_id !== Number(req.userId)) {
-                return unauthorized(res, "You do not have permission to edit this collection.");
-            }
+            if (!collection || collection.user_id !== Number(req.userId))
+                return notFound(res, "Collection not found.");
 
             const insertResult = await insertCollectionItemBySongId.run(
                 {
@@ -422,6 +426,83 @@ router.delete(
             if (!collection) return notFound(res, "Collection not found.");
 
             return ok(res, collection);
+        } catch (err) {
+            console.error(err);
+            return serverError(res);
+        }
+    },
+);
+
+router.put(
+    "/:collection_id/albums/:album_id",
+    authgate,
+    validatePath(PutCollectionAlbumPathSchema),
+    async (req: Request<PutCollectionAlbumPath, unknown, unknown>, res: Response) => {
+        try {
+            const { collection_id, album_id } = req.params;
+
+            if (!req.userId) return unauthorized(res, "Missing user ID.");
+
+            const result = await getCollectionById.run(
+                {
+                    collection_id: Number(collection_id),
+                    user_id: Number(req.userId),
+                },
+                pool,
+            );
+
+            const collection = result[0];
+            if (!collection || collection.user_id !== Number(req.userId))
+                return notFound(res, "Collection not found.");
+
+            const insertResult = await addCollectionItemsByAlbumId.run(
+                {
+                    collection_id: Number(collection_id),
+                    album_id: Number(album_id),
+                    added_at: new Date().toISOString(),
+                },
+                pool,
+            );
+
+            return created(res, { collection_id, songs: insertResult });
+        } catch (err) {
+            console.error(err);
+            return serverError(res);
+        }
+    },
+);
+
+router.delete(
+    "/:collection_id/albums/:album_id",
+    authgate,
+    validatePath(DeleteCollectionAlbumPathSchema),
+    async (req: Request<DeleteCollectionAlbumPath, unknown, unknown>, res: Response) => {
+        try {
+            const { collection_id, album_id } = req.params;
+
+            if (!req.userId) return unauthorized(res, "Missing user ID.");
+
+            const result = await getCollectionById.run(
+                {
+                    collection_id: Number(collection_id),
+                    user_id: Number(req.userId),
+                },
+                pool,
+            );
+
+            const collection = result[0];
+            if (!collection || collection.user_id !== Number(req.userId))
+                return notFound(res, "Collection not found.");
+
+            const deleteResult = await removeCollectionItemsByAlbumId.run(
+                {
+                    collection_id: Number(collection_id),
+                    album_id: Number(album_id),
+                },
+                pool,
+            );
+
+            return ok(res, { collection_id, removed_songs: deleteResult });
         } catch (err) {
             console.error(err);
             return serverError(res);
