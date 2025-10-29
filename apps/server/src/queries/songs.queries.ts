@@ -229,3 +229,33 @@ const getSongsByGenreNameIR: any = {"usedParamSet":{"genre_name":true,"sort":tru
 export const getSongsByGenreName = new PreparedQuery<IGetSongsByGenreNameParams,IGetSongsByGenreNameResult>(getSongsByGenreNameIR);
 
 
+/** 'GetSongsById' parameters type */
+export interface IGetSongsByIdParams {
+  song_id: number;
+}
+
+/** 'GetSongsById' return type */
+export interface IGetSongsByIdResult {
+  released_at: Date;
+  song_id: number;
+  song_length: number;
+  song_title: string;
+}
+
+/** 'GetSongsById' query type */
+export interface IGetSongsByIdQuery {
+  params: IGetSongsByIdParams;
+  result: IGetSongsByIdResult;
+}
+
+const getSongsByIdIR: any = {"usedParamSet":{"song_id":true},"params":[{"name":"song_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":41,"b":49}]}],"statement":"SELECT * FROM SONGS as S WHERE song_id = :song_id!"};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * SELECT * FROM SONGS as S WHERE song_id = :song_id!
+ * ```
+ */
+export const getSongsById = new PreparedQuery<IGetSongsByIdParams,IGetSongsByIdResult>(getSongsByIdIR);
+
+

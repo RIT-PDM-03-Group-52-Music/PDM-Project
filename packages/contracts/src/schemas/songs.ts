@@ -29,3 +29,9 @@ export const GetSongsQuerySchema = z.union([
     GetSongsByAlbumNameQuerySchema,
     GetSongsByGenreNameQuerySchema,
 ]);
+
+export const GetSongByIDPathSchema = z.object({
+    song_id: z.string().regex(/^\d{1,24}$/, "Song ID must be a numeric string of up to 24 digits."),
+});
+
+export type GetSongByIDPath = z.infer<typeof GetSongByIDPathSchema>;

@@ -1,14 +1,16 @@
-import { GetSongsQuerySchema } from "@pdm/contracts";
+import { type GetSongByIDPath, GetSongByIDPathSchema, GetSongsQuerySchema } from "@pdm/contracts";
 import { type Request, type Response, Router } from "express";
 import { pool } from "../db";
 import { authgate } from "../middleware/authgate";
+import { validatePath } from "../middleware/validate";
 import {
     getSongsByAlbumName,
     getSongsByArtistName,
     getSongsByGenreName,
+    getSongsById,
     getSongsBySongTitle,
 } from "../queries/songs.queries";
-import { badRequest, ok, serverError } from "../utils/http";
+import { badRequest, notFound, ok, serverError } from "../utils/http";
 
 const router = Router();
 
@@ -79,5 +81,31 @@ router.get("/", authgate, async (req: Request, res: Response) => {
         return serverError(res);
     }
 });
+
+router.get(
+    "/:song_id",
+    authgate,
+    validatePath(GetSongByIDPathSchema),
+    async (req: Request<GetSongByIDPath, unknown, unknown>, res: Response) => {
+        try {
+            const { song_id } = req.params;
+
+            const result = await getSongsById.run(
+                {
+                    song_id: Number(song_id),
+                },
+                pool,
+            );
+
+            const song = result[0];
+            if (!song) return notFound(res, "Song not found.");
+
+            return ok(res, song);
+        } catch (err) {
+            console.error(err);
+            return serverError(res);
+        }
+    },
+);
 
 export default router;

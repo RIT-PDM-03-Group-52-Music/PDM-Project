@@ -85,3 +85,6 @@ ORDER BY
     CASE WHEN :sort! = 'genre_name' AND :order! = 'asc' THEN g.genre_name END ASC,
     CASE WHEN :sort! = 'genre_name' AND :order! = 'desc' THEN g.genre_name END DESC
 LIMIT :page_size! OFFSET GREATEST(:page!, 0) * :page_size!;
+
+/* @name getSongsById */ 
+SELECT s.song_id, s.song_title, s.released_at, s.song_length FROM songs as s WHERE s.song_id = :song_id!;
