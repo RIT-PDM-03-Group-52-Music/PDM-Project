@@ -187,7 +187,7 @@ export function Chat() {
     };
 
     return (
-        <div className="w-full max-w-4xl flex-1 min-h-0 flex flex-col p-2 md:p-4 gap-2 md:gap-4">
+        <div className="w-full flex-1 min-h-0 flex flex-col p-2 md:p-4 gap-2 md:gap-4">
             <div className="relative flex-1 min-h-0 overflow-hidden rounded-xl border border-neutral-800 bg-gradient-to-b from-neutral-900 via-neutral-900 to-neutral-800 shadow-sm">
                 <div ref={listRef} className="h-full overflow-y-auto py-4 px-2 sm:px-4 space-y-3">
                     {messages.length === 0 ? (

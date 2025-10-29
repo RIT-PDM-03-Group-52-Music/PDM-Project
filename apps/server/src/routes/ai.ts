@@ -25,7 +25,7 @@ router.post(
             const { prompt, history } = req.body;
 
             const response = await generateObject({
-                model: openai("gpt-4.1-mini"),
+                model: openai("gpt-4.1"),
                 schema: PlanOutputSchema,
                 system: PLAN_SYSTEM_PROMPT,
                 messages: [
@@ -41,7 +41,6 @@ router.post(
             });
 
             console.log(`[PLAN] User: "${prompt}"`);
-            console.log(`[PLAN] Reasoning: ${response.object.justification ?? "N/A"}`);
             console.log(`[PLAN] Calls: ${response.object.calls.length}`);
 
             if (response.object.calls.length === 0) return noContent(res);

@@ -17,7 +17,8 @@ ORDER BY
     CASE WHEN :sort! = 'artist_name' AND :order! = 'asc' THEN a.artist_name END ASC,
     CASE WHEN :sort! = 'artist_name' AND :order! = 'desc' THEN a.artist_name END DESC,
     CASE WHEN :sort! = 'genre_name' AND :order! = 'asc' THEN g.genre_name END ASC,
-    CASE WHEN :sort! = 'genre_name' AND :order! = 'desc' THEN g.genre_name END DESC
+    CASE WHEN :sort! = 'genre_name' AND :order! = 'desc' THEN g.genre_name END DESC,
+    a.artist_name ASC
 LIMIT :page_size! OFFSET GREATEST(:page!, 0) * :page_size!;
 
 /* @name getSongsByArtistName */
@@ -39,7 +40,8 @@ ORDER BY
     CASE WHEN :sort! = 'artist_name' AND :order! = 'asc' THEN a.artist_name END ASC,
     CASE WHEN :sort! = 'artist_name' AND :order! = 'desc' THEN a.artist_name END DESC,
     CASE WHEN :sort! = 'genre_name' AND :order! = 'asc' THEN g.genre_name END ASC,
-    CASE WHEN :sort! = 'genre_name' AND :order! = 'desc' THEN g.genre_name END DESC
+    CASE WHEN :sort! = 'genre_name' AND :order! = 'desc' THEN g.genre_name END DESC,
+    a.artist_name ASC
 LIMIT :page_size! OFFSET GREATEST(:page!, 0) * :page_size!;
 
 /* @name getSongsByAlbumName */
@@ -61,7 +63,8 @@ ORDER BY
     CASE WHEN :sort! = 'artist_name' AND :order! = 'asc' THEN a.artist_name END ASC,
     CASE WHEN :sort! = 'artist_name' AND :order! = 'desc' THEN a.artist_name END DESC,
     CASE WHEN :sort! = 'genre_name' AND :order! = 'asc' THEN g.genre_name END ASC,
-    CASE WHEN :sort! = 'genre_name' AND :order! = 'desc' THEN g.genre_name END DESC
+    CASE WHEN :sort! = 'genre_name' AND :order! = 'desc' THEN g.genre_name END DESC,
+    a.artist_name ASC
 LIMIT :page_size! OFFSET GREATEST(:page!, 0) * :page_size!;
 
 /* @name getSongsByGenreName */
@@ -83,7 +86,8 @@ ORDER BY
     CASE WHEN :sort! = 'artist_name' AND :order! = 'asc' THEN a.artist_name END ASC,
     CASE WHEN :sort! = 'artist_name' AND :order! = 'desc' THEN a.artist_name END DESC,
     CASE WHEN :sort! = 'genre_name' AND :order! = 'asc' THEN g.genre_name END ASC,
-    CASE WHEN :sort! = 'genre_name' AND :order! = 'desc' THEN g.genre_name END DESC
+    CASE WHEN :sort! = 'genre_name' AND :order! = 'desc' THEN g.genre_name END DESC,
+    a.artist_name ASC
 LIMIT :page_size! OFFSET GREATEST(:page!, 0) * :page_size!;
 
 /* @name getSongsById */ 

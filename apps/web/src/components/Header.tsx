@@ -11,6 +11,7 @@ interface ProfileDropdown {
 
 function ProfileButton({ firstName, lastName, email }: ProfileDropdown) {
     const { logout } = useAuth();
+    const { reset } = useChatStore();
     const [isOpen, setIsOpen] = useState(false);
     const containerRef = useRef<HTMLDivElement | null>(null);
 
@@ -64,6 +65,7 @@ function ProfileButton({ firstName, lastName, email }: ProfileDropdown) {
                                 role="menuitem"
                                 onClick={() => {
                                     setIsOpen(false);
+                                    reset();
                                     logout();
                                 }}
                                 className="inline-flex w-full items-center justify-between gap-2 rounded-md border border-neutral-800 bg-neutral-900 px-3 py-1.5 text-xs font-medium text-neutral-200 hover:bg-neutral-800 transition cursor-pointer"

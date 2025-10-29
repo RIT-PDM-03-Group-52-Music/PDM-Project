@@ -10,6 +10,7 @@ export const validateBody =
             (req as unknown as { body: T }).body = parsed;
             next();
         } catch (err) {
+            console.log("Validation error:", err);
             handleZodError(res, err) ?? res.status(400).json({ error: "Invalid request body." });
         }
     };

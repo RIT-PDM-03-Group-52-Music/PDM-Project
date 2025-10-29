@@ -251,7 +251,7 @@ export const ENDPOINTS: Endpoint[] = [
             album_name: { t: "string", d: "string <= 128 (optional)" },
             genre_name: { t: "string", d: "string <= 128 (optional)" },
             page: { t: "integer", d: "default = 0" },
-            page_size: { t: "integer", d: "default = 50" },
+            page_size: { t: "integer", d: "default = 10" },
             sort: {
                 t: "enum",
                 enum: ["song_title", "artist_name", "genre_name", "released_at"],
@@ -290,8 +290,21 @@ export const ENDPOINTS: Endpoint[] = [
             song_id: { t: "integer_str", d: "ID of the song to record" },
         },
         ret: [
-            { status: 201, d: "{ user_id, song_id, listened_at }" },
+            { status: 201, d: "listens[] { user_id, song_id, listened_at }" },
             { status: 404, d: "song not found" },
+            { status: 401, d: "unauthorized" },
+        ],
+    },
+    {
+        method: "POST",
+        path: "/listens/collection/:collection_id",
+        desc: "Record that user listened to or plays an entire collection",
+        pathParams: {
+            collection_id: { t: "integer_str", d: "ID of the collection to play" },
+        },
+        ret: [
+            { status: 201, d: "listens[] { user_id, song_id, listened_at }" },
+            { status: 404, d: "collection not found" },
             { status: 401, d: "unauthorized" },
         ],
     },
