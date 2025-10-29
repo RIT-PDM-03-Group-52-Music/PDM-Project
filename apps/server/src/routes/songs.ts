@@ -1,4 +1,4 @@
-import { GetSongsQuerySchema } from "@pdm/contracts";
+import { type GetSongByIDPath, GetSongByIDPathSchema, GetSongsQuerySchema } from "@pdm/contracts";
 import { type Request, type Response, Router } from "express";
 import { pool } from "../db";
 import { authgate } from "../middleware/authgate";
@@ -10,7 +10,7 @@ import {
     getSongsById,
     getSongsBySongTitle,
 } from "../queries/songs.queries";
-import { badRequest, notFound, ok, serverError, unauthorized } from "../utils/http";
+import { badRequest, notFound, ok, serverError } from "../utils/http";
 
 const router = Router();
 
@@ -82,41 +82,29 @@ router.get("/", authgate, async (req: Request, res: Response) => {
     }
 });
 
-/**
- * GET /songs/:song_id
- * Path param: song_id (int)
- * Returns:
- * 200 with song info { song_id, song_title, song_length, released_at, artists[], genres[] }
- * 401 if unauthorized
- * 404 if song not found
- */
+router.get(
+    "/",
+    authgate,
+    validatePath(GetSongByIDPathSchema),
+    async (req: Request<GetSongByIDPath, unknown, unknown>, res: Response) => {
+        try {
+            const { song_id } = req.params;
 
-router.get("/", authgate, async (req: Request, res: Response) => {
-        const { song_id } = req.params;
+            const result = await getSongsById.run(
+                {
+                    song_id: Number(song_id),
+                },
+                pool,
+            );
 
-        if (!req.userId) return unauthorized(res, "Missing user ID.");
+            const song = result[0];
+            if (!song) return notFound(res, "Song not found.");
 
-        // Default paging
-        const page = Number(req.query.page) || 0;
-        const page_size = Number(req.query.page_size) || 10;
-        const sort = String(req.query.sort || "song_title");
-        const order = String(req.query.order || "asc");
-
-        return getSongsById
-            .run({ song_id: Number(song_id), page, page_size, sort, order }, pool)
-            .then((result) => {
-                if (result.length === 0) return notFound(res, "Song not found.");
-
-                return ok(res, {
-                    songs: result,
-                    page,
-                    page_size,
-                });
-            })
-            .catch((err) => {
-                console.error(err);
-                return serverError(res);
-            });
+            return ok(res, song);
+        } catch (err) {
+            console.error(err);
+            return serverError(res);
+        }
     },
 );
 

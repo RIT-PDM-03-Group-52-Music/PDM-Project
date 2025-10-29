@@ -3,9 +3,7 @@ import z from "zod";
 export const GetSongsQuerySchemaBase = z.object({
     page: z.string().default("0").transform(Number),
     page_size: z.string().default("50").transform(Number),
-    sort: z
-        .enum(["song_title", "artist_name", "genre_name", "released_at"])
-        .default("song_title"),
+    sort: z.enum(["song_title", "artist_name", "genre_name", "released_at"]).default("song_title"),
     order: z.enum(["asc", "desc"]).default("asc"),
 });
 
@@ -29,5 +27,11 @@ export const GetSongsQuerySchema = z.union([
     GetSongsByTitleQuerySchema,
     GetSongsByArtistNameQuerySchema,
     GetSongsByAlbumNameQuerySchema,
-    GetSongsByGenreNameQuerySchema
+    GetSongsByGenreNameQuerySchema,
 ]);
+
+export const GetSongByIDPathSchema = z.object({
+    song_id: z.string().regex(/^\d{1,24}$/, "Song ID must be a numeric string of up to 24 digits."),
+});
+
+export type GetSongByIDPath = z.infer<typeof GetSongByIDPathSchema>;

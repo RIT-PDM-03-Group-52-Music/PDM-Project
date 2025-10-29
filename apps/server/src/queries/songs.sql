@@ -87,5 +87,4 @@ ORDER BY
 LIMIT :page_size! OFFSET GREATEST(:page!, 0) * :page_size!;
 
 /* @name getSongsById */ 
-SELECT * FROM SONGS as S WHERE song_id = :song_id! 
-LIMIT :page_size! OFFSET GREATEST(:page!, 0) * :page_size!;
+SELECT * FROM SONGS as S WHERE song_id = :song_id!;
