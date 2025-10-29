@@ -8,4 +8,3 @@ DELETE FROM FOLLOWS
 WHERE FOLLOWS.follower_id = :user_id!
     AND FOLLOWS.followee_id = :followee_id!
 RETURNING *;
-RETURNING *;
