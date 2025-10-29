@@ -12,6 +12,6 @@ export type UserPath = z.infer<typeof UserPathSchema>;
 
 export const PostFollowBodySchema = z.object({
     followee_id: z.string().regex(/^\d+$/, "Followee ID must be a number."),
-})
+});
 
 export type PostFollowBody = z.infer<typeof PostFollowBodySchema>;
