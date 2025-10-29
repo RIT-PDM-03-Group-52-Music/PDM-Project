@@ -64,3 +64,33 @@ const deleteFollowsByUserIdIR: any = {"usedParamSet":{"user_id":true,"followee_i
 export const deleteFollowsByUserId = new PreparedQuery<IDeleteFollowsByUserIdParams,IDeleteFollowsByUserIdResult>(deleteFollowsByUserIdIR);
 
 
+/** 'PostFollowsByUserId' parameters type */
+export interface IPostFollowsByUserIdParams {
+  followee_id: number;
+  follower_id: number;
+}
+
+/** 'PostFollowsByUserId' return type */
+export interface IPostFollowsByUserIdResult {
+  followee_id: number;
+  follower_id: number;
+}
+
+/** 'PostFollowsByUserId' query type */
+export interface IPostFollowsByUserIdQuery {
+  params: IPostFollowsByUserIdParams;
+  result: IPostFollowsByUserIdResult;
+}
+
+const postFollowsByUserIdIR: any = {"usedParamSet":{"followee_id":true,"follower_id":true},"params":[{"name":"followee_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":53,"b":65}]},{"name":"follower_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":68,"b":80}]}],"statement":"INSERT INTO FOLLOWS(followee_id, follower_id) VALUES(:followee_id!, :follower_id!)\nRETURNING *"};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * INSERT INTO FOLLOWS(followee_id, follower_id) VALUES(:followee_id!, :follower_id!)
+ * RETURNING *
+ * ```
+ */
+export const postFollowsByUserId = new PreparedQuery<IPostFollowsByUserIdParams,IPostFollowsByUserIdResult>(postFollowsByUserIdIR);
+
+
