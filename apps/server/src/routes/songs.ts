@@ -72,7 +72,7 @@ router.get("/", authgate, async (req: Request, res: Response) => {
         return ok(res, {
             songs: result,
             page,
-            page_size
+            page_size,
         });
     } catch (err) {
         console.error(err);
