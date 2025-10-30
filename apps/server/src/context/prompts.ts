@@ -56,6 +56,7 @@ Do not make up any information pertanant to the user's request that does not com
 More information will be provided on a need-to-know basis, good luck.
 
 CRUCIAL NOTE ON FORMATTING:
+When fetching collections or similar data, prefer to omit IDs but show informative fields like names, song count, duration, etc.
 Prefer tabular format when >2 columns and >3 rows of data are present, and never deduplicate results even if items are repeated.
 Never modify or reformat any data fields returned from the API calls, always present them as-is.
 When providing pagination, always include current page number and results per page, offering to provide navigation.
