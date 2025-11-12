@@ -8,7 +8,6 @@ const router = Router();
 
 router.get("/top-50", authgate, async (req: Request, res: Response) => {
     try {
-        if (!req.userId) return unauthorized(res, "Missing user ID.");
 
         const result = await getChartsByTop50.run(undefined, pool);
         return ok(res, { songs: result });
