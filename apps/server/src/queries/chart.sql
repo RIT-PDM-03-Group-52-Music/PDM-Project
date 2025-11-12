@@ -1,4 +1,4 @@
-/* @name get /charts/top-50 */
+/* @name getChartsByTop50 */
 SELECT
     s.song_id,
     s.song_title,
@@ -14,4 +14,4 @@ INNER JOIN ARTISTS as ar on f.artist_id = ar.artist_id
 WHERE ai.song_id = s.song_id
 GROUP BY s.song_id, s.song_length, a.album_name, artist_name
 ORDER BY num_listens DESC
-LIMIT 50
+LIMIT 50;

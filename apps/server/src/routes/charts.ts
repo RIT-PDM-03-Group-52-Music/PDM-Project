@@ -1,40 +1,21 @@
-import { GetUserQuerySchema } from "@pdm/contracts";
 import { type Request, type Response, Router } from "express";
 import { pool } from "../db";
 import { authgate } from "../middleware/authgate";
-import { getPublicUserByEmail } from "../queries/user.queries";
-import { badRequest, notFound, ok, serverError } from "../utils/http";
+import { getChartsByTop50 } from "../queries/chart.queries";
+import { ok, serverError, unauthorized } from "../utils/http";
 
 const router = Router();
 
-router.get("/", authgate, async (req: Request, res: Response) => {
+router.get("/top-50", authgate, async (req: Request, res: Response) => {
     try {
-        const query = GetUserQuerySchema.safeParse(req.query);
-        console.log("Get User Query:", req.query);
-        if (!query.success) {
-            const first = query.error.issues[0]?.message ?? "Email is required.";
-            return badRequest(res, first);
-        }
+        if (!req.userId) return unauthorized(res, "Missing user ID.");
 
-        const { email } = query.data;
-
-        const result = await getPublicUserByEmail.run(
-            {
-                email,
-            },
-            pool,
-        );
-
-        const user = result[0];
-        if (!user) return notFound(res, "User not found.");
-
-        return ok(res, user);
+        const result = await getChartsByTop50.run(undefined, pool);
+        return ok(res, { songs: result });
     } catch (err) {
         console.error(err);
         return serverError(res);
     }
 });
-
-router.get("/top50")
 
 export default router;
