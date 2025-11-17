@@ -10,7 +10,6 @@ export interface IGetChartsByTop50Result {
   artist_names: string | null;
   num_listens: string | null;
   song_id: number;
-  song_title: string;
 }
 
 /** 'GetChartsByTop50' query type */
