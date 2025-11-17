@@ -24,7 +24,7 @@ export const PlanOutputSchema = z.object({
             query: z.string().optional(),
             body: z.record(z.any()).optional(),
         }),
-    )
+    ),
 });
 export type PlanOutput = z.infer<typeof PlanOutputSchema>;
 

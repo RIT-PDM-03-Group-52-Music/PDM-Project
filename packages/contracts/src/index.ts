@@ -6,3 +6,4 @@ export * from "./schemas/listens";
 export * from "./schemas/songs";
 export * from "./schemas/user";
 export * from "./schemas/charts";
+export * from "./schemas/recommendations";

@@ -1,4 +1,9 @@
-import { type PostListeningSessionBody, PostListeningSessionBodySchema, type PostListenToCollectionPath, PostListenToCollectionPathSchema } from "@pdm/contracts";
+import {
+    type PostListeningSessionBody,
+    PostListeningSessionBodySchema,
+    type PostListenToCollectionPath,
+    PostListenToCollectionPathSchema,
+} from "@pdm/contracts";
 import { type Request, type Response, Router } from "express";
 import { pool } from "../db";
 import { authgate } from "../middleware/authgate";
@@ -67,7 +72,7 @@ router.post(
             console.error(err);
             return serverError(res);
         }
-    }
-)
+    },
+);
 
 export default router;

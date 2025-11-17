@@ -8,7 +8,6 @@ const router = Router();
 
 router.get("/top-50", authgate, async (req: Request, res: Response) => {
     try {
-
         const result = await getChartsByTop50.run(undefined, pool);
         return ok(res, { songs: result });
     } catch (err) {
@@ -16,19 +15,5 @@ router.get("/top-50", authgate, async (req: Request, res: Response) => {
         return serverError(res);
     }
 });
-
-router.get("/recommendations", authgate, async (req: Request, res: Response) => {
-    try {
-
-        const result = await getRecommendations.run(undefined, pool);
-        return ok(res, { songs: result });
-    } catch (err) {
-        console.error(err);
-        return serverError(res);
-    }
-});
-
-
-
 
 export default router;
