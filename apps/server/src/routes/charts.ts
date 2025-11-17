@@ -38,7 +38,7 @@ router.get("/top-50-following", authgate, async (req: Request, res: Response) =>
             const first = query.error.issues[0]?.message ?? "Invalid query parameters.";
             return badRequest(res, first);
         }
-        
+
         const { user_id } = query.data;
 
         const result = await getTopFiftyFollowing.run(

@@ -10,6 +10,7 @@ export interface IGetChartsByTop50Result {
   artist_names: string | null;
   num_listens: string | null;
   song_id: number;
+  song_title: string;
 }
 
 /** 'GetChartsByTop50' query type */
@@ -18,13 +19,14 @@ export interface IGetChartsByTop50Query {
   result: IGetChartsByTop50Result;
 }
 
-const getChartsByTop50IR: any = {"usedParamSet":{},"params":[],"statement":"SELECT\n    s.song_id,\n    STRING_AGG(DISTINCT a.album_name, ', ') AS album_names,\n    STRING_AGG(DISTINCT ar.artist_name, ', ') AS artist_names,\n    t.num_listens\nFROM (\n    SELECT\n        s.song_id,\n        COUNT(*) as num_listens\n    FROM SONGS as s\n    INNER JOIN LISTENS as l ON s.song_id = l.song_id\n    GROUP BY s.song_id\n    ORDER BY num_listens DESC\n    LIMIT 50\n) t\nINNER JOIN SONGS as s ON s.song_id = t.song_id\nINNER JOIN ALBUMITEMS as ai ON s.song_id = ai.song_id\nINNER JOIN ALBUMS as a ON a.album_id = ai.album_id\nINNER JOIN FEATURES as f ON f.song_id = s.song_id\nINNER JOIN ARTISTS as ar on f.artist_id = ar.artist_id\nGROUP BY s.song_id, s.song_title, t.num_listens\nORDER BY t.num_listens DESC"};
+const getChartsByTop50IR: any = {"usedParamSet":{},"params":[],"statement":"SELECT\n    s.song_id,\n    s.song_title,\n    STRING_AGG(DISTINCT a.album_name, ', ') AS album_names,\n    STRING_AGG(DISTINCT ar.artist_name, ', ') AS artist_names,\n    t.num_listens\nFROM (\n    SELECT\n        s.song_id,\n        COUNT(*) as num_listens\n    FROM SONGS as s\n    INNER JOIN LISTENS as l ON s.song_id = l.song_id\n    GROUP BY s.song_id\n    ORDER BY num_listens DESC\n    LIMIT 50\n) t\nINNER JOIN SONGS as s ON s.song_id = t.song_id\nINNER JOIN ALBUMITEMS as ai ON s.song_id = ai.song_id\nINNER JOIN ALBUMS as a ON a.album_id = ai.album_id\nINNER JOIN FEATURES as f ON f.song_id = s.song_id\nINNER JOIN ARTISTS as ar on f.artist_id = ar.artist_id\nGROUP BY s.song_id, s.song_title, t.num_listens\nORDER BY t.num_listens DESC"};
 
 /**
  * Query generated from SQL:
  * ```
  * SELECT
  *     s.song_id,
+ *     s.song_title,
  *     STRING_AGG(DISTINCT a.album_name, ', ') AS album_names,
  *     STRING_AGG(DISTINCT ar.artist_name, ', ') AS artist_names,
  *     t.num_listens
@@ -96,6 +98,7 @@ export interface IGetTopFiftyFollowingResult {
   artist_names: string | null;
   num_listens: string | null;
   song_id: number;
+  song_title: string;
 }
 
 /** 'GetTopFiftyFollowing' query type */
@@ -104,13 +107,14 @@ export interface IGetTopFiftyFollowingQuery {
   result: IGetTopFiftyFollowingResult;
 }
 
-const getTopFiftyFollowingIR: any = {"usedParamSet":{"user_id":true},"params":[{"name":"user_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":439,"b":447}]}],"statement":"SELECT\n    s.song_id,\n    STRING_AGG(DISTINCT a.album_name, ', ') AS album_names,\n    STRING_AGG(DISTINCT ar.artist_name, ', ') AS artist_names,\n    t.num_listens\nFROM (\n    SELECT\n        s.song_id,\n        COUNT(*) as num_listens\n    FROM SONGS as s\n    INNER JOIN LISTENS as l ON s.song_id = l.song_id\n    INNER JOIN USERS as u ON l.user_id = u.user_id\n    INNER JOIN FOLLOWS as f ON u.user_id = f.followee_id\n    WHERE f.follower_id = :user_id!\n    GROUP BY s.song_id\n    ORDER BY num_listens DESC\n    LIMIT 50\n) t\nINNER JOIN SONGS as s ON s.song_id = t.song_id\nINNER JOIN ALBUMITEMS as ai ON s.song_id = ai.song_id\nINNER JOIN ALBUMS as a ON a.album_id = ai.album_id\nINNER JOIN FEATURES as f ON f.song_id = s.song_id\nINNER JOIN ARTISTS as ar on f.artist_id = ar.artist_id\nGROUP BY s.song_id, s.song_title, t.num_listens\nORDER BY t.num_listens DESC"};
+const getTopFiftyFollowingIR: any = {"usedParamSet":{"user_id":true},"params":[{"name":"user_id","required":true,"transform":{"type":"scalar"},"locs":[{"a":457,"b":465}]}],"statement":"SELECT\n    s.song_id,\n    s.song_title,\n    STRING_AGG(DISTINCT a.album_name, ', ') AS album_names,\n    STRING_AGG(DISTINCT ar.artist_name, ', ') AS artist_names,\n    t.num_listens\nFROM (\n    SELECT\n        s.song_id,\n        COUNT(*) as num_listens\n    FROM SONGS as s\n    INNER JOIN LISTENS as l ON s.song_id = l.song_id\n    INNER JOIN USERS as u ON l.user_id = u.user_id\n    INNER JOIN FOLLOWS as f ON u.user_id = f.followee_id\n    WHERE f.follower_id = :user_id!\n    GROUP BY s.song_id\n    ORDER BY num_listens DESC\n    LIMIT 50\n) t\nINNER JOIN SONGS as s ON s.song_id = t.song_id\nINNER JOIN ALBUMITEMS as ai ON s.song_id = ai.song_id\nINNER JOIN ALBUMS as a ON a.album_id = ai.album_id\nINNER JOIN FEATURES as f ON f.song_id = s.song_id\nINNER JOIN ARTISTS as ar on f.artist_id = ar.artist_id\nGROUP BY s.song_id, s.song_title, t.num_listens\nORDER BY t.num_listens DESC"};
 
 /**
  * Query generated from SQL:
  * ```
  * SELECT
  *     s.song_id,
+ *     s.song_title,
  *     STRING_AGG(DISTINCT a.album_name, ', ') AS album_names,
  *     STRING_AGG(DISTINCT ar.artist_name, ', ') AS artist_names,
  *     t.num_listens
