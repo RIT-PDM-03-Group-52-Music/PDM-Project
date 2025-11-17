@@ -1,7 +1,7 @@
 import { type Request, type Response, Router } from "express";
 import { pool } from "../db";
 import { authgate } from "../middleware/authgate";
-import { getChartsByTop50, getRecommendations } from "../queries/chart.queries";
+import { getChartsByTop50 } from "../queries/chart.queries";
 import { ok, serverError, unauthorized } from "../utils/http";
 
 const router = Router();
