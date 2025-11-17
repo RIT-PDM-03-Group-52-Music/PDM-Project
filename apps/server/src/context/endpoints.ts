@@ -431,7 +431,7 @@ export const ENDPOINTS: Endpoint[] = [
             page_size: { t: "integer", d: "default = 10" },
         },
         ret: [
-            { status: 200, d: "{ songs[] { song_id, song_title, artists[], album } }" },
+            { status: 200, d: "{ songs[] { song_id, song_title, average_rating, genre_support } }" },
             { status: 400, d: "invalid query parameters" },
             { status: 401, d: "unauthorized" },
         ],
