@@ -50,32 +50,3 @@ const getChartsByTop50IR: any = {"usedParamSet":{},"params":[],"statement":"SELE
 export const getChartsByTop50 = new PreparedQuery<IGetChartsByTop50Params,IGetChartsByTop50Result>(getChartsByTop50IR);
 
 
-/** 'GetRecommendations' parameters type */
-export type IGetRecommendationsParams = void;
-
-/** 'GetRecommendations' return type */
-export interface IGetRecommendationsResult {
-  released_at: Date;
-  song_id: number;
-  song_length: number;
-  song_title: string;
-}
-
-/** 'GetRecommendations' query type */
-export interface IGetRecommendationsQuery {
-  params: IGetRecommendationsParams;
-  result: IGetRecommendationsResult;
-}
-
-const getRecommendationsIR: any = {"usedParamSet":{},"params":[],"statement":"SELECT *\nFROM SONGS"};
-
-/**
- * Query generated from SQL:
- * ```
- * SELECT *
- * FROM SONGS
- * ```
- */
-export const getRecommendations = new PreparedQuery<IGetRecommendationsParams,IGetRecommendationsResult>(getRecommendationsIR);
-
-
