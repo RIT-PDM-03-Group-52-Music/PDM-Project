@@ -58,5 +58,5 @@ INNER JOIN ALBUMITEMS as ai ON s.song_id = ai.song_id
 INNER JOIN ALBUMS as a ON a.album_id = ai.album_id
 INNER JOIN FEATURES as f ON f.song_id = s.song_id
 INNER JOIN ARTISTS as ar on f.artist_id = ar.artist_id
-GROUP BY s.song_id, s.song_title, t.num_listens
+GROUP BY s.song_id, t.num_listens
 ORDER BY t.num_listens DESC;
