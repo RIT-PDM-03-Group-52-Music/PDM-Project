@@ -1,3 +1,4 @@
+import { GetTopFollowingQuerySchema } from "@pdm/contracts";
 import { type Request, type Response, Router } from "express";
 import { pool } from "../db";
 import { authgate } from "../middleware/authgate";
@@ -7,7 +8,6 @@ import {
     getTopFiveGenresForMonth,
 } from "../queries/chart.queries";
 import { badRequest, ok, serverError } from "../utils/http";
-import { GetTopFollowingQuerySchema } from "@pdm/contracts";
 
 const router = Router();
 

@@ -4,12 +4,13 @@ import { ENDPOINTS } from "./context/endpoints";
 import aiRouter from "./routes/ai";
 import albumsRouter from "./routes/albums";
 import authRouter from "./routes/auth";
+import chartsRouter from "./routes/charts";
 import collectionRouter from "./routes/collection";
 import followsRouter from "./routes/follows";
 import listensRouter from "./routes/listens";
+import recommendationsRouter from "./routes/recommendations";
 import songsRouter from "./routes/songs";
 import userRouter from "./routes/user";
-import recommendationsRouter from "./routes/recommendations";
 import { ok } from "./utils/http";
 
 const app = express(); // HTTP server
@@ -30,6 +31,7 @@ app.use("/api/listens", listensRouter);
 app.use("/api/users", userRouter);
 app.use("/api/songs", songsRouter);
 app.use("/api/albums", albumsRouter);
+app.use("/api/charts", chartsRouter);
 app.use("/api/recommendations", recommendationsRouter);
 app.use("/api/follows", followsRouter);
 

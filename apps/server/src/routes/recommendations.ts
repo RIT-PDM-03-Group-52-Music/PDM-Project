@@ -1,9 +1,9 @@
+import { GetRecommendationsQuerySchema } from "@pdm/contracts";
 import { type Request, type Response, Router } from "express";
 import { pool } from "../db";
 import { authgate } from "../middleware/authgate";
-import { badRequest, ok, serverError, unauthorized } from "../utils/http";
 import { getRecommendations } from "../queries/recommendations.queries";
-import { GetRecommendationsQuerySchema } from "@pdm/contracts";
+import { badRequest, ok, serverError, unauthorized } from "../utils/http";
 
 const router = Router();
 
