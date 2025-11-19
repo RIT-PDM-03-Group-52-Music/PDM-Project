@@ -3,7 +3,11 @@ import { type Request, type Response, Router } from "express";
 import { pool } from "../db";
 import { authgate } from "../middleware/authgate";
 import { validatePath } from "../middleware/validate";
-import { deleteFollowsByUserId, getFollowsByFollower, postFollowsByUserId } from "../queries/follows.queries";
+import {
+    deleteFollowsByUserId,
+    getFollowsByFollower,
+    postFollowsByUserId,
+} from "../queries/follows.queries";
 import { conflict, notFound, ok, serverError, unauthorized } from "../utils/http";
 
 const router = Router();
@@ -73,7 +77,7 @@ router.post(
                     follower_id: Number(user_id),
                     followee_id: Number(followee_id),
                 },
-                pool
+                pool,
             );
 
             const follow = result[0];
@@ -84,8 +88,7 @@ router.post(
             console.error(err);
             return serverError(res);
         }
-    });
-
-
+    },
+);
 
 export default router;

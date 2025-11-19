@@ -373,4 +373,70 @@ export const ENDPOINTS: Endpoint[] = [
             { status: 401, d: "unauthorized" },
         ],
     },
+    {
+        method: "GET",
+        path: "/profile/:user_id",
+        desc: "Get public profile information for a user",
+        pathParams: {
+            user_id: { t: "integer_str", d: "ID of any user" },
+        },
+        ret: [
+            {
+                status: 200,
+                d: "{ username, collections_count, followers_count, following_count, top_artists[]",
+            },
+            { status: 404, d: "user not found" },
+            { status: 401, d: "unauthorized" },
+        ],
+    },
+    {
+        method: "GET",
+        path: "/charts/top-50",
+        desc: "Get the top 50 most listened to songs across all users",
+        ret: [
+            {
+                status: 200,
+                d: "{ songs[] { song_id, song_title, artists[], album, listen_count } }",
+            },
+            { status: 401, d: "unauthorized" },
+        ],
+    },
+    {
+        method: "GET",
+        path: "/charts/top-50-following",
+        desc: "Get the top 50 most listened to songs among users you are following",
+        ret: [
+            {
+                status: 200,
+                d: "{ songs[] { song_id, song_title, artists[], album, listen_count } }",
+            },
+            { status: 401, d: "unauthorized" },
+        ],
+    },
+    {
+        method: "GET",
+        path: "/charts/top-genres",
+        desc: "Get the top genres listened to by the user",
+        ret: [
+            { status: 200, d: "{ genres[] }" },
+            { status: 401, d: "unauthorized" },
+        ],
+    },
+    {
+        method: "GET",
+        path: "/recommendations",
+        desc: "Get song recommendations for the user based on their listening history",
+        query: {
+            page: { t: "integer", d: "default = 0" },
+            page_size: { t: "integer", d: "default = 10" },
+        },
+        ret: [
+            {
+                status: 200,
+                d: "{ songs[] { song_id, song_title, average_rating, genre_support } }",
+            },
+            { status: 400, d: "invalid query parameters" },
+            { status: 401, d: "unauthorized" },
+        ],
+    },
 ];

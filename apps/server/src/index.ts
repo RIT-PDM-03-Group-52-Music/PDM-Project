@@ -4,9 +4,11 @@ import { ENDPOINTS } from "./context/endpoints";
 import aiRouter from "./routes/ai";
 import albumsRouter from "./routes/albums";
 import authRouter from "./routes/auth";
+import chartsRouter from "./routes/charts";
 import collectionRouter from "./routes/collection";
 import followsRouter from "./routes/follows";
 import listensRouter from "./routes/listens";
+import recommendationsRouter from "./routes/recommendations";
 import songsRouter from "./routes/songs";
 import userRouter from "./routes/user";
 import profileRouter from "./routes/profile";
@@ -31,7 +33,10 @@ app.use("/api/users", userRouter);
 app.use("/api/songs", songsRouter);
 app.use("/api/albums", albumsRouter);
 app.use("/api/profile", profileRouter);
+app.use("/api/charts", chartsRouter);
+app.use("/api/recommendations", recommendationsRouter);
 app.use("/api/follows", followsRouter);
+
 app.get("/api/endpoints", (_, req) => {
     return ok(req, JSON.stringify(ENDPOINTS, null, 2));
 });

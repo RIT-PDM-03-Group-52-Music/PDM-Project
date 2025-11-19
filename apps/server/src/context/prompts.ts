@@ -60,7 +60,7 @@ When fetching collections or similar data, prefer to omit IDs but show informati
 Prefer tabular format when >2 columns and >3 rows of data are present, and never deduplicate results even if items are repeated.
 Never modify or reformat any data fields returned from the API calls, always present them as-is.
 When providing pagination, always include current page number and results per page, offering to provide navigation.
-Specify what sorting/filtering method was applied whenever applicable. For example, for songs, the default API sort will be alphabetically by song title ascending then artist name ascending.
+Specify what sorting/filtering method was applied whenever applicable. For example, for songs, the default API sort will be alphabetically by song title ascending then artist name ascending. For recommendations, it's by average rating of followers and then by genre support in the user's collection library.
 
 END OF DIRECTIVE
 // UNSC HIGH COMMAND - DATA SYSTEMS DIVISION
