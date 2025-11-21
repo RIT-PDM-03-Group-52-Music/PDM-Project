@@ -19,7 +19,7 @@ export interface IGetChartsByTop50Query {
   result: IGetChartsByTop50Result;
 }
 
-const getChartsByTop50IR: any = {"usedParamSet":{},"params":[],"statement":"SELECT\n    s.song_id,\n    s.song_title,\n    STRING_AGG(DISTINCT a.album_name, ', ') AS album_names,\n    STRING_AGG(DISTINCT ar.artist_name, ', ') AS artist_names,\n    t.num_listens\nFROM (\n    SELECT\n        s.song_id,\n        COUNT(*) as num_listens\n    FROM SONGS as s\n    INNER JOIN LISTENS as l ON s.song_id = l.song_id\n    GROUP BY s.song_id\n    ORDER BY num_listens DESC\n    LIMIT 50\n) t\nINNER JOIN SONGS as s ON s.song_id = t.song_id\nINNER JOIN ALBUMITEMS as ai ON s.song_id = ai.song_id\nINNER JOIN ALBUMS as a ON a.album_id = ai.album_id\nINNER JOIN FEATURES as f ON f.song_id = s.song_id\nINNER JOIN ARTISTS as ar on f.artist_id = ar.artist_id\nGROUP BY s.song_id, s.song_title, t.num_listens\nORDER BY t.num_listens DESC"};
+const getChartsByTop50IR: any = {"usedParamSet":{},"params":[],"statement":"SELECT\n    s.song_id,\n    s.song_title,\n    STRING_AGG(DISTINCT a.album_name, ', ') AS album_names,\n    STRING_AGG(DISTINCT ar.artist_name, ', ') AS artist_names,\n    t.num_listens\nFROM (\n    SELECT\n        s.song_id,\n        COUNT(*) as num_listens\n    FROM SONGS as s\n    INNER JOIN LISTENS as l ON s.song_id = l.song_id AND l.listened_at >= (NOW() - INTERVAL '30 days')\n    GROUP BY s.song_id\n    ORDER BY num_listens DESC\n    LIMIT 50\n) t\nINNER JOIN SONGS as s ON s.song_id = t.song_id\nINNER JOIN ALBUMITEMS as ai ON s.song_id = ai.song_id\nINNER JOIN ALBUMS as a ON a.album_id = ai.album_id\nINNER JOIN FEATURES as f ON f.song_id = s.song_id\nINNER JOIN ARTISTS as ar on f.artist_id = ar.artist_id\nGROUP BY s.song_id, s.song_title, t.num_listens\nORDER BY t.num_listens DESC"};
 
 /**
  * Query generated from SQL:
@@ -35,7 +35,7 @@ const getChartsByTop50IR: any = {"usedParamSet":{},"params":[],"statement":"SELE
  *         s.song_id,
  *         COUNT(*) as num_listens
  *     FROM SONGS as s
- *     INNER JOIN LISTENS as l ON s.song_id = l.song_id
+ *     INNER JOIN LISTENS as l ON s.song_id = l.song_id AND l.listened_at >= (NOW() - INTERVAL '30 days')
  *     GROUP BY s.song_id
  *     ORDER BY num_listens DESC
  *     LIMIT 50
@@ -67,7 +67,7 @@ export interface IGetTopFiveGenresForMonthQuery {
   result: IGetTopFiveGenresForMonthResult;
 }
 
-const getTopFiveGenresForMonthIR: any = {"usedParamSet":{},"params":[],"statement":"SELECT\n    g.genre_name,\n    COUNT(*) as genre_count\nFROM GENRES as g\nINNER JOIN SONGCAT as sg ON g.genre_id = sg.genre_id\nINNER JOIN LISTENS as l ON sg.song_id = l.song_id\nWHERE l.listened_at >= (NOW() - INTERVAL '30 days')\nGROUP BY g.genre_name\nORDER BY genre_count DESC\nLIMIT 5"};
+const getTopFiveGenresForMonthIR: any = {"usedParamSet":{},"params":[],"statement":"SELECT\n    g.genre_name,\n    COUNT(*) as genre_count\nFROM GENRES as g\nINNER JOIN SONGCAT as sg ON g.genre_id = sg.genre_id\nINNER JOIN LISTENS as l ON sg.song_id = l.song_id\nWHERE EXTRACT(MONTH FROM l.listened_at) = EXTRACT(MONTH FROM NOW())\n  AND EXTRACT(YEAR FROM l.listened_at) = EXTRACT(YEAR FROM NOW())\nGROUP BY g.genre_name\nORDER BY genre_count DESC\nLIMIT 5"};
 
 /**
  * Query generated from SQL:
@@ -78,7 +78,8 @@ const getTopFiveGenresForMonthIR: any = {"usedParamSet":{},"params":[],"statemen
  * FROM GENRES as g
  * INNER JOIN SONGCAT as sg ON g.genre_id = sg.genre_id
  * INNER JOIN LISTENS as l ON sg.song_id = l.song_id
- * WHERE l.listened_at >= (NOW() - INTERVAL '30 days')
+ * WHERE EXTRACT(MONTH FROM l.listened_at) = EXTRACT(MONTH FROM NOW())
+ *   AND EXTRACT(YEAR FROM l.listened_at) = EXTRACT(YEAR FROM NOW())
  * GROUP BY g.genre_name
  * ORDER BY genre_count DESC
  * LIMIT 5
