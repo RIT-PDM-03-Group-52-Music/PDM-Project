@@ -1,4 +1,3 @@
-import { GetTopFollowingQuerySchema } from "@pdm/contracts";
 import { type Request, type Response, Router } from "express";
 import { pool } from "../db";
 import { authgate } from "../middleware/authgate";
@@ -7,7 +6,7 @@ import {
     getTopFiftyFollowing,
     getTopFiveGenresForMonth,
 } from "../queries/chart.queries";
-import { badRequest, ok, serverError } from "../utils/http";
+import { ok, serverError, unauthorized } from "../utils/http";
 
 const router = Router();
 
@@ -33,13 +32,8 @@ router.get("/top-genres", authgate, async (_req: Request, res: Response) => {
 
 router.get("/top-50-following", authgate, async (req: Request, res: Response) => {
     try {
-        const query = GetTopFollowingQuerySchema.safeParse(req.query);
-        if (!query.success) {
-            const first = query.error.issues[0]?.message ?? "Invalid query parameters.";
-            return badRequest(res, first);
-        }
-
-        const { user_id } = query.data;
+        const user_id = req.userId;
+        if (!user_id) return unauthorized(res, "User not authenticated");
 
         const result = await getTopFiftyFollowing.run(
             {

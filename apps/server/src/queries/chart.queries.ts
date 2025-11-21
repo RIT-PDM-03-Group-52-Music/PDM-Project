@@ -1,6 +1,42 @@
 /** Types generated for queries found in "src/queries/chart.sql" */
 import { PreparedQuery } from '@pgtyped/runtime';
 
+/** 'GetTopFiveGenresForMonth' parameters type */
+export type IGetTopFiveGenresForMonthParams = void;
+
+/** 'GetTopFiveGenresForMonth' return type */
+export interface IGetTopFiveGenresForMonthResult {
+  genre_count: string | null;
+  genre_name: string;
+}
+
+/** 'GetTopFiveGenresForMonth' query type */
+export interface IGetTopFiveGenresForMonthQuery {
+  params: IGetTopFiveGenresForMonthParams;
+  result: IGetTopFiveGenresForMonthResult;
+}
+
+const getTopFiveGenresForMonthIR: any = {"usedParamSet":{},"params":[],"statement":"SELECT\n    g.genre_name,\n    COUNT(*) as genre_count\nFROM GENRES as g\nINNER JOIN SONGCAT as sg ON g.genre_id = sg.genre_id\nINNER JOIN LISTENS as l ON sg.song_id = l.song_id\nWHERE EXTRACT(MONTH FROM l.listened_at) = EXTRACT(MONTH FROM NOW())\n  AND EXTRACT(YEAR FROM l.listened_at) = EXTRACT(YEAR FROM NOW())\nGROUP BY g.genre_name\nORDER BY genre_count DESC\nLIMIT 5"};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * SELECT
+ *     g.genre_name,
+ *     COUNT(*) as genre_count
+ * FROM GENRES as g
+ * INNER JOIN SONGCAT as sg ON g.genre_id = sg.genre_id
+ * INNER JOIN LISTENS as l ON sg.song_id = l.song_id
+ * WHERE EXTRACT(MONTH FROM l.listened_at) = EXTRACT(MONTH FROM NOW())
+ *   AND EXTRACT(YEAR FROM l.listened_at) = EXTRACT(YEAR FROM NOW())
+ * GROUP BY g.genre_name
+ * ORDER BY genre_count DESC
+ * LIMIT 5
+ * ```
+ */
+export const getTopFiveGenresForMonth = new PreparedQuery<IGetTopFiveGenresForMonthParams,IGetTopFiveGenresForMonthResult>(getTopFiveGenresForMonthIR);
+
+
 /** 'GetChartsByTop50' parameters type */
 export type IGetChartsByTop50Params = void;
 
@@ -50,42 +86,6 @@ const getChartsByTop50IR: any = {"usedParamSet":{},"params":[],"statement":"SELE
  * ```
  */
 export const getChartsByTop50 = new PreparedQuery<IGetChartsByTop50Params,IGetChartsByTop50Result>(getChartsByTop50IR);
-
-
-/** 'GetTopFiveGenresForMonth' parameters type */
-export type IGetTopFiveGenresForMonthParams = void;
-
-/** 'GetTopFiveGenresForMonth' return type */
-export interface IGetTopFiveGenresForMonthResult {
-  genre_count: string | null;
-  genre_name: string;
-}
-
-/** 'GetTopFiveGenresForMonth' query type */
-export interface IGetTopFiveGenresForMonthQuery {
-  params: IGetTopFiveGenresForMonthParams;
-  result: IGetTopFiveGenresForMonthResult;
-}
-
-const getTopFiveGenresForMonthIR: any = {"usedParamSet":{},"params":[],"statement":"SELECT\n    g.genre_name,\n    COUNT(*) as genre_count\nFROM GENRES as g\nINNER JOIN SONGCAT as sg ON g.genre_id = sg.genre_id\nINNER JOIN LISTENS as l ON sg.song_id = l.song_id\nWHERE EXTRACT(MONTH FROM l.listened_at) = EXTRACT(MONTH FROM NOW())\n  AND EXTRACT(YEAR FROM l.listened_at) = EXTRACT(YEAR FROM NOW())\nGROUP BY g.genre_name\nORDER BY genre_count DESC\nLIMIT 5"};
-
-/**
- * Query generated from SQL:
- * ```
- * SELECT
- *     g.genre_name,
- *     COUNT(*) as genre_count
- * FROM GENRES as g
- * INNER JOIN SONGCAT as sg ON g.genre_id = sg.genre_id
- * INNER JOIN LISTENS as l ON sg.song_id = l.song_id
- * WHERE EXTRACT(MONTH FROM l.listened_at) = EXTRACT(MONTH FROM NOW())
- *   AND EXTRACT(YEAR FROM l.listened_at) = EXTRACT(YEAR FROM NOW())
- * GROUP BY g.genre_name
- * ORDER BY genre_count DESC
- * LIMIT 5
- * ```
- */
-export const getTopFiveGenresForMonth = new PreparedQuery<IGetTopFiveGenresForMonthParams,IGetTopFiveGenresForMonthResult>(getTopFiveGenresForMonthIR);
 
 
 /** 'GetTopFiftyFollowing' parameters type */

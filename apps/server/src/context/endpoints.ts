@@ -392,7 +392,7 @@ export const ENDPOINTS: Endpoint[] = [
     {
         method: "GET",
         path: "/charts/top-50",
-        desc: "Get the top 50 most listened to songs across all users",
+        desc: "Get the top 50 most listened to songs across all users in the last 30 days (rolling)",
         ret: [
             {
                 status: 200,
@@ -404,7 +404,7 @@ export const ENDPOINTS: Endpoint[] = [
     {
         method: "GET",
         path: "/charts/top-50-following",
-        desc: "Get the top 50 most listened to songs among users you are following",
+        desc: "Get the top 50 most listened to songs among users you are following (all time)",
         ret: [
             {
                 status: 200,
@@ -416,7 +416,7 @@ export const ENDPOINTS: Endpoint[] = [
     {
         method: "GET",
         path: "/charts/top-genres",
-        desc: "Get the top genres listened to by the user",
+        desc: "Get the platform-wide top genres (current month)",
         ret: [
             { status: 200, d: "{ genres[] }" },
             { status: 401, d: "unauthorized" },

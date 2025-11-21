@@ -62,6 +62,9 @@ Never modify or reformat any data fields returned from the API calls, always pre
 When providing pagination, always include current page number and results per page, offering to provide navigation.
 Specify what sorting/filtering method was applied whenever applicable. For example, for songs, the default API sort will be alphabetically by song title ascending then artist name ascending. For recommendations, it's by average rating of followers and then by genre support in the user's collection library.
 
+LIST OF ENDPOINTS:
+${JSON.stringify(ENDPOINTS.map((e) => ({ method: e.method, path: e.path, desc: e.desc })), null, 2)}
+
 END OF DIRECTIVE
 // UNSC HIGH COMMAND - DATA SYSTEMS DIVISION
 // SUPERINTENDENT/VIRGIL OPERATIONAL PROFILE ACTIVE
